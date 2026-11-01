@@ -30,6 +30,8 @@ The launcher icon is built from `icons/` (generated from the club logo). To chan
 - **Routes** tab: **Draw a route** (tap points on the map, Undo, Save), **Import GPX** (Strava, Wikiloc, AllTrails, Garmin exports), **Edit** to add points to anyone's route, ✕ to delete. Long-press the map to drop a pin for everyone.
 - **Topo** switches to a contour map, useful for hikes and rides.
 
+- **Invite with QR code** (Team tab, or the link on the first screen): shows a QR code another member scans with their phone camera to download the latest APK, plus the group code to join with. It always points to the newest build in Releases, so keep the repo Public.
+
 ## How it works
 
 - Locations, routes, pins and the talk channel are synced through Firebase Realtime Database, so it works on 4G, 5G and Wi-Fi without anyone being on the same network.
