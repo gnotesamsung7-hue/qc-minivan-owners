@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#1E3B2F">
+<title>QC Minivan Owners</title>
+<link rel="stylesheet" href="lib/leaflet.css">
+<script src="lib/leaflet.js"></script>
+<script>window.L||document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\/script>')</script>
+<script src="lib/firebase-app-compat.js"></script>
+<script src="lib/firebase-auth-compat.js"></script>
+<script src="lib/firebase-database-compat.js"></script>
+<script>window.firebase&&firebase.database||document.write('<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"><\/script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"><\/script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"><\/script>')</script>
+<script src="config.js"></script>
+<style>
+:root{
+  --forest:#1E3B2F; --forest2:#2C5242; --khaki:#EDE8D8; --paper:#F8F6EF; --ink:#202623;
+  --muted:#5F675F; --line:#D5CFBC; --orange:#F2661B; --orange-d:#C94E0E; --teal:#23897D; --red:#C2362B;
+  --sheet:#F8F6EF; --chip:#FFFFFFEE;
+  font-family:"Roboto Condensed","sans-serif-condensed","Arial Narrow",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#18211D; --sheet:#18211D; --khaki:#24302A; --ink:#E9E6DA; --muted:#A3AA9E; --line:#34423A; --chip:#18211DEE; color-scheme:dark;
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--forest);color:var(--ink);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:12px;font-size:18px;width:100%;min-width:0}
+[hidden]{display:none!important}
+
+/* join */
+#join{position:fixed;inset:0;overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 28px;
+  background:radial-gradient(circle at 80% -10%,#3F6B57 0,transparent 55%),repeating-radial-gradient(circle at 20% 110%,transparent 0 22px,#ffffff0d 22px 23px),var(--forest)}
+.join-card{max-width:420px;margin:0 auto;color:#F3EFE2}
+.brand{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
+.brand h1{font-size:34px;line-height:1.05;margin:0;letter-spacing:-.3px;font-weight:700}
+.brand img{width:96px;height:auto;flex:none;filter:drop-shadow(0 3px 8px #0006)}
+.tag{font-size:18px;line-height:1.4;color:#CFD8CD;margin:0 0 28px}
+.join-card label{display:block;font-weight:700;font-size:17px;margin-bottom:6px}
+.join-card input{background:#10221A;border-color:#3D5E4F;color:#F3EFE2}
+.row{display:flex;gap:8px}
+.hint{font-size:14px;color:#AFC0B2;margin:6px 0 16px;line-height:1.35}
+#p-routes .hint{color:var(--muted)}
+.swatches{display:flex;gap:10px;margin:0 0 26px;flex-wrap:wrap}
+.swatches button{width:36px;height:36px;border-radius:50%;background:var(--c);border:3px solid transparent}
+.swatches button[aria-checked=true]{border-color:#F3EFE2;box-shadow:0 0 0 2px var(--c)}
+.primary{background:var(--orange);color:#fff;font-weight:700;font-size:19px;padding:15px;border-radius:12px;width:100%}
+.primary:active{background:var(--orange-d)}
+.secondary{background:var(--forest2);color:#F3EFE2;font-weight:700;padding:12px 18px;border-radius:10px;white-space:nowrap}
+.ghost{border:2px solid #3D5E4F;border-radius:10px;padding:0 16px;font-size:20px;color:#F3EFE2}
+.or{text-align:center;color:#AFC0B2;margin:20px 0 12px}
+.err{color:#FFB199;min-height:1.3em;font-size:15px;line-height:1.35}
+.setup{background:#10221A;border:2px solid var(--orange);border-radius:12px;padding:16px;margin-top:20px;line-height:1.45}
+
+/* app */
+#map{position:fixed;inset:0;background:#cfd6c8}
+.top{position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);display:flex;gap:8px;align-items:center;z-index:500;pointer-events:none}
+.top>*{pointer-events:auto}
+.code-chip{background:var(--forest);color:#F3EFE2;border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;box-shadow:0 2px 8px #0004}
+.code-chip .lbl{font-size:12px;color:#AFC0B2}
+.code-chip b{font-size:20px;letter-spacing:2px}
+.pill{background:var(--chip);border-radius:20px;padding:6px 10px;font-size:13px;box-shadow:0 1px 5px #0003;display:flex;align-items:center;gap:6px}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,#999)}
+.top .spacer{flex:1}
+.icon{width:42px;height:42px;border-radius:12px;background:var(--chip);box-shadow:0 1px 5px #0003;display:grid;place-items:center}
+.mapbtns{position:fixed;right:10px;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:8px;z-index:500}
+.mapbtns button{width:46px;height:46px;border-radius:12px;background:var(--chip);box-shadow:0 1px 5px #0003;display:grid;place-items:center;font-size:12px;font-weight:700}
+.talk{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 66px);z-index:600;background:var(--forest);color:#fff;border-radius:24px;padding:10px 18px 10px 14px;display:flex;gap:10px;align-items:center;font-weight:700;font-size:17px;box-shadow:0 3px 12px #0005;border-left:6px solid var(--c,#fff)}
+.wave{display:flex;gap:3px;height:18px;align-items:center}
+.wave i{width:3px;background:#fff;border-radius:2px;animation:w .8s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.15s}.wave i:nth-child(3){animation-delay:.3s}.wave i:nth-child(4){animation-delay:.45s}
+@keyframes w{0%,100%{height:4px}50%{height:18px}}
+
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:700;background:var(--sheet);border-radius:18px 18px 0 0;box-shadow:0 -4px 18px #0003;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs{display:flex;gap:4px;padding:8px 10px 6px;padding-right:140px}
+.tab{padding:10px 14px;border-radius:10px;font-weight:700;font-size:16px;color:var(--muted)}
+.tab[aria-selected=true]{background:var(--khaki);color:var(--ink)}
+.tab span{font-weight:400}
+.panel{max-height:38vh;overflow:auto;padding:4px 12px 14px}
+.sheet.collapsed .panel{display:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 2px}
+.actions .secondary{flex:1}
+.item{display:flex;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.sw{width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.item.off .sw{opacity:.35}
+.item .main{flex:1;min-width:0}
+.item .name{font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .meta{font-size:14px;color:var(--muted);margin-top:2px}
+.item.talking .name::after{content:" is talking";color:var(--orange);font-weight:700}
+.mini{padding:8px 10px;border-radius:8px;background:var(--khaki);font-size:14px;font-weight:700}
+.mini.danger{color:var(--red)}
+.empty{color:var(--muted);padding:14px 4px;line-height:1.4}
+
+/* PTT: the one loud thing */
+#ptt{position:absolute;right:16px;top:-108px;width:118px;height:118px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#FF8A47,var(--orange) 55%,var(--orange-d));
+  color:#fff;font-weight:700;font-size:15px;line-height:1.1;box-shadow:0 6px 0 #8F3608,0 10px 22px #0006;
+  display:grid;place-items:center;text-align:center;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  border:5px solid #FFE2CF}
+#ptt .ptt-txt{pointer-events:none;padding:0 10px}
+#ptt.arming{transform:translateY(3px);box-shadow:0 3px 0 #8F3608,0 6px 14px #0006}
+#ptt.live{background:radial-gradient(circle at 35% 30%,#FF5A4A,var(--red) 60%,#7E1D15);transform:translateY(5px);box-shadow:0 1px 0 #5E140E,0 0 0 10px #C2362B44,0 0 0 22px #C2362B22}
+#ptt.busy{background:radial-gradient(circle at 35% 30%,#8A948B,#5F675F);border-color:#C9CEC6;box-shadow:0 6px 0 #3C423C,0 10px 22px #0005}
+@media (prefers-reduced-motion:no-preference){#ptt.live{animation:tx 1s ease-in-out infinite}}
+@keyframes tx{50%{box-shadow:0 1px 0 #5E140E,0 0 0 14px #C2362B55,0 0 0 30px #C2362B18}}
+
+#drawbar{position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 66px);z-index:650;background:var(--forest);color:#F3EFE2;border-radius:14px;padding:10px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 3px 12px #0005}
+#drawbar .info{flex:1;font-size:15px;line-height:1.25}
+#drawbar button{background:#ffffff1f;color:#fff;padding:10px 12px;border-radius:9px;font-weight:700}
+#drawbar button.go{background:var(--orange)}
+
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);transform:translateX(-50%);z-index:900;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-size:15px;max-width:88vw;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+#modal{position:fixed;inset:0;z-index:1000;background:#0007;display:grid;place-items:center;padding:20px}
+.dlg{background:var(--paper);border-radius:16px;padding:18px;width:100%;max-width:380px}
+.dlg h2{margin:0 0 12px;font-size:20px}
+.dlg p{margin:0 0 14px;line-height:1.4;color:var(--muted)}
+.dlg .btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.dlg .btns button{padding:11px 16px;border-radius:10px;font-weight:700}
+.dlg .ok{background:var(--orange);color:#fff}
+
+/* markers */
+.mk{position:relative;width:24px;height:24px}
+.mk .dot{position:absolute;inset:3px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 4px #0007}
+.mk .arr{position:absolute;left:50%;top:50%;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:10px solid var(--c);transform-origin:50% 21px;margin:-21px 0 0 -6px}
+.mk .lbl{position:absolute;left:28px;top:1px;white-space:nowrap;background:#fff;color:#202623;font:700 13px "Roboto Condensed","sans-serif-condensed",sans-serif;padding:2px 6px;border-radius:6px;box-shadow:0 1px 4px #0005;border-left:4px solid var(--c)}
+.mk.stale .dot{filter:grayscale(1);opacity:.6}.mk.stale .lbl{opacity:.7}
+.mk.talking .dot{animation:ring 1s infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 var(--c)}100%{box-shadow:0 0 0 16px #0000}}
+.pin{width:26px;height:34px}
+.pin svg{filter:drop-shadow(0 1px 2px #0007)}
+.rpt{width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--c)}
+.leaflet-popup-content{font:15px "Roboto Condensed",sans-serif;margin:12px 14px}
+.leaflet-popup-content .mini{margin-top:8px}
+</style>
+</head>
+<body>
+
+<section id="join">
+  <div class="join-card">
+    <div class="brand">
+      <img src="logo.png" alt="QC Minivan Owners logo" width="96" height="117">
+      <h1>QC Minivan Owners</h1>
+    </div>
+    <p class="tag">Plan the convoy route together, see where every van is, and talk to the whole group with one button.</p>
+
+    <label for="cs">Callsign</label>
+    <div class="row">
+      <input id="cs" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <button id="reroll" class="ghost" aria-label="Give me another random callsign">↻</button>
+    </div>
+    <p class="hint">This is all the group sees. Use a handle, not your real name.</p>
+    <div id="swatches" class="swatches" role="radiogroup" aria-label="Marker color"></div>
+
+    <button id="create" class="primary">Start a new group</button>
+    <div class="or">or join with a code</div>
+    <div class="row">
+      <input id="code" placeholder="6-letter code" maxlength="6" autocapitalize="characters" autocomplete="off" spellcheck="false">
+      <button id="joinbtn" class="secondary">Join</button>
+    </div>
+    <p id="joinerr" class="err" role="alert"></p>
+
+    <div id="setup" class="setup" hidden>
+      <b>Firebase isn't connected yet.</b><br>
+      Paste your Firebase web config into <code>www/config.js</code>, push to GitHub, and the next APK build will work. The README has the steps.
+    </div>
+  </div>
+</section>
+
+<section id="app" hidden>
+  <div id="map"></div>
+  <header class="top">
+    <button id="codebtn" class="code-chip" aria-label="Copy group code"><span class="lbl">Group code</span><b id="codeTxt"></b></button>
+    <span id="net" class="pill">Connecting</span>
+    <span id="gps" class="pill">GPS</span>
+    <span class="spacer"></span>
+    <button id="leave" class="icon" aria-label="Leave group">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/></svg>
+    </button>
+  </header>
+
+  <div class="mapbtns">
+    <button id="btnMe" aria-label="Center on me"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
+    <button id="btnGroup" aria-label="Show the whole group"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button id="btnLayer" aria-label="Switch map style">Topo</button>
+  </div>
+
+  <div id="talk" class="talk" hidden><span class="wave"><i></i><i></i><i></i><i></i></span><span id="talkTxt"></span></div>
+
+  <div id="drawbar" hidden>
+    <div class="info"><b id="drawTitle">Tap the map to add points</b><br><span id="drawInfo">0 points</span></div>
+    <button id="drawUndo">Undo</button>
+    <button id="drawCancel">Cancel</button>
+    <button id="drawSave" class="go">Save</button>
+  </div>
+
+  <div id="sheet" class="sheet collapsed">
+    <button id="ptt" aria-label="Hold to talk"><span class="ptt-txt">Hold to talk</span></button>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="team" aria-selected="false">Team <span id="teamCount"></span></button>
+      <button class="tab" role="tab" data-tab="routes" aria-selected="false">Routes <span id="routeCount"></span></button>
+    </div>
+    <div class="panel" id="p-team"></div>
+    <div class="panel" id="p-routes" hidden>
+      <div class="actions">
+        <button id="btnDraw" class="secondary">Draw a route</button>
+        <button id="btnGpx" class="secondary">Import GPX</button>
+        <input type="file" id="gpxfile" hidden>
+      </div>
+      <p class="hint">Long-press anywhere on the map to drop a pin everyone can see.</p>
+      <div id="routeList"></div>
+    </div>
+  </div>
+  <div id="toast" role="status"></div>
+</section>
+
+<div id="modal" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <h2 id="mTitle"></h2>
+    <p id="mText" hidden></p>
+    <input id="mInput" maxlength="40" autocomplete="off">
+    <div class="btns"><button id="mCancel">Cancel</button><button id="mOk" class="ok">OK</button></div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem('sabay_' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v){ try { localStorage.setItem('sabay_' + k, JSON.stringify(v)); } catch {} }
+};
+const ANIMALS = ['Agila','Lawin','Maya','Tarsier','Tamaraw','Pawikan','Kalaw','Kuwago','Tikling','Bayawak','Dugong','Haribon','Banog','Pugo'];
+const COLORS = ['#F2661B','#23897D','#3A6EA5','#C2362B','#8E44AD','#C9A227','#2E8B57','#D63384'];
+const ROUTE_COLORS = ['#3A6EA5','#C2362B','#8E44AD','#2E8B57','#D63384','#C9A227','#23897D'];
+const CODE_CH = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const randCS = () => ANIMALS[Math.random() * ANIMALS.length | 0] + '-' + (10 + (Math.random() * 90 | 0));
+const randCode = () => Array.from({length:6}, () => CODE_CH[Math.random() * CODE_CH.length | 0]).join('');
+
+let db, R, uid, me = {}, offset = 0, startKey;
+let members = {}, routes = {}, pins = {}, floor = null;
+let map, baseStreets, baseTopo, topoOn = false, myPos = null, myAcc = null, firstFix = true;
+const memberMarkers = {}, routeLayers = {}, pinMarkers = {};
+const now = () => Date.now() + offset;
+
+/* ---------- small UI helpers ---------- */
+let toastT;
+function toast(msg, ms = 2600){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), ms); }
+function ask({title, text = '', value = '', input = true, ok = 'OK'}){
+  return new Promise(res => {
+    $('#mTitle').textContent = title;
+    $('#mText').textContent = text; $('#mText').hidden = !text;
+    const inp = $('#mInput'); inp.hidden = !input; inp.value = value;
+    $('#mOk').textContent = ok;
+    $('#modal').hidden = false;
+    if (input) setTimeout(() => { inp.focus(); inp.select(); }, 50);
+    const done = v => { $('#modal').hidden = true; $('#mOk').onclick = $('#mCancel').onclick = inp.onkeydown = null; res(v); };
+    $('#mOk').onclick = () => done(input ? inp.value.trim() : true);
+    $('#mCancel').onclick = () => done(null);
+    inp.onkeydown = e => { if (e.key === 'Enter') done(inp.value.trim()); };
+  });
+}
+function hav(a, b){
+  const r = Math.PI / 180, dLat = (b[0]-a[0]) * r, dLng = (b[1]-a[1]) * r;
+  const h = Math.sin(dLat/2)**2 + Math.cos(a[0]*r) * Math.cos(b[0]*r) * Math.sin(dLng/2)**2;
+  return 12742000 * Math.asin(Math.sqrt(h));
+}
+const fmtDist = m => m < 1000 ? Math.round(m) + ' m' : (m / 1000).toFixed(m < 10000 ? 1 : 0) + ' km';
+function ago(t){ const s = Math.max(0, (now() - t) / 1000); return s < 20 ? 'just now' : s < 60 ? Math.round(s) + 's ago' : s < 3600 ? Math.round(s/60) + ' min ago' : Math.round(s/3600) + ' h ago'; }
+
+/* ---------- audio: tones ---------- */
+let actx;
+function ac(){ if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); return actx; }
+function tone(freq, dur, when = 0, vol = .12){
+  try {
+    const c = ac(), o = c.createOscillator(), g = c.createGain(), t = c.currentTime + when;
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .01); g.gain.linearRampToValueAtTime(0, t + dur);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + .02);
+  } catch {}
+}
+const chirpStart = () => { tone(880, .06); tone(1320, .08, .07); };
+const rogerBeep = () => { tone(1250, .07); tone(950, .09, .08); };
+const busyBeep = () => { tone(420, .12); tone(420, .12, .18); };
+const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch {} };
+
+/* ---------- join screen ---------- */
+function setupJoin(){
+  $('#cs').value = store.get('cs', randCS());
+  $('#code').value = store.get('room', '');
+  me.color = store.get('color', COLORS[Math.random() * COLORS.length | 0]);
+  const sw = $('#swatches');
+  COLORS.forEach(c => {
+    const b = document.createElement('button');
+    b.style.setProperty('--c', c); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', 'Color ' + c);
+    b.setAttribute('aria-checked', c === me.color);
+    b.onclick = () => { me.color = c; sw.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', x === b)); };
+    sw.appendChild(b);
+  });
+  $('#reroll').onclick = () => $('#cs').value = randCS();
+  $('#code').oninput = e => e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  $('#create').onclick = () => start(randCode(), true);
+  $('#joinbtn').onclick = () => {
+    const c = $('#code').value.trim();
+    if (c.length !== 6) return $('#joinerr').textContent = 'Group codes have 6 letters and numbers.';
+    start(c, false);
+  };
+}
+function validCS(){
+  const v = $('#cs').value.trim();
+  if (!/^[A-Za-z0-9 _-]{2,16}$/.test(v)) { $('#joinerr').textContent = 'Callsigns use 2 to 16 letters, numbers, spaces, - or _.'; return null; }
+  return v;
+}
+
+async function start(code, create){
+  $('#joinerr').textContent = '';
+  const cs = validCS(); if (!cs) return;
+  ac(); unlockPlayer();
+  me.cs = cs;
+  $('#create').disabled = $('#joinbtn').disabled = true;
+  try {
+    if (!firebase.auth().currentUser) await firebase.auth().signInAnonymously();
+    uid = firebase.auth().currentUser.uid;
+    R = db.ref('rooms/' + code);
+    if (create) await R.child('meta').set({ created: firebase.database.ServerValue.TIMESTAMP });
+    else {
+      const m = await R.child('meta').once('value');
+      if (!m.exists()) throw new Error('No group uses the code ' + code + '. Check it with whoever started the group.');
+    }
+    store.set('cs', cs); store.set('color', me.color); store.set('room', code);
+    await enterRoom(code);
+  } catch (e) {
+    const c = e && e.code || '';
+    $('#joinerr').textContent =
+      /operation-not-allowed|admin-restricted/.test(c) ? 'Turn on Anonymous sign-in in Firebase (Authentication, Sign-in method).' :
+      /permission/i.test(c + e.message) ? 'The database refused access. Check the database rules in the README.' :
+      /network/i.test(c) ? 'No internet connection. Connect and try again.' :
+      (e.message || 'Could not connect.');
+  } finally { $('#create').disabled = $('#joinbtn').disabled = false; }
+}
+
+/* ---------- room ---------- */
+let meRef;
+async function enterRoom(code){
+  meRef = R.child('members/' + uid);
+  await meRef.update({ cs: me.cs, color: me.color, online: true, t: firebase.database.ServerValue.TIMESTAMP });
+  meRef.child('online').onDisconnect().set(false);
+  startKey = R.child('ptt').push().key;
+
+  $('#join').hidden = true; $('#app').hidden = false;
+  $('#codeTxt').textContent = code;
+  initMap();
+  setTab('team', true);
+
+  db.ref('.info/connected').on('value', s => {
+    const on = !!s.val();
+    $('#net').textContent = on ? 'Online' : 'Reconnecting';
+    $('#net').style.setProperty('--c', on ? '#23897D' : '#C2362B');
+    if (on) meRef.update({ online: true, t: firebase.database.ServerValue.TIMESTAMP });
+  });
+  R.child('members').on('value', s => { members = s.val() || {}; renderMembers(); });
+  const rr = R.child('routes');
+  rr.on('child_added', s => { routes[s.key] = s.val(); drawRoute(s.key); renderRoutes(); });
+  rr.on('child_changed', s => { routes[s.key] = s.val(); drawRoute(s.key); renderRoutes(); });
+  rr.on('child_removed', s => { delete routes[s.key]; drawRoute(s.key); renderRoutes(); });
+  R.child('pins').on('value', s => { pins = s.val() || {}; renderPins(); });
+  R.child('floor').on('value', s => { floor = s.val(); renderFloor(); });
+  R.child('ptt').orderByKey().startAt(startKey).on('child_added', s => {
+    const v = s.val(); if (v && v.uid && v.uid !== uid) receive(s.key, v);
+  });
+
+  setInterval(() => meRef.update({ t: firebase.database.ServerValue.TIMESTAMP }), 30000);
+  setInterval(() => { renderMembers(); renderFloor(); }, 10000);
+  startGPS();
+  keepAwake();
+}
+
+$('#leave').onclick = async () => {
+  if (!await ask({ title: 'Leave this group?', text: 'You will stop sharing your location and stop hearing the group.', input: false, ok: 'Leave' })) return;
+  try { await meRef.update({ online: false }); } catch {}
+  location.reload();
+};
+$('#codebtn').onclick = async () => {
+  const c = $('#codeTxt').textContent;
+  try { await navigator.clipboard.writeText(c); toast('Group code ' + c + ' copied'); }
+  catch { toast('Group code: ' + c, 4000); }
+};
+
+let wakeLock;
+async function keepAwake(){
+  try { wakeLock = await navigator.wakeLock.request('screen'); } catch {}
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible') { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
+  });
+}
+
+/* ---------- map ---------- */
+function initMap(){
+  if (map) return;
+  map = L.map('map', { zoomControl: false }).setView([12.5, 122], 6);
+  baseStreets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+  baseTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '© OpenStreetMap, SRTM | © OpenTopoMap' });
+  map.on('click', e => { if (draw) { draw.pts.push([+e.latlng.lat.toFixed(6), +e.latlng.lng.toFixed(6)]); updDraw(); } });
+  map.on('contextmenu', e => { if (!draw) dropPin(e.latlng); });
+  $('#btnMe').onclick = () => myPos ? map.setView(myPos, Math.max(map.getZoom(), 16)) : toast('Waiting for your GPS fix');
+  $('#btnGroup').onclick = fitGroup;
+  $('#btnLayer').onclick = () => {
+    topoOn = !topoOn;
+    if (topoOn) { map.removeLayer(baseStreets); baseTopo.addTo(map); } else { map.removeLayer(baseTopo); baseStreets.addTo(map); }
+    $('#btnLayer').textContent = topoOn ? 'Street' : 'Topo';
+  };
+}
+function fitGroup(){
+  const pts = Object.values(members).filter(m => m.lat != null).map(m => [m.lat, m.lng]);
+  if (myPos) pts.push(myPos);
+  if (!pts.length) return toast('Nobody has a location yet');
+  pts.length === 1 ? map.setView(pts[0], 16) : map.fitBounds(pts, { padding: [60, 60], maxZoom: 17 });
+}
+
+/* ---------- GPS ---------- */
+let lastSent = null, lastSentT = 0;
+function startGPS(){
+  if (!navigator.geolocation) return setGps('No GPS', '#C2362B');
+  setGps('Finding you', '#C9A227');
+  navigator.geolocation.watchPosition(onPos, err => {
+    setGps(err.code === 1 ? 'Location blocked' : 'Weak GPS', '#C2362B');
+    if (err.code === 1) toast('Allow location for QC Minivan Owners in Android Settings so your group can see you.', 5000);
+  }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 });
+}
+function setGps(t, c){ $('#gps').textContent = t; $('#gps').style.setProperty('--c', c); }
+function onPos(p){
+  const c = p.coords;
+  myPos = [c.latitude, c.longitude]; myAcc = c.accuracy;
+  setGps('±' + Math.round(c.accuracy) + ' m', c.accuracy < 25 ? '#23897D' : '#C9A227');
+  if (firstFix) { firstFix = false; map.setView(myPos, 16); }
+  updateMyMarker();
+  const moved = lastSent ? hav(lastSent, myPos) : Infinity;
+  const dt = Date.now() - lastSentT;
+  if ((dt > 3000 && moved > 6) || dt > 25000) {
+    lastSent = myPos; lastSentT = Date.now();
+    const d = { lat: +c.latitude.toFixed(6), lng: +c.longitude.toFixed(6), acc: Math.round(c.accuracy),
+      lt: firebase.database.ServerValue.TIMESTAMP, t: firebase.database.ServerValue.TIMESTAMP };
+    d.spd = c.speed != null && !isNaN(c.speed) ? +c.speed.toFixed(1) : null;
+    d.hdg = c.heading != null && !isNaN(c.heading) ? Math.round(c.heading) : null;
+    meRef.update(d);
+  }
+}
+
+/* ---------- members ---------- */
+let accCircle;
+function markerHtml(m, id){
+  const talking = floor && floor.uid === id && fresh(floor);
+  const stale = !(m.online && now() - (m.t || 0) < 120000);
+  const arr = m.hdg != null && m.spd > 0.8 ? `<span class="arr" style="transform:rotate(${m.hdg}deg)"></span>` : '';
+  return `<div class="mk${stale ? ' stale' : ''}${talking ? ' talking' : ''}" style="--c:${esc(m.color)}">${arr}<span class="dot"></span><span class="lbl">${esc(m.cs)}${id === uid ? ' (you)' : ''}</span></div>`;
+}
+function placeMarker(id, m, ll){
+  const html = markerHtml(m, id);
+  let mk = memberMarkers[id];
+  if (!mk) {
+    mk = memberMarkers[id] = L.marker(ll, { icon: L.divIcon({ html, className: '', iconSize: [24, 24], iconAnchor: [12, 12] }), zIndexOffset: id === uid ? 1000 : 500 }).addTo(map);
+    mk._html = html;
+  } else {
+    mk.setLatLng(ll);
+    if (mk._html !== html) { mk.setIcon(L.divIcon({ html, className: '', iconSize: [24, 24], iconAnchor: [12, 12] })); mk._html = html; }
+  }
+}
+function updateMyMarker(){
+  if (!myPos || !map) return;
+  const m = Object.assign({}, members[uid] || {}, { cs: me.cs, color: me.color, online: true, t: now() });
+  placeMarker(uid, m, myPos);
+  if (!accCircle) accCircle = L.circle(myPos, { radius: myAcc, color: me.color, weight: 1, fillOpacity: .08, interactive: false }).addTo(map);
+  else accCircle.setLatLng(myPos).setRadius(myAcc);
+}
+function renderMembers(){
+  if (!map) return;
+  Object.keys(memberMarkers).forEach(id => {
+    if (id !== uid && (!members[id] || members[id].lat == null)) { map.removeLayer(memberMarkers[id]); delete memberMarkers[id]; }
+  });
+  Object.entries(members).forEach(([id, m]) => { if (id !== uid && m.lat != null) placeMarker(id, m, [m.lat, m.lng]); });
+  updateMyMarker();
+
+  const list = Object.entries(members).sort((a, b) => (a[0] === uid ? -1 : b[0] === uid ? 1 : (b[1].online - a[1].online) || String(a[1].cs).localeCompare(b[1].cs)));
+  const live = list.filter(([, m]) => m.online && now() - (m.t || 0) < 120000).length;
+  $('#teamCount').textContent = live + '/' + list.length;
+  $('#p-team').innerHTML = list.map(([id, m]) => {
+    const on = m.online && now() - (m.t || 0) < 120000;
+    const talking = floor && floor.uid === id && fresh(floor);
+    const bits = [];
+    if (id === uid) bits.push('You');
+    else if (m.lat != null && myPos) bits.push(fmtDist(hav(myPos, [m.lat, m.lng])) + ' away');
+    if (m.spd > 0.8) bits.push(Math.round(m.spd * 3.6) + ' km/h');
+    bits.push(on ? (m.lt ? 'seen ' + ago(m.lt) : 'no location yet') : 'offline');
+    return `<div class="item${on ? '' : ' off'}${talking ? ' talking' : ''}"><span class="sw" style="--c:${esc(m.color)}"></span>
+      <div class="main"><div class="name">${esc(m.cs)}</div><div class="meta">${esc(bits.join(', '))}</div></div>
+      ${m.lat != null ? `<button class="mini" data-goto="${esc(id)}">Find</button>` : ''}</div>`;
+  }).join('') || '<div class="empty">Share the group code so others can join.</div>';
+  $('#p-team').querySelectorAll('[data-goto]').forEach(b => b.onclick = () => {
+    const id = b.dataset.goto, ll = id === uid ? myPos : [members[id].lat, members[id].lng];
+    if (ll) map.setView(ll, 17);
+  });
+}
+
+/* ---------- tabs / sheet ---------- */
+let curTab = null;
+function setTab(t, keepCollapsed){
+  const sheet = $('#sheet');
+  if (curTab === t && !keepCollapsed) { sheet.classList.toggle('collapsed'); }
+  else if (!keepCollapsed) sheet.classList.remove('collapsed');
+  curTab = t;
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
+  $('#p-team').hidden = t !== 'team'; $('#p-routes').hidden = t !== 'routes';
+}
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+
+/* ---------- routes ---------- */
+function routeStats(pts){
+  let d = 0, up = 0;
+  for (let i = 1; i < pts.length; i++) {
+    d += hav(pts[i-1], pts[i]);
+    if (pts[i][2] != null && pts[i-1][2] != null && pts[i][2] > pts[i-1][2]) up += pts[i][2] - pts[i-1][2];
+  }
+  return { d, up };
+}
+const hidden = new Set();
+function drawRoute(id){
+  if (routeLayers[id]) { map.removeLayer(routeLayers[id]); delete routeLayers[id]; }
+  const r = routes[id];
+  if (!r || !r.pts || hidden.has(id) || (draw && draw.id === id)) return;
+  const ll = r.pts.map(p => [p[0], p[1]]);
+  const g = L.layerGroup();
+  L.polyline(ll, { color: '#fff', weight: 9, opacity: .9 }).addTo(g);
+  const line = L.polyline(ll, { color: r.color, weight: 5 }).addTo(g);
+  line.bindPopup(() => `<b>${esc(r.name)}</b><br>${fmtDist(routeStats(r.pts).d)}, added by ${esc(r.by)}`);
+  const ic = c => L.divIcon({ html: `<div class="rpt" style="--c:${c}"></div>`, className: '', iconSize: [12, 12], iconAnchor: [6, 6] });
+  L.marker(ll[0], { icon: ic('#2E8B57'), interactive: false }).addTo(g);
+  if (ll.length > 1) L.marker(ll[ll.length - 1], { icon: ic('#C2362B'), interactive: false }).addTo(g);
+  (r.wpts || []).forEach(w => L.marker([w.lat, w.lng], { icon: pinIcon(r.color) }).bindPopup(esc(w.name || 'Waypoint')).addTo(g));
+  routeLayers[id] = g.addTo(map);
+}
+function renderRoutes(){
+  const ids = Object.keys(routes).sort((a, b) => (routes[b].t || 0) - (routes[a].t || 0));
+  $('#routeCount').textContent = ids.length || '';
+  $('#routeList').innerHTML = ids.map(id => {
+    const r = routes[id], s = routeStats(r.pts || []);
+    const meta = [fmtDist(s.d)];
+    if (s.up > 5) meta.push(Math.round(s.up) + ' m climb');
+    meta.push('by ' + r.by + (r.eb && r.eb !== r.by ? ', edited by ' + r.eb : ''));
+    return `<div class="item${hidden.has(id) ? ' off' : ''}"><span class="sw" style="--c:${esc(r.color)}"></span>
+      <div class="main"><div class="name">${esc(r.name)}</div><div class="meta">${esc(meta.join(', '))}</div></div>
+      <button class="mini" data-r="zoom" data-id="${id}">Show</button>
+      <button class="mini" data-r="edit" data-id="${id}">Edit</button>
+      <button class="mini danger" data-r="del" data-id="${id}" aria-label="Delete ${esc(r.name)}">✕</button></div>`;
+  }).join('') || '<div class="empty">No routes yet. Draw one on the map or import a GPX file from Strava, Wikiloc, AllTrails or Garmin.</div>';
+  $('#routeList').querySelectorAll('[data-r]').forEach(b => b.onclick = async () => {
+    const id = b.dataset.id, r = routes[id];
+    if (b.dataset.r === 'zoom') {
+      if (hidden.has(id)) { hidden.delete(id); drawRoute(id); renderRoutes(); }
+      map.fitBounds(r.pts.map(p => [p[0], p[1]]), { padding: [50, 50] });
+      $('#sheet').classList.add('collapsed');
+    } else if (b.dataset.r === 'edit') startDraw(id);
+    else if (await ask({ title: 'Delete "' + r.name + '"?', text: 'It disappears for everyone in the group.', input: false, ok: 'Delete' })) {
+      R.child('routes/' + id).remove(); toast('Route deleted');
+    }
+  });
+}
+
+/* drawing / editing */
+let draw = null;
+function startDraw(id){
+  if (draw) return;
+  const r = id ? routes[id] : null;
+  draw = { id, pts: r ? r.pts.map(p => p.slice()) : [], color: r ? r.color : ROUTE_COLORS[Object.keys(routes).length % ROUTE_COLORS.length] };
+  draw.line = L.polyline([], { color: draw.color, weight: 5, dashArray: '8 8' }).addTo(map);
+  draw.dots = L.layerGroup().addTo(map);
+  if (id) drawRoute(id);
+  $('#drawTitle').textContent = id ? 'Editing ' + r.name + ': tap to add points' : 'Tap the map to add points';
+  $('#drawbar').hidden = false; $('#sheet').classList.add('collapsed');
+  updDraw();
+  if (r && r.pts.length) map.fitBounds(r.pts.map(p => [p[0], p[1]]), { padding: [60, 60] });
+}
+function updDraw(){
+  draw.line.setLatLngs(draw.pts.map(p => [p[0], p[1]]));
+  draw.dots.clearLayers();
+  if (draw.pts.length < 400) draw.pts.forEach(p => L.circleMarker([p[0], p[1]], { radius: 4, color: draw.color, fillColor: '#fff', fillOpacity: 1, weight: 2, interactive: false }).addTo(draw.dots));
+  $('#drawInfo').textContent = draw.pts.length + ' points, ' + fmtDist(routeStats(draw.pts).d);
+}
+function endDraw(){
+  map.removeLayer(draw.line); map.removeLayer(draw.dots);
+  const id = draw.id; draw = null; $('#drawbar').hidden = true;
+  if (id) drawRoute(id);
+}
+$('#btnDraw').onclick = () => startDraw(null);
+$('#drawUndo').onclick = () => { draw.pts.pop(); updDraw(); };
+$('#drawCancel').onclick = endDraw;
+$('#drawSave').onclick = async () => {
+  if (draw.pts.length < 2) return toast('Add at least 2 points');
+  const r = draw.id ? routes[draw.id] : null;
+  const name = r ? r.name : await ask({ title: 'Name this route', value: 'Route ' + (Object.keys(routes).length + 1) });
+  if (!name) return;
+  if (r) await R.child('routes/' + draw.id).update({ pts: draw.pts, eb: me.cs, t: firebase.database.ServerValue.TIMESTAMP });
+  else await R.child('routes').push({ name: name.slice(0, 40), color: draw.color, by: me.cs, pts: draw.pts, t: firebase.database.ServerValue.TIMESTAMP });
+  endDraw(); toast(r ? 'Route updated for everyone' : 'Route shared with the group');
+};
+
+/* GPX import */
+$('#btnGpx').onclick = () => $('#gpxfile').click();
+$('#gpxfile').onchange = async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  try {
+    const g = parseGPX(await f.text(), f.name);
+    const name = await ask({ title: 'Import route', text: g.pts.length + ' points, ' + fmtDist(routeStats(g.pts).d) + (g.wpts.length ? ', ' + g.wpts.length + ' waypoints' : ''), value: g.name });
+    if (!name) return;
+    const ref = await R.child('routes').push({ name: name.slice(0, 40), color: ROUTE_COLORS[Object.keys(routes).length % ROUTE_COLORS.length], by: me.cs, pts: g.pts, wpts: g.wpts, t: firebase.database.ServerValue.TIMESTAMP });
+    map.fitBounds(g.pts.map(p => [p[0], p[1]]), { padding: [50, 50] });
+    $('#sheet').classList.add('collapsed');
+    toast('Route shared with the group');
+  } catch (err) { toast(err.message || 'That file could not be read as GPX.', 4500); }
+};
+function parseGPX(text, fname){
+  const x = new DOMParser().parseFromString(text, 'application/xml');
+  if (x.getElementsByTagName('parsererror').length) throw new Error('That file is not valid GPX.');
+  const all = t => Array.from(x.getElementsByTagNameNS('*', t));
+  const child = (n, t) => { const c = n.getElementsByTagNameNS('*', t)[0]; return c ? c.textContent.trim() : ''; };
+  let nodes = all('trkpt'); if (!nodes.length) nodes = all('rtept');
+  let raw = nodes.map(n => {
+    const la = +n.getAttribute('lat'), lo = +n.getAttribute('lon'), e = child(n, 'ele');
+    const p = [+la.toFixed(6), +lo.toFixed(6)];
+    if (e !== '' && !isNaN(+e)) p.push(Math.round(+e));
+    return p;
+  }).filter(p => isFinite(p[0]) && isFinite(p[1]) && Math.abs(p[0]) <= 90 && Math.abs(p[1]) <= 180);
+  const wpts = all('wpt').slice(0, 100).map(n => ({ lat: +(+n.getAttribute('lat')).toFixed(6), lng: +(+n.getAttribute('lon')).toFixed(6), name: (child(n, 'name') || 'Waypoint').slice(0, 40) })).filter(w => isFinite(w.lat) && isFinite(w.lng));
+  if (raw.length < 2) throw new Error('No track or route found in that GPX file.');
+  const pts = [raw[0]];
+  for (let i = 1; i < raw.length; i++) if (hav(pts[pts.length - 1], raw[i]) >= 5) pts.push(raw[i]);
+  if (pts[pts.length - 1] !== raw[raw.length - 1]) pts.push(raw[raw.length - 1]);
+  let out = pts;
+  if (out.length > 2000) { const step = out.length / 2000; out = Array.from({ length: 2000 }, (_, i) => pts[Math.floor(i * step)]); out.push(pts[pts.length - 1]); }
+  const trk = all('trk')[0] || all('rte')[0];
+  const name = (trk && child(trk, 'name')) || fname.replace(/\.gpx$/i, '');
+  return { pts: out, wpts, name: name.slice(0, 40) };
+}
+
+/* pins */
+function pinIcon(c){
+  return L.divIcon({ className: '', iconSize: [26, 34], iconAnchor: [13, 33],
+    html: `<div class="pin"><svg width="26" height="34" viewBox="0 0 26 34"><path d="M13 33C13 33 2 20 2 12a11 11 0 0 1 22 0c0 8-11 21-11 21z" fill="${esc(c)}" stroke="#fff" stroke-width="2"/><circle cx="13" cy="12" r="4" fill="#fff"/></svg></div>` });
+}
+async function dropPin(ll){
+  buzz(20);
+  const label = await ask({ title: 'Drop a shared pin', text: 'Everyone in the group sees it.', value: 'Meet here' });
+  if (!label) return;
+  R.child('pins').push({ lat: +ll.lat.toFixed(6), lng: +ll.lng.toFixed(6), label: label.slice(0, 40), by: me.cs, color: me.color, t: firebase.database.ServerValue.TIMESTAMP });
+}
+function renderPins(){
+  Object.keys(pinMarkers).forEach(id => { if (!pins[id]) { map.removeLayer(pinMarkers[id]); delete pinMarkers[id]; } });
+  Object.entries(pins).forEach(([id, p]) => {
+    if (pinMarkers[id]) return;
+    const el = document.createElement('div');
+    el.innerHTML = `<b>${esc(p.label)}</b><br>dropped by ${esc(p.by)}${myPos ? '<br>' + fmtDist(hav(myPos, [p.lat, p.lng])) + ' from you' : ''}<br>`;
+    const del = document.createElement('button'); del.className = 'mini danger'; del.textContent = 'Remove pin';
+    del.onclick = () => R.child('pins/' + id).remove();
+    el.appendChild(del);
+    pinMarkers[id] = L.marker([p.lat, p.lng], { icon: pinIcon(p.color) }).bindPopup(el).addTo(map);
+  });
+}
+
+/* ---------- push-to-talk ---------- */
+const MAX_TX = 60000;
+const fresh = f => f && now() - (f.t || 0) < MAX_TX + 5000;
+const MIME = (window.MediaRecorder && MediaRecorder.isTypeSupported && ['audio/webm;codecs=opus', 'audio/ogg;codecs=opus', 'audio/webm'].find(m => MediaRecorder.isTypeSupported(m))) || '';
+let mic = null, micIdleT, rec = null, txRef = null, seq = 0, pttState = 'idle', pressed = false, maxT;
+const pttBtn = $('#ptt');
+
+function b64(buf){ let s = ''; const b = new Uint8Array(buf); for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); }
+function unb64(s){ const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+
+async function getMic(){
+  clearTimeout(micIdleT);
+  if (mic && mic.getTracks().some(t => t.readyState === 'live')) return mic;
+  mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1, sampleRate: 48000 } });
+  return mic;
+}
+function releaseMicLater(){
+  clearTimeout(micIdleT);
+  micIdleT = setTimeout(() => { if (mic && pttState === 'idle') { mic.getTracks().forEach(t => t.stop()); mic = null; } }, 90000);
+}
+
+function renderFloor(){
+  const f = fresh(floor) ? floor : null;
+  const other = f && f.uid !== uid;
+  pttBtn.classList.toggle('busy', !!other && pttState === 'idle');
+  if (pttState === 'idle') pttBtn.querySelector('.ptt-txt').textContent = other ? 'Channel busy' : 'Hold to talk';
+  $('#talk').hidden = !other;
+  if (other) { $('#talkTxt').textContent = f.cs + ' is talking'; $('#talk').style.setProperty('--c', f.color || '#fff'); }
+  renderMembers();
+}
+
+async function pttDown(e){
+  e.preventDefault();
+  if (pttState !== 'idle' || !R) return;
+  pressed = true; pttState = 'starting';
+  pttBtn.classList.add('arming'); buzz(25);
+  try { pttBtn.setPointerCapture(e.pointerId); } catch {}
+  try {
+    if (!window.MediaRecorder) throw new Error('This phone cannot record audio in the app.');
+    const stream = await getMic();
+    const txId = R.child('ptt').push().key;
+    const floorRef = R.child('floor');
+    const res = await floorRef.transaction(cur => {
+      if (cur && cur.uid !== uid && now() - (cur.t || 0) < MAX_TX + 5000) return;
+      return { uid, cs: me.cs, color: me.color, t: now(), tx: txId };
+    }, undefined, false);
+    if (!res.committed) { busyBeep(); buzz([40, 60, 40]); toast((floor && floor.cs || 'Someone') + ' is talking. Wait for them to finish.'); return resetPtt(); }
+    floorRef.onDisconnect().remove();
+    if (!pressed) { releaseFloor(); return resetPtt(); }
+    beginTx(stream, txId);
+  } catch (err) {
+    resetPtt();
+    toast(err && err.name === 'NotAllowedError' ? 'Microphone is blocked. Allow it for QC Minivan Owners in Android Settings, Apps, Permissions.' : (err.message || 'Could not start the microphone.'), 5000);
+  }
+}
+function beginTx(stream, txId){
+  txRef = R.child('ptt/' + txId);
+  txRef.onDisconnect().remove();
+  txRef.set({ uid, cs: me.cs, mime: MIME || 'audio/webm', t: firebase.database.ServerValue.TIMESTAMP });
+  seq = 0;
+  const ref = txRef;
+  rec = new MediaRecorder(stream, MIME ? { mimeType: MIME, audioBitsPerSecond: 32000 } : { audioBitsPerSecond: 32000 });
+  rec.ondataavailable = ev => {
+    if (!ev.data || !ev.data.size) return;
+    const n = seq++;
+    ev.data.arrayBuffer().then(buf => ref.child('c/' + n).set(b64(buf)));
+  };
+  rec.onstop = () => setTimeout(() => {
+    ref.child('end').set(seq);
+    setTimeout(() => ref.remove(), 20000);
+  }, 250);
+  rec.start(200);
+  pttState = 'live';
+  pttBtn.classList.remove('arming'); pttBtn.classList.add('live');
+  pttBtn.querySelector('.ptt-txt').textContent = 'On air';
+  chirpStart();
+  maxT = setTimeout(() => { toast('Transmissions stop after 60 seconds so others can talk.'); pttUp(); }, MAX_TX);
+}
+function pttUp(e){
+  if (e) e.preventDefault();
+  pressed = false;
+  if (pttState !== 'live') return;
+  clearTimeout(maxT);
+  try { rec.stop(); } catch {}
+  rec = null;
+  releaseFloor();
+  tone(700, .05);
+  buzz(15);
+  resetPtt();
+}
+function releaseFloor(){
+  const f = R.child('floor');
+  f.transaction(cur => (cur && cur.uid === uid) ? null : cur);
+  f.onDisconnect().cancel();
+}
+function resetPtt(){
+  pttState = 'idle'; pttBtn.classList.remove('arming', 'live');
+  renderFloor(); releaseMicLater();
+}
+pttBtn.addEventListener('pointerdown', pttDown);
+pttBtn.addEventListener('pointerup', pttUp);
+pttBtn.addEventListener('pointercancel', pttUp);
+pttBtn.addEventListener('contextmenu', e => e.preventDefault());
+pttBtn.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) pttDown(e); });
+pttBtn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') pttUp(e); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) pttUp(); });
+
+/* receive: stream Opus chunks into MediaSource with a small jitter buffer */
+const player = new Audio();
+player.autoplay = true;
+function unlockPlayer(){
+  try {
+    player.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+    player.play().catch(() => {});
+  } catch {}
+}
+let current = null;
+function receive(id, meta){
+  if (current) current.stop();
+  const ref = R.child('ptt/' + id);
+  const chunks = {}; let next = 0, total = null, started = false, stopped = false;
+  tone(1500, .04, 0, .06);
+  const useMSE = window.MediaSource && MediaSource.isTypeSupported(meta.mime || 'audio/webm;codecs=opus');
+  let ms, sb;
+  const done = () => {
+    if (stopped) return; stopped = true;
+    ref.child('c').off(); ref.child('end').off();
+    if (current === ctl) current = null;
+  };
+  const ctl = { stop(){ done(); try { player.pause(); } catch {} } };
+  current = ctl;
+
+  if (useMSE) {
+    ms = new MediaSource();
+    player.src = URL.createObjectURL(ms);
+    ms.addEventListener('sourceopen', () => {
+      try { sb = ms.addSourceBuffer(meta.mime || 'audio/webm;codecs=opus'); sb.mode = 'sequence'; } catch { return; }
+      sb.addEventListener('updateend', pump); pump();
+    }, { once: true });
+  }
+  function pump(){
+    if (!useMSE) return;
+    if (!sb || sb.updating) return;
+    if (chunks[next] !== undefined) {
+      const d = unb64(chunks[next]); delete chunks[next]; next++;
+      try { sb.appendBuffer(d); } catch { return; }
+      if (!started && (next >= 2 || total !== null)) { started = true; player.play().catch(() => {}); }
+    } else if (total !== null && next >= total && ms.readyState === 'open') {
+      try { ms.endOfStream(); } catch {}
+      if (!started) { started = true; player.play().catch(() => {}); }
+      player.onended = () => { rogerBeep(); player.onended = null; };
+      done();
+    }
+  }
+  function fallbackPlay(){
+    const parts = []; for (let i = 0; i < total; i++) if (chunks[i]) parts.push(unb64(chunks[i]));
+    player.src = URL.createObjectURL(new Blob(parts, { type: meta.mime || 'audio/webm' }));
+    player.onended = () => { rogerBeep(); player.onended = null; };
+    player.play().catch(() => {});
+    done();
+  }
+  ref.child('c').on('child_added', s => { chunks[+s.key] = s.val(); useMSE ? pump() : (total !== null && Object.keys(chunks).length >= total && fallbackPlay()); });
+  ref.child('end').on('value', s => {
+    if (s.val() == null) return;
+    total = +s.val();
+    useMSE ? pump() : (Object.keys(chunks).length >= total && fallbackPlay());
+  });
+  setTimeout(() => { if (!stopped && total === null) done(); }, MAX_TX + 15000);
+}
+
+/* ---------- boot ---------- */
+setupJoin();
+const CFG = window.FIREBASE_CONFIG;
+if (!window.firebase || !CFG || !CFG.apiKey || /PASTE/i.test(CFG.apiKey)) {
+  $('#setup').hidden = false; $('#create').disabled = $('#joinbtn').disabled = true;
+} else {
+  firebase.initializeApp(CFG);
+  db = firebase.database();
+  db.ref('.info/serverTimeOffset').on('value', s => offset = s.val() || 0);
+}
+})();
+</script>
+</body>
+</html>

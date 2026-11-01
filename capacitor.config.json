@@ -1,0 +1,8 @@
+{
+  "appId": "com.qcminivanowners.app",
+  "appName": "QC Minivan Owners",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}
