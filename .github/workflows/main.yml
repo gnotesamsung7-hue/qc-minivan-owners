@@ -33,6 +33,7 @@ jobs:
           mkdir -p www/lib/images
           cp node_modules/leaflet/dist/leaflet.js node_modules/leaflet/dist/leaflet.css www/lib/
           cp node_modules/leaflet/dist/images/* www/lib/images/
+          cp node_modules/qrcode-generator/qrcode.js www/lib/ || echo "qrcode not bundled; app will load it from the CDN"
           for f in firebase-app-compat.js firebase-auth-compat.js firebase-database-compat.js; do
             cp "node_modules/firebase/$f" www/lib/ || echo "$f not bundled; app will load it from the CDN"
           done
@@ -76,3 +77,4 @@ jobs:
           tag_name: build-${{ github.run_number }}
           name: QC Minivan Owners build ${{ github.run_number }}
           files: QC-Minivan-Owners.apk
+          make_latest: true
