@@ -12,6 +12,8 @@
 <script src="lib/firebase-auth-compat.js"></script>
 <script src="lib/firebase-database-compat.js"></script>
 <script>window.firebase&&firebase.database||document.write('<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"><\/script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"><\/script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"><\/script>')</script>
+<script src="lib/qrcode.js"></script>
+<script>window.qrcode||document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"><\/script>')</script>
 <script src="config.js"></script>
 <style>
 :root{
@@ -123,6 +125,41 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
 .dlg .btns button{padding:11px 16px;border-radius:10px;font-weight:700}
 .dlg .ok{background:var(--orange);color:#fff}
 
+#qrModal{position:fixed;inset:0;z-index:1000;background:#0009;display:grid;place-items:center;padding:20px}
+.qrbox{background:var(--paper);border-radius:18px;padding:20px;width:100%;max-width:360px;text-align:center}
+.qrbox h2{margin:0 0 6px;font-size:21px}
+.qrbox p{margin:0 0 14px;color:var(--muted);line-height:1.4;font-size:15px}
+.qrcode{background:#fff;border-radius:12px;padding:8px;display:inline-block;width:min(230px,62vw)}
+.qrcode svg{display:block;width:100%;height:auto}
+.qrbox .code{font-size:26px;letter-spacing:3px;font-weight:700;color:var(--ink);margin:12px 0 2px}
+.qrbox .btns{display:flex;gap:8px;margin-top:16px}
+.qrbox .btns button{flex:1;padding:12px;border-radius:10px;font-weight:700;background:var(--khaki)}
+.qrbox .btns .ok{background:var(--orange);color:#fff}
+.share-link{display:block;margin:14px auto 0;color:#F3EFE2;text-decoration:underline;font-size:16px;padding:8px}
+.settings{margin:10px 0 4px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.set{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--line)}
+.set:last-child{border-bottom:0}
+.set>div:first-child{flex:1;min-width:0}
+.set b{display:block;font-size:16px}
+.set span{display:block;font-size:14px;color:var(--muted);margin-top:2px;line-height:1.3}
+.switch{width:52px;height:30px;border-radius:15px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0004;transition:transform .15s}
+.switch[aria-checked=true]{background:var(--teal)}
+.switch[aria-checked=true]::after{transform:translateX(22px)}
+.seg{display:flex;background:var(--khaki);border-radius:9px;padding:3px;flex:none}
+.seg button{padding:7px 10px;border-radius:7px;font-size:14px;font-weight:700;color:var(--muted)}
+.seg button[aria-checked=true]{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px #0002}
+#ptt.voxon::after{content:"";position:absolute;inset:-13px;border-radius:50%;border:4px solid var(--teal);pointer-events:none;
+  opacity:calc(.3 + var(--lvl,0) * .7);transform:scale(calc(1 + var(--lvl,0) * .1))}
+.qrbox{max-height:92vh;overflow:auto}
+.steps{text-align:left;margin:14px 0 0;padding:0;list-style:none;counter-reset:st}
+.steps li{counter-increment:st;position:relative;padding:0 0 12px 38px;line-height:1.4;font-size:15px}
+.steps li::before{content:counter(st);position:absolute;left:0;top:-2px;width:26px;height:26px;border-radius:50%;background:var(--forest);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+.steps b{color:var(--ink)}
+.qrnote{font-size:13px!important;margin:4px 0 0!important}
+.dlg ul{margin:0 0 4px;padding-left:20px;line-height:1.45}
+.dlg li{margin-bottom:8px}
+.dlg .warn{background:#F2661B1F;border-left:4px solid var(--orange);padding:10px 12px;border-radius:8px;line-height:1.4;font-size:15px}
 /* markers */
 .mk{position:relative;width:24px;height:24px}
 .mk .dot{position:absolute;inset:3px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 4px #0007}
@@ -146,7 +183,7 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
       <img src="logo.png" alt="QC Minivan Owners logo" width="96" height="117">
       <h1>QC Minivan Owners</h1>
     </div>
-    <p class="tag">Plan the convoy route together, see where every van is, and talk to the whole group with one button.</p>
+    <p class="tag">Plan the convoy route together, see where everyone is, and talk to the whole group with one button.</p>
 
     <label for="cs">Callsign</label>
     <div class="row">
@@ -163,6 +200,7 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
       <button id="joinbtn" class="secondary">Join</button>
     </div>
     <p id="joinerr" class="err" role="alert"></p>
+    <button id="shareJoin" class="share-link">Show download QR for another member</button>
 
     <div id="setup" class="setup" hidden>
       <b>Firebase isn't connected yet.</b><br>
@@ -204,7 +242,18 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
       <button class="tab" role="tab" data-tab="team" aria-selected="false">Team <span id="teamCount"></span></button>
       <button class="tab" role="tab" data-tab="routes" aria-selected="false">Routes <span id="routeCount"></span></button>
     </div>
-    <div class="panel" id="p-team"></div>
+    <div class="panel" id="p-team">
+      <div class="actions"><button id="btnInvite" class="secondary">Invite with QR code</button></div>
+      <div class="settings">
+        <div class="set"><div><b>Share my location</b><span id="shareSub">The group sees you on the map</span></div>
+          <button id="shareTgl" class="switch" role="switch" aria-checked="true" aria-label="Share my location"></button></div>
+        <div class="set"><div><b>Hands-free voice mode</b><span id="voxSub">Transmits when you speak, no button needed. For drivers with the phone mounted.</span></div>
+          <button id="voxTgl" class="switch" role="switch" aria-checked="false" aria-label="Hands-free voice mode"></button></div>
+        <div class="set" id="voxSensRow" hidden><div><b>Voice sensitivity</b><span>Use Low if road noise keeps setting it off</span></div>
+          <div class="seg" role="radiogroup" aria-label="Voice sensitivity"><button role="radio" data-s="low">Low</button><button role="radio" data-s="med">Med</button><button role="radio" data-s="high">High</button></div></div>
+      </div>
+      <div id="teamList"></div>
+    </div>
     <div class="panel" id="p-routes" hidden>
       <div class="actions">
         <button id="btnDraw" class="secondary">Draw a route</button>
@@ -217,6 +266,35 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
   </div>
   <div id="toast" role="status"></div>
 </section>
+
+<div id="qrModal" hidden>
+  <div class="qrbox" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <h2 id="qrTitle">Get the app</h2>
+    <div class="qrcode" id="qrImg"></div>
+    <div id="qrJoin" hidden><div class="code" id="qrCode"></div><p class="qrnote">Group code to join after installing</p></div>
+    <ol class="steps">
+      <li><b>Scan.</b> Open the camera (or Google Lens) on the other phone, point it at the code, and tap the link that pops up.</li>
+      <li><b>Download.</b> The file <b>QC-Minivan-Owners.apk</b> downloads. If Chrome warns about the file, tap <b>Download anyway</b>.</li>
+      <li><b>Install.</b> Open the downloaded file. If Android asks, allow <b>Install unknown apps</b> for Chrome, go back, then tap <b>Install</b>.</li>
+      <li><b>Join.</b> Open the app, pick a callsign (not a real name), allow location and microphone, and <span id="qrJoinStep">join with the group code</span>.</li>
+    </ol>
+    <p class="qrnote">Android phones only. Updating? Install the new file over the old one; nothing is lost.</p>
+    <div class="btns"><button id="qrCopy">Copy link</button><button id="qrClose" class="ok">Done</button></div>
+  </div>
+</div>
+
+<div id="notice" hidden style="position:fixed;inset:0;z-index:1000;background:#0007;display:grid;place-items:center;padding:20px">
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="nTitle" style="max-height:90vh;overflow:auto">
+    <h2 id="nTitle">Before you join</h2>
+    <ul>
+      <li>The group sees your <b>callsign</b>, your <b>live location</b> and <b>speed</b> while the app is open, and hears you when you transmit.</li>
+      <li>You can pause location sharing anytime in the <b>Team</b> tab. When you leave a group, your location is deleted.</li>
+      <li>Voice clips are deleted from the server about 20 seconds after each transmission.</li>
+    </ul>
+    <div class="warn"><b>Driving?</b> Don't hold the phone or press Talk while moving. Let a passenger handle the radio, or mount the phone and turn on <b>hands-free voice mode</b>. The Anti-Distracted Driving Act (RA 10913) fines start at ₱5,000.</div>
+    <div class="btns"><button id="nCancel">Cancel</button><button id="nOk" class="ok">I understand</button></div>
+  </div>
+</div>
 
 <div id="modal" hidden>
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mTitle">
@@ -321,6 +399,10 @@ function validCS(){
 async function start(code, create){
   $('#joinerr').textContent = '';
   const cs = validCS(); if (!cs) return;
+  if (!store.get('notice1', false)) {
+    if (!await showNotice()) return;
+    store.set('notice1', true);
+  }
   ac(); unlockPlayer();
   me.cs = cs;
   $('#create').disabled = $('#joinbtn').disabled = true;
@@ -343,6 +425,15 @@ async function start(code, create){
       /network/i.test(c) ? 'No internet connection. Connect and try again.' :
       (e.message || 'Could not connect.');
   } finally { $('#create').disabled = $('#joinbtn').disabled = false; }
+}
+
+function showNotice(){
+  return new Promise(res => {
+    $('#notice').hidden = false;
+    const done = v => { $('#notice').hidden = true; $('#nOk').onclick = $('#nCancel').onclick = null; res(v); };
+    $('#nOk').onclick = () => done(true);
+    $('#nCancel').onclick = () => done(false);
+  });
 }
 
 /* ---------- room ---------- */
@@ -377,13 +468,19 @@ async function enterRoom(code){
 
   setInterval(() => meRef.update({ t: firebase.database.ServerValue.TIMESTAMP }), 30000);
   setInterval(() => { renderMembers(); renderFloor(); }, 10000);
+  renderShare(); renderRadio();
   startGPS();
   keepAwake();
 }
 
 $('#leave').onclick = async () => {
-  if (!await ask({ title: 'Leave this group?', text: 'You will stop sharing your location and stop hearing the group.', input: false, ok: 'Leave' })) return;
-  try { await meRef.update({ online: false }); } catch {}
+  if (!await ask({ title: 'Leave this group?', text: 'Your location is deleted from the group and you stop hearing them. Routes and pins you added stay for the others.', input: false, ok: 'Leave' })) return;
+  try {
+    if (vox) await setVox(false);
+    pttUp();
+    await meRef.child('online').onDisconnect().cancel();
+    await meRef.remove();
+  } catch {}
   location.reload();
 };
 $('#codebtn').onclick = async () => {
@@ -434,9 +531,29 @@ function startGPS(){
   }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 });
 }
 function setGps(t, c){ $('#gps').textContent = t; $('#gps').style.setProperty('--c', c); }
+let sharing = store.get('share', true), mySpeed = 0, lastDriveNag = 0;
+function renderShare(){
+  $('#shareTgl').setAttribute('aria-checked', sharing);
+  $('#shareSub').textContent = sharing ? 'The group sees you on the map' : "Paused. The group can't see where you are";
+}
+$('#shareTgl').onclick = () => {
+  sharing = !sharing; store.set('share', sharing);
+  if (!sharing) { meRef.update({ lat: null, lng: null, acc: null, spd: null, hdg: null, lt: null }); toast('Location sharing paused'); setGps('Not sharing', '#5F675F'); }
+  else { lastSent = null; lastSentT = 0; toast('Sharing your location again'); }
+  renderShare();
+};
+function drivingNudge(force){
+  if (vox || mySpeed < 4.2) return;
+  if (!force && Date.now() - lastDriveNag < 600000) return;
+  lastDriveNag = Date.now();
+  toast('Moving at ' + Math.round(mySpeed * 3.6) + ' km/h. Driving? Let a passenger talk, or turn on hands-free voice mode in the Team tab.', 7000);
+}
 function onPos(p){
   const c = p.coords;
   myPos = [c.latitude, c.longitude]; myAcc = c.accuracy;
+  mySpeed = c.speed != null && !isNaN(c.speed) ? c.speed : 0;
+  if (lastDriveNag === 0 && mySpeed >= 4.2) drivingNudge(true);
+  if (!sharing) { setGps('Not sharing', '#5F675F'); updateMyMarker(); if (firstFix) { firstFix = false; map.setView(myPos, 16); } return; }
   setGps('±' + Math.round(c.accuracy) + ' m', c.accuracy < 25 ? '#23897D' : '#C9A227');
   if (firstFix) { firstFix = false; map.setView(myPos, 16); }
   updateMyMarker();
@@ -481,27 +598,28 @@ function updateMyMarker(){
 function renderMembers(){
   if (!map) return;
   Object.keys(memberMarkers).forEach(id => {
-    if (id !== uid && (!members[id] || members[id].lat == null)) { map.removeLayer(memberMarkers[id]); delete memberMarkers[id]; }
+    const mm = members[id];
+    if (id !== uid && (!mm || mm.lat == null || (!mm.online && now() - (mm.t || 0) > 86400000))) { map.removeLayer(memberMarkers[id]); delete memberMarkers[id]; }
   });
-  Object.entries(members).forEach(([id, m]) => { if (id !== uid && m.lat != null) placeMarker(id, m, [m.lat, m.lng]); });
+  Object.entries(members).forEach(([id, m]) => { if (id !== uid && m.lat != null && (m.online || now() - (m.t || 0) < 86400000)) placeMarker(id, m, [m.lat, m.lng]); });
   updateMyMarker();
 
-  const list = Object.entries(members).sort((a, b) => (a[0] === uid ? -1 : b[0] === uid ? 1 : (b[1].online - a[1].online) || String(a[1].cs).localeCompare(b[1].cs)));
+  const list = Object.entries(members).filter(([id, m]) => id === uid || (m.cs && (m.online || now() - (m.t || 0) < 86400000))).sort((a, b) => (a[0] === uid ? -1 : b[0] === uid ? 1 : (b[1].online - a[1].online) || String(a[1].cs).localeCompare(b[1].cs)));
   const live = list.filter(([, m]) => m.online && now() - (m.t || 0) < 120000).length;
   $('#teamCount').textContent = live + '/' + list.length;
-  $('#p-team').innerHTML = list.map(([id, m]) => {
+  $('#teamList').innerHTML = list.map(([id, m]) => {
     const on = m.online && now() - (m.t || 0) < 120000;
     const talking = floor && floor.uid === id && fresh(floor);
     const bits = [];
     if (id === uid) bits.push('You');
     else if (m.lat != null && myPos) bits.push(fmtDist(hav(myPos, [m.lat, m.lng])) + ' away');
     if (m.spd > 0.8) bits.push(Math.round(m.spd * 3.6) + ' km/h');
-    bits.push(on ? (m.lt ? 'seen ' + ago(m.lt) : 'no location yet') : 'offline');
+    bits.push(on ? (id === uid && !sharing ? 'location paused' : m.lt ? 'seen ' + ago(m.lt) : 'location not shared') : 'offline');
     return `<div class="item${on ? '' : ' off'}${talking ? ' talking' : ''}"><span class="sw" style="--c:${esc(m.color)}"></span>
       <div class="main"><div class="name">${esc(m.cs)}</div><div class="meta">${esc(bits.join(', '))}</div></div>
       ${m.lat != null ? `<button class="mini" data-goto="${esc(id)}">Find</button>` : ''}</div>`;
   }).join('') || '<div class="empty">Share the group code so others can join.</div>';
-  $('#p-team').querySelectorAll('[data-goto]').forEach(b => b.onclick = () => {
+  $('#teamList').querySelectorAll('[data-goto]').forEach(b => b.onclick = () => {
     const id = b.dataset.goto, ll = id === uid ? myPos : [members[id].lat, members[id].lng];
     if (ll) map.setView(ll, 17);
   });
@@ -690,25 +808,31 @@ async function getMic(){
 }
 function releaseMicLater(){
   clearTimeout(micIdleT);
-  micIdleT = setTimeout(() => { if (mic && pttState === 'idle') { mic.getTracks().forEach(t => t.stop()); mic = null; } }, 90000);
+  micIdleT = setTimeout(() => { if (mic && pttState === 'idle' && !vox) { mic.getTracks().forEach(t => t.stop()); mic = null; } }, 90000);
 }
 
 function renderFloor(){
   const f = fresh(floor) ? floor : null;
   const other = f && f.uid !== uid;
   pttBtn.classList.toggle('busy', !!other && pttState === 'idle');
-  if (pttState === 'idle') pttBtn.querySelector('.ptt-txt').textContent = other ? 'Channel busy' : 'Hold to talk';
+  if (pttState === 'idle') pttBtn.querySelector('.ptt-txt').textContent = other ? 'Channel busy' : vox ? 'Voice mode: just speak' : 'Hold to talk';
   $('#talk').hidden = !other;
   if (other) { $('#talkTxt').textContent = f.cs + ' is talking'; $('#talk').style.setProperty('--c', f.color || '#fff'); }
   renderMembers();
 }
 
-async function pttDown(e){
+let txMode = 'ptt';
+function pttDown(e){
   e.preventDefault();
   if (pttState !== 'idle' || !R) return;
-  pressed = true; pttState = 'starting';
-  pttBtn.classList.add('arming'); buzz(25);
   try { pttBtn.setPointerCapture(e.pointerId); } catch {}
+  drivingNudge(false);
+  startTx('ptt');
+}
+async function startTx(mode){
+  if (pttState !== 'idle' || !R) return;
+  pressed = true; pttState = 'starting'; txMode = mode;
+  if (mode === 'ptt') { pttBtn.classList.add('arming'); buzz(25); }
   try {
     if (!window.MediaRecorder) throw new Error('This phone cannot record audio in the app.');
     const stream = await getMic();
@@ -718,12 +842,16 @@ async function pttDown(e){
       if (cur && cur.uid !== uid && now() - (cur.t || 0) < MAX_TX + 5000) return;
       return { uid, cs: me.cs, color: me.color, t: now(), tx: txId };
     }, undefined, false);
-    if (!res.committed) { busyBeep(); buzz([40, 60, 40]); toast((floor && floor.cs || 'Someone') + ' is talking. Wait for them to finish.'); return resetPtt(); }
+    if (!res.committed) {
+      if (mode === 'ptt') { busyBeep(); buzz([40, 60, 40]); toast((floor && floor.cs || 'Someone') + ' is talking. Wait for them to finish.'); }
+      return resetPtt();
+    }
     floorRef.onDisconnect().remove();
     if (!pressed) { releaseFloor(); return resetPtt(); }
     beginTx(stream, txId);
   } catch (err) {
     resetPtt();
+    if (mode === 'vox') setVox(false);
     toast(err && err.name === 'NotAllowedError' ? 'Microphone is blocked. Allow it for QC Minivan Owners in Android Settings, Apps, Permissions.' : (err.message || 'Could not start the microphone.'), 5000);
   }
 }
@@ -747,7 +875,7 @@ function beginTx(stream, txId){
   pttState = 'live';
   pttBtn.classList.remove('arming'); pttBtn.classList.add('live');
   pttBtn.querySelector('.ptt-txt').textContent = 'On air';
-  chirpStart();
+  if (txMode === 'ptt') chirpStart();
   maxT = setTimeout(() => { toast('Transmissions stop after 60 seconds so others can talk.'); pttUp(); }, MAX_TX);
 }
 function pttUp(e){
@@ -778,6 +906,59 @@ pttBtn.addEventListener('contextmenu', e => e.preventDefault());
 pttBtn.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) pttDown(e); });
 pttBtn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') pttUp(e); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pttUp(); });
+
+/* hands-free voice mode (VOX): transmit while the mic hears speech */
+const VOX_TH = { low: .09, med: .05, high: .028 };
+let vox = false, voxSens = store.get('voxSens', 'med'), voxSrc = null, voxAn = null, voxBuf, voxT, voxOn = 0, voxOff = 0, voxHoldUntil = 0;
+async function setVox(on){
+  if (on) {
+    try {
+      const st = await getMic(), c = ac();
+      voxSrc = c.createMediaStreamSource(st); voxAn = c.createAnalyser(); voxAn.fftSize = 1024;
+      voxBuf = new Float32Array(voxAn.fftSize); voxSrc.connect(voxAn);
+      vox = true; voxOn = voxOff = 0; voxHoldUntil = performance.now() + 800;
+      clearInterval(voxT); voxT = setInterval(voxTick, 40);
+      toast('Voice mode on. Mount the phone and just speak; it transmits when it hears you.', 4500);
+    } catch (err) {
+      vox = false;
+      toast(err && err.name === 'NotAllowedError' ? 'Microphone is blocked. Allow it for QC Minivan Owners in Android Settings, Apps, Permissions.' : 'Could not start voice mode.', 5000);
+    }
+  } else {
+    vox = false; clearInterval(voxT);
+    try { voxSrc && voxSrc.disconnect(); } catch {}
+    voxSrc = voxAn = null;
+    if (pttState === 'live' && txMode === 'vox') pttUp();
+    pttBtn.style.removeProperty('--lvl');
+    releaseMicLater();
+  }
+  renderRadio(); renderFloor();
+}
+function voxTick(){
+  if (!voxAn) return;
+  voxAn.getFloatTimeDomainData(voxBuf);
+  let sum = 0; for (let i = 0; i < voxBuf.length; i++) sum += voxBuf[i] * voxBuf[i];
+  const rms = Math.sqrt(sum / voxBuf.length), th = VOX_TH[voxSens] || VOX_TH.med, t = performance.now();
+  pttBtn.style.setProperty('--lvl', Math.min(1, rms / (th * 2)).toFixed(2));
+  const hearing = !player.paused && !player.ended;
+  const busy = fresh(floor) && floor.uid !== uid;
+  if (pttState === 'idle') {
+    if (rms > th && !hearing && !busy && t > voxHoldUntil) { voxOn += 40; if (voxOn >= 80) { voxOn = voxOff = 0; startTx('vox'); } }
+    else voxOn = 0;
+  } else if (pttState === 'live' && txMode === 'vox') {
+    if (rms < th * .7) { voxOff += 40; if (voxOff >= 1400) { voxOff = 0; pttUp(); voxHoldUntil = t + 500; } }
+    else voxOff = 0;
+  }
+}
+function renderRadio(){
+  $('#voxTgl').setAttribute('aria-checked', vox);
+  $('#voxSensRow').hidden = !vox;
+  document.querySelectorAll('#voxSensRow [data-s]').forEach(b => b.setAttribute('aria-checked', b.dataset.s === voxSens));
+  pttBtn.classList.toggle('voxon', vox);
+  pttBtn.setAttribute('aria-label', vox ? 'Voice mode is on. Press and hold to talk manually.' : 'Hold to talk');
+}
+$('#voxTgl').onclick = () => setVox(!vox);
+document.querySelectorAll('#voxSensRow [data-s]').forEach(b => b.onclick = () => { voxSens = b.dataset.s; store.set('voxSens', voxSens); renderRadio(); });
+function afterPlay(){ rogerBeep(); voxHoldUntil = performance.now() + 900; player.onended = null; }
 
 /* receive: stream Opus chunks into MediaSource with a small jitter buffer */
 const player = new Audio();
@@ -822,14 +1003,14 @@ function receive(id, meta){
     } else if (total !== null && next >= total && ms.readyState === 'open') {
       try { ms.endOfStream(); } catch {}
       if (!started) { started = true; player.play().catch(() => {}); }
-      player.onended = () => { rogerBeep(); player.onended = null; };
+      player.onended = afterPlay;
       done();
     }
   }
   function fallbackPlay(){
     const parts = []; for (let i = 0; i < total; i++) if (chunks[i]) parts.push(unb64(chunks[i]));
     player.src = URL.createObjectURL(new Blob(parts, { type: meta.mime || 'audio/webm' }));
-    player.onended = () => { rogerBeep(); player.onended = null; };
+    player.onended = afterPlay;
     player.play().catch(() => {});
     done();
   }
@@ -841,6 +1022,26 @@ function receive(id, meta){
   });
   setTimeout(() => { if (!stopped && total === null) done(); }, MAX_TX + 15000);
 }
+
+/* ---------- invite QR ---------- */
+const DOWNLOAD_URL = window.APP_DOWNLOAD_URL || 'https://github.com/gnotesamsung7-hue/qc-minivan-owners/releases/latest/download/QC-Minivan-Owners.apk';
+function showInvite(){
+  if (!window.qrcode) return toast('QR codes need internet the first time. Use Copy link instead.', 4000);
+  const q = qrcode(0, 'M'); q.addData(DOWNLOAD_URL); q.make();
+  $('#qrImg').innerHTML = q.createSvgTag({ cellSize: 6, margin: 3, scalable: true });
+  const code = R ? $('#codeTxt').textContent : '';
+  $('#qrJoin').hidden = !code; $('#qrCode').textContent = code;
+  $('#qrJoinStep').innerHTML = code ? 'join with group code <b>' + esc(code) + '</b>' : 'join with the group code';
+  $('#qrModal').hidden = false;
+}
+$('#btnInvite').onclick = showInvite;
+$('#shareJoin').onclick = showInvite;
+$('#qrClose').onclick = () => $('#qrModal').hidden = true;
+$('#qrModal').onclick = e => { if (e.target.id === 'qrModal') $('#qrModal').hidden = true; };
+$('#qrCopy').onclick = async () => {
+  try { await navigator.clipboard.writeText(DOWNLOAD_URL); toast('Download link copied'); }
+  catch { toast(DOWNLOAD_URL, 6000); }
+};
 
 /* ---------- boot ---------- */
 setupJoin();

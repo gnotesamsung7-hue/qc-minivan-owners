@@ -32,6 +32,10 @@ The launcher icon is built from `icons/` (generated from the club logo). To chan
 
 - **Invite with QR code** (Team tab, or the link on the first screen): shows a QR code another member scans with their phone camera to download the latest APK, plus the group code to join with. It always points to the newest build in Releases, so keep the repo Public.
 
+- **Share my location** (Team tab): pause it anytime; the group stops seeing you. Leaving a group deletes your location.
+- **Hands-free voice mode** (Team tab): for drivers with the phone mounted. The app transmits when it hears you and stops after about 1.5 seconds of quiet. Set sensitivity to Low if road noise triggers it.
+- **invite-card.png**: post it in the group chat or print it; it has the download QR and install steps.
+
 ## How it works
 
 - Locations, routes, pins and the talk channel are synced through Firebase Realtime Database, so it works on 4G, 5G and Wi-Fi without anyone being on the same network.
