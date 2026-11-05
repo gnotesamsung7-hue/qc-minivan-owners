@@ -3,6 +3,13 @@
   "appName": "QC Minivan Owners",
   "webDir": "www",
   "android": {
-    "allowMixedContent": false
+    "allowMixedContent": false,
+    "useLegacyBridge": true
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_van",
+      "iconColor": "#1FA2B5"
+    }
   }
 }

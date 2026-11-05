@@ -32,9 +32,12 @@ The launcher icon is built from `icons/` (generated from the club logo). To chan
 
 - **Invite with QR code** (Team tab, or the link on the first screen): shows a QR code another member scans with their phone camera to download the latest APK, plus the group code to join with. It always points to the newest build in Releases, so keep the repo Public.
 
-- **Share my location** (Team tab): pause it anytime; the group stops seeing you. Leaving a group deletes your location.
-- **Hands-free voice mode** (Team tab): for drivers with the phone mounted. The app transmits when it hears you and stops after about 1.5 seconds of quiet. Set sensitivity to Low if road noise triggers it.
+- **Share my location** (Me tab): pause it anytime; the group stops seeing you. Leaving a group deletes your location.
+- **Hands-free voice mode** (Me tab): for drivers with the phone mounted. The app transmits when it hears you and stops after about 1.5 seconds of quiet. Set sensitivity to Low if road noise triggers it.
 - **invite-card.png**: post it in the group chat or print it; it has the download QR and install steps.
+
+- **Me tab**: pixel avatar maker (16x16, with mirror mode and ready-made templates), 18 marker colours, battery saver (Off / Saver / Max, turns on automatically at 20%), dark map, and saved map tiles.
+- **Callsign ideas** on the first screen: tap one, or "More ideas" for a new batch. If two people pick the same callsign in a group, the second gets a number added.
 
 ## How it works
 
@@ -42,8 +45,15 @@ The launcher icon is built from `icons/` (generated from the club logo). To chan
 - Voice is recorded as Opus at 32 kbps with echo cancellation, noise suppression and auto gain, sent in 200 ms chunks and played on the other phones about half a second behind the speaker. Clips are deleted from the database 20 seconds after each transmission.
 - The screen stays on while the app is open.
 
+## Background sharing and nearby alerts
+
+- **Keep sharing in background** (Me tab, on by default): your location keeps updating with the screen off or while you use Waze, Spotify or Messenger. Android shows a "QC Minivan Owners" notification while it runs; leaving the group stops it.
+- On Samsung, Xiaomi, Oppo, Vivo and realme phones, set the app's battery use to **Unrestricted** (Me tab, "open app settings", then Battery), or the phone may freeze your dot after a while.
+- **Nearby alerts** (Me tab): pick any of 100 m, 150 m, 300 m, 500 m, 1 km. Choose Sonar, Chime, Beep-beep, Horn, Bell or Silent, plus an optional spoken alert in English or Filipino ("Malapit na si Busina King, 150 metro."). With the screen off you get a notification and the spoken alert.
+- **Happy sound**: when 3 or more members are within your closest distance, a jingle plays with confetti and "Convoy assembled!".
+
 ## Known limits
 
-- Location sharing and listening pause when the screen is locked or the app is in the background (Android pauses web apps). Keep the app open on screen during the trip, ideally on a phone mount. A background service can be added later as a native plugin.
-- Map tiles need data; there is no offline map caching yet.
+- Push-to-talk needs the app open on screen. Hearing others while the app is in the background usually works but is not guaranteed on every phone.
+- Map areas you have viewed are saved on the phone for 30 days (up to about 6,000 tiles), so repeat trips use far less data. Areas you have never opened still need data. Pre-downloading whole regions is not offered, because the free OpenStreetMap servers do not allow bulk downloads.
 - Data use is small: roughly 4 KB per second while someone talks, and a few hundred bytes per location update.

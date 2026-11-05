@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#1E3B2F">
+<meta name="theme-color" content="#0D1B2A">
 <title>QC Minivan Owners</title>
+<script src="lib/capacitor.js"></script>
 <link rel="stylesheet" href="lib/leaflet.css">
 <script src="lib/leaflet.js"></script>
 <script>window.L||document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\/script>')</script>
@@ -17,14 +18,15 @@
 <script src="config.js"></script>
 <style>
 :root{
-  --forest:#1E3B2F; --forest2:#2C5242; --khaki:#EDE8D8; --paper:#F8F6EF; --ink:#202623;
-  --muted:#5F675F; --line:#D5CFBC; --orange:#F2661B; --orange-d:#C94E0E; --teal:#23897D; --red:#C2362B;
-  --sheet:#F8F6EF; --chip:#FFFFFFEE;
+  --forest:#0D1B2A; --forest2:#17324A; --khaki:#EDE8D8; --paper:#F8F6EF; --ink:#202623;
+  --muted:#5F675F; --line:#D5CFBC; --orange:#F2661B; --orange-d:#C94E0E; --teal:#1FA2B5; --red:#C2362B;
+  --sheet:#F8F6EF; --chip:#FFFFFFD9;
+  --stripes:linear-gradient(90deg,#1B3F8B,#1E6FB0 22%,#1FA2B5 45%,#2BC4C9 62%,#17806A 82%,#0F5A48);
   font-family:"Roboto Condensed","sans-serif-condensed","Arial Narrow",system-ui,sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --paper:#18211D; --sheet:#18211D; --khaki:#24302A; --ink:#E9E6DA; --muted:#A3AA9E; --line:#34423A; --chip:#18211DEE; color-scheme:dark;
+  --paper:#101B25; --sheet:#101B25; --khaki:#1B2A38; --ink:#EAF0F3; --muted:#9AAAB6; --line:#26384A; --chip:#101B25D9; color-scheme:dark;
 }}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--forest);color:var(--ink);overflow:hidden}
@@ -35,34 +37,43 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
 
 /* join */
 #join{position:fixed;inset:0;overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 20px 28px;
-  background:radial-gradient(circle at 80% -10%,#3F6B57 0,transparent 55%),repeating-radial-gradient(circle at 20% 110%,transparent 0 22px,#ffffff0d 22px 23px),var(--forest)}
+  background:radial-gradient(120% 70% at 85% -10%,#1E6FB066,transparent 60%),radial-gradient(90% 50% at 0% 110%,#17806A55,transparent 60%),repeating-linear-gradient(180deg,transparent 0 34px,#ffffff07 34px 35px),var(--forest)}
 .join-card{max-width:420px;margin:0 auto;color:#F3EFE2}
 .brand{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
 .brand h1{font-size:34px;line-height:1.05;margin:0;letter-spacing:-.3px;font-weight:700}
 .brand img{width:96px;height:auto;flex:none;filter:drop-shadow(0 3px 8px #0006)}
-.tag{font-size:18px;line-height:1.4;color:#CFD8CD;margin:0 0 28px}
+.tag{font-size:18px;line-height:1.4;color:#C9D6E0;margin:0 0 28px}
 .join-card label{display:block;font-weight:700;font-size:17px;margin-bottom:6px}
-.join-card input{background:#10221A;border-color:#3D5E4F;color:#F3EFE2}
+.join-card input{background:#0A1622;border-color:#2A4A63;color:#F3EFE2}
 .row{display:flex;gap:8px}
-.hint{font-size:14px;color:#AFC0B2;margin:6px 0 16px;line-height:1.35}
+.hint{font-size:14px;color:#9FB6C6;margin:6px 0 16px;line-height:1.35}
 #p-routes .hint{color:var(--muted)}
 .swatches{display:flex;gap:10px;margin:0 0 26px;flex-wrap:wrap}
-.swatches button{width:36px;height:36px;border-radius:50%;background:var(--c);border:3px solid transparent}
+.swatches button{width:36px;height:36px;border-radius:50%;background:var(--c);border:3px solid transparent;box-shadow:inset 0 0 0 1px #ffffff40}
 .swatches button[aria-checked=true]{border-color:#F3EFE2;box-shadow:0 0 0 2px var(--c)}
+.swatches.light{gap:8px;margin:6px 0 4px}
+.swatches.light button{width:32px;height:32px}
+.swatches.light button[aria-checked=true]{border-color:var(--paper);box-shadow:0 0 0 3px var(--ink)}
+.ideas{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.ideas button{background:#0A1622;border:1px solid #2A4A63;color:#F3EFE2;border-radius:16px;padding:6px 11px;font-size:14px}
+.ideas button.more{background:none;border-style:dashed;color:#9FB6C6}
+.avrow{display:flex;align-items:center;gap:12px;margin:-8px 0 24px}
+.avprev{width:52px;height:52px;border-radius:12px;border:3px solid var(--c,#F3EFE2);background:#0A1622 center/cover no-repeat;image-rendering:pixelated;display:grid;place-items:center;font-weight:700;font-size:22px;color:#fff;flex:none}
+.linkbtn{color:#F3EFE2;text-decoration:underline;font-size:16px;padding:6px 0}
 .primary{background:var(--orange);color:#fff;font-weight:700;font-size:19px;padding:15px;border-radius:12px;width:100%}
 .primary:active{background:var(--orange-d)}
 .secondary{background:var(--forest2);color:#F3EFE2;font-weight:700;padding:12px 18px;border-radius:10px;white-space:nowrap}
-.ghost{border:2px solid #3D5E4F;border-radius:10px;padding:0 16px;font-size:20px;color:#F3EFE2}
-.or{text-align:center;color:#AFC0B2;margin:20px 0 12px}
+.ghost{border:2px solid #2A4A63;border-radius:10px;padding:0 16px;font-size:20px;color:#F3EFE2}
+.or{text-align:center;color:#9FB6C6;margin:20px 0 12px}
 .err{color:#FFB199;min-height:1.3em;font-size:15px;line-height:1.35}
-.setup{background:#10221A;border:2px solid var(--orange);border-radius:12px;padding:16px;margin-top:20px;line-height:1.45}
+.setup{background:#0A1622;border:2px solid var(--orange);border-radius:12px;padding:16px;margin-top:20px;line-height:1.45}
 
 /* app */
 #map{position:fixed;inset:0;background:#cfd6c8}
 .top{position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);display:flex;gap:8px;align-items:center;z-index:500;pointer-events:none}
 .top>*{pointer-events:auto}
 .code-chip{background:var(--forest);color:#F3EFE2;border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;box-shadow:0 2px 8px #0004}
-.code-chip .lbl{font-size:12px;color:#AFC0B2}
+.code-chip .lbl{font-size:12px;color:#9FB6C6}
 .code-chip b{font-size:20px;letter-spacing:2px}
 .pill{background:var(--chip);border-radius:20px;padding:6px 10px;font-size:13px;box-shadow:0 1px 5px #0003;display:flex;align-items:center;gap:6px}
 .pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,#999)}
@@ -160,11 +171,89 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
 .dlg ul{margin:0 0 4px;padding-left:20px;line-height:1.45}
 .dlg li{margin-bottom:8px}
 .dlg .warn{background:#F2661B1F;border-left:4px solid var(--orange);padding:10px 12px;border-radius:8px;line-height:1.4;font-size:15px}
+.tabs .tab{padding:10px 11px;white-space:nowrap}
+.me-card{display:flex;align-items:center;gap:12px;padding:6px 2px 4px}
+.me-card .avprev{border-color:var(--c);background-color:var(--khaki);color:var(--ink)}
+.me-card .main{flex:1;min-width:0}
+.me-card b{font-size:19px;display:block}
+.me-card span{font-size:14px;color:var(--muted)}
+.lbl2{font-size:14px;font-weight:700;color:var(--muted);margin:12px 0 0}
+.seg.wide button{padding:7px 9px}
+.item .sw.av{width:30px;height:30px;border-radius:7px;background:#fff center/cover no-repeat;image-rendering:pixelated;border:2px solid var(--c)}
+#avModal{position:fixed;inset:0;z-index:1100;background:#000a;display:grid;place-items:center;padding:10px}
+.avdlg{background:var(--paper);border-radius:16px;padding:14px;width:100%;max-width:400px;max-height:96vh;overflow:auto}
+.avdlg h2{margin:0 0 8px;font-size:20px}
+#avCanvas{display:block;margin:0 auto;width:min(320px,82vw);height:auto;aspect-ratio:1;touch-action:none;border-radius:8px;box-shadow:0 0 0 2px var(--line);image-rendering:pixelated}
+.avtools{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0 8px}
+.avtools button{padding:8px 11px;border-radius:9px;background:var(--khaki);font-weight:700;font-size:14px}
+.avtools button[aria-pressed=true]{background:var(--forest);color:#fff}
+.avpal{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin:6px 0 10px}
+.avpal button{aspect-ratio:1;border-radius:6px;background:var(--c);box-shadow:inset 0 0 0 1px #0003}
+.avpal button[aria-checked=true]{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
+.avpre{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px}
+.avpre button{flex:none;width:46px;height:46px;border-radius:9px;background:#fff center/cover no-repeat;image-rendering:pixelated;box-shadow:inset 0 0 0 2px var(--line)}
+.avpre button.txt{width:auto;padding:0 10px;background:var(--khaki);font-weight:700;font-size:13px}
+.avdlg .btns{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.avdlg .btns button{padding:11px 14px;border-radius:10px;font-weight:700}
+.avdlg .btns .ok{background:var(--orange);color:#fff}
+.avdlg .btns .left{margin-right:auto;color:var(--red)}
+body.darkmap .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.92)}
+body.lowpower .wave i,body.lowpower #ptt.live,body.lowpower .mk.talking .dot{animation:none!important}
+/* ---- phase 4: cooler chrome ---- */
+.stripe{height:6px;border-radius:3px;background:var(--stripes);margin:-16px 0 26px;box-shadow:0 0 18px #2BC4C955}
+.brand img{filter:drop-shadow(0 0 18px #2BC4C944) drop-shadow(0 3px 8px #0008)}
+.primary{background:linear-gradient(180deg,#FF7A30,var(--orange));box-shadow:0 4px 0 #A8420C,0 8px 18px #F2661B44}
+.primary:active{transform:translateY(2px);box-shadow:0 2px 0 #A8420C}
+.code-chip{background:linear-gradient(135deg,#0D1B2AE6,#17324AE6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid #ffffff1f;position:relative;overflow:hidden}
+.code-chip::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--stripes)}
+.pill,.icon,.mapbtns button{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid #ffffff44}
+.sheet::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;border-radius:18px 18px 0 0;background:var(--stripes)}
+.tab svg{width:17px;height:17px;vertical-align:-3px;margin-right:3px}
+.tab[aria-selected=true]{background:var(--forest);color:#F3EEDF}
+.tab[aria-selected=true] span{color:#9FB6C6}
+#ptt::before{content:"";position:absolute;inset:-11px;border-radius:50%;z-index:-1;background:conic-gradient(from 210deg,#E9EEF1,#8E98A0,#F6F8F9,#6F7980,#E9EEF1);box-shadow:0 10px 24px #0008}
+#ptt .led{position:absolute;top:14px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#7CFFB2;box-shadow:0 0 10px #7CFFB2;pointer-events:none}
+#ptt.live .led{background:#FF5A4A;box-shadow:0 0 14px #FF5A4A}
+#ptt.busy .led{background:#FFC24A;box-shadow:0 0 10px #FFC24A}
+.nearby{position:fixed;left:10px;right:66px;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:520;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px}
+.nearby::-webkit-scrollbar{display:none}
+.nb{display:flex;align-items:center;gap:7px;background:#0D1B2AE6;color:#F3EEDF;border-radius:22px;padding:4px 11px 4px 4px;flex:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid #ffffff22;box-shadow:0 2px 8px #0005}
+.nb.hot{border-color:#2BC4C9;box-shadow:0 0 0 2px #2BC4C955,0 2px 10px #2BC4C944}
+.nbav{width:28px;height:28px;border-radius:50%;background:var(--c) center/cover no-repeat;image-rendering:pixelated;display:grid;place-items:center;font-weight:700;font-size:13px;border:2px solid var(--c);color:#fff}
+.nbt{display:flex;flex-direction:column;line-height:1.05;text-align:left}
+.nbt b{font-size:13px}.nbt i{font-style:normal;font-size:12px;color:#9FE3E6}
+.ringlbl{position:absolute;transform:translate(-50%,-50%);background:#0D1B2ACC;color:#BFF3F5;font:700 11px "Roboto Condensed","sans-serif-condensed",sans-serif;padding:2px 7px;border-radius:9px;white-space:nowrap;border:1px solid #2BC4C977}
+.mk.me::before{content:"";position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:2px solid var(--c);animation:mepulse 2.4s ease-out infinite;pointer-events:none}
+@keyframes mepulse{0%{transform:scale(.8);opacity:.9}100%{transform:scale(3.4);opacity:0}}
+body.lowpower .mk.me::before{animation:none;opacity:0}
+.dist{font-size:13px;font-weight:700;padding:4px 9px;border-radius:12px;background:var(--khaki);white-space:nowrap}
+.dist.hot{background:#2BC4C933;color:#0F7F86}.dist.warm{background:#1FA2B51F}
+@media (prefers-color-scheme:dark){.dist.hot{color:#7FE6EA}}
+.set.col{flex-direction:column;align-items:stretch;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{padding:8px 12px;border-radius:16px;background:var(--khaki);font-weight:700;font-size:14px}
+.chips button[aria-checked=true]{background:var(--teal);color:#fff;box-shadow:0 0 0 2px #2BC4C944}
+.hint2{font-size:13px;color:var(--muted);margin:8px 2px 0;line-height:1.4}
+.hint2 button{color:var(--teal);font-weight:700;text-decoration:underline;padding:0}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:1500;overflow:hidden}
+.confetti i{position:absolute;top:-14px;width:8px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+#splash{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;align-content:center;gap:24px;background:radial-gradient(80% 50% at 50% 42%,#17324A,#0A1420 72%);transition:opacity .45s}
+#splash.gone{opacity:0;pointer-events:none}
+.sp-disc{position:relative;width:212px;height:212px;border-radius:50%;display:grid;place-items:center;background:repeating-radial-gradient(circle,#2BC4C91a 0 1px,transparent 1px 35px),#0B1724;border:2px solid #2BC4C966;overflow:hidden;box-shadow:0 0 44px #2BC4C933}
+.sp-disc::before{content:"";position:absolute;inset:0;background:conic-gradient(from 0deg,#2BC4C900 0deg 270deg,#2BC4C999 360deg);animation:sweep 1.6s linear infinite}
+.sp-disc img{position:relative;width:114px;filter:drop-shadow(0 4px 12px #000b)}
+.sp-txt{color:#C9D6E0;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:13px;text-align:center}
+.sp-txt b{display:block;color:#F3EEDF;font-size:24px;letter-spacing:.5px;text-transform:none;margin-bottom:6px}
+@keyframes sweep{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.sp-disc::before,.mk.me::before{animation:none}}
 /* markers */
 .mk{position:relative;width:24px;height:24px}
 .mk .dot{position:absolute;inset:3px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 4px #0007}
 .mk .arr{position:absolute;left:50%;top:50%;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:10px solid var(--c);transform-origin:50% 21px;margin:-21px 0 0 -6px}
 .mk .lbl{position:absolute;left:28px;top:1px;white-space:nowrap;background:#fff;color:#202623;font:700 13px "Roboto Condensed","sans-serif-condensed",sans-serif;padding:2px 6px;border-radius:6px;box-shadow:0 1px 4px #0005;border-left:4px solid var(--c)}
+.mk.hasav .dot{inset:-6px;border-radius:9px;background:#fff center/cover no-repeat;image-rendering:pixelated;border:3px solid var(--c)}
+.mk.hasav .lbl{left:34px}
 .mk.stale .dot{filter:grayscale(1);opacity:.6}.mk.stale .lbl{opacity:.7}
 .mk.talking .dot{animation:ring 1s infinite}
 @keyframes ring{0%{box-shadow:0 0 0 0 var(--c)}100%{box-shadow:0 0 0 16px #0000}}
@@ -176,6 +265,7 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><div class="sp-disc"><img src="logo.png" alt=""></div><div class="sp-txt"><b>QC Minivan Owners</b>Warming up the radio</div></div>
 
 <section id="join">
   <div class="join-card">
@@ -184,14 +274,17 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
       <h1>QC Minivan Owners</h1>
     </div>
     <p class="tag">Plan the convoy route together, see where everyone is, and talk to the whole group with one button.</p>
+    <div class="stripe" aria-hidden="true"></div>
 
     <label for="cs">Callsign</label>
     <div class="row">
       <input id="cs" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <button id="reroll" class="ghost" aria-label="Give me another random callsign">↻</button>
     </div>
+    <div id="csIdeas" class="ideas" aria-label="Callsign ideas"></div>
     <p class="hint">This is all the group sees. Use a handle, not your real name.</p>
     <div id="swatches" class="swatches" role="radiogroup" aria-label="Marker color"></div>
+    <div class="avrow"><span id="joinAv" class="avprev" aria-hidden="true"></span><button id="joinAvBtn" class="linkbtn">Make a pixel avatar for the map</button></div>
 
     <button id="create" class="primary">Start a new group</button>
     <div class="or">or join with a code</div>
@@ -221,6 +314,7 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
     </button>
   </header>
 
+  <div id="nearby" class="nearby" hidden aria-label="Members near you"></div>
   <div class="mapbtns">
     <button id="btnMe" aria-label="Center on me"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
     <button id="btnGroup" aria-label="Show the whole group"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
@@ -237,22 +331,53 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
   </div>
 
   <div id="sheet" class="sheet collapsed">
-    <button id="ptt" aria-label="Hold to talk"><span class="ptt-txt">Hold to talk</span></button>
+    <button id="ptt" aria-label="Hold to talk"><span class="led"></span><span class="ptt-txt">Hold to talk</span></button>
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" data-tab="team" aria-selected="false">Team <span id="teamCount"></span></button>
-      <button class="tab" role="tab" data-tab="routes" aria-selected="false">Routes <span id="routeCount"></span></button>
+      <button class="tab" role="tab" data-tab="team" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.2 6-5.2s5.4 1.8 6 5.2"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.2c2.4.2 4 1.8 4.5 4.6"/></svg>Team <span id="teamCount"></span></button>
+      <button class="tab" role="tab" data-tab="routes" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="6" r="2.4"/><path d="M8.4 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.6"/></svg>Routes <span id="routeCount"></span></button>
+      <button class="tab" role="tab" data-tab="me" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="4" width="14" height="16" rx="3"/><circle cx="12" cy="10" r="2.6"/><path d="M8.5 16.5c.8-1.6 2-2.3 3.5-2.3s2.7.7 3.5 2.3"/></svg>Me</button>
     </div>
     <div class="panel" id="p-team">
       <div class="actions"><button id="btnInvite" class="secondary">Invite with QR code</button></div>
+      <div id="teamList"></div>
+    </div>
+    <div class="panel" id="p-me" hidden>
+      <div class="me-card"><span id="meAv" class="avprev" aria-hidden="true"></span>
+        <div class="main"><b id="meCs"></b><span>Your callsign</span></div>
+        <button id="meAvBtn" class="mini">Edit avatar</button></div>
+      <p class="lbl2">Marker color</p>
+      <div id="meSwatches" class="swatches light" role="radiogroup" aria-label="Marker color"></div>
       <div class="settings">
         <div class="set"><div><b>Share my location</b><span id="shareSub">The group sees you on the map</span></div>
           <button id="shareTgl" class="switch" role="switch" aria-checked="true" aria-label="Share my location"></button></div>
+        <div class="set" id="bgRow" hidden><div><b>Keep sharing in background</b><span id="bgSub"></span></div>
+          <button id="bgTgl" class="switch" role="switch" aria-checked="true" aria-label="Keep sharing in background"></button></div>
         <div class="set"><div><b>Hands-free voice mode</b><span id="voxSub">Transmits when you speak, no button needed. For drivers with the phone mounted.</span></div>
           <button id="voxTgl" class="switch" role="switch" aria-checked="false" aria-label="Hands-free voice mode"></button></div>
         <div class="set" id="voxSensRow" hidden><div><b>Voice sensitivity</b><span>Use Low if road noise keeps setting it off</span></div>
           <div class="seg" role="radiogroup" aria-label="Voice sensitivity"><button role="radio" data-s="low">Low</button><button role="radio" data-s="med">Med</button><button role="radio" data-s="high">High</button></div></div>
+        <div class="set"><div><b>Battery saver</b><span id="powSub"></span></div>
+          <div class="seg wide" role="radiogroup" aria-label="Battery saver"><button role="radio" data-p="normal">Off</button><button role="radio" data-p="saver">Saver</button><button role="radio" data-p="max">Max</button></div></div>
+        <div class="set"><div><b>Dark map</b><span>Easier at night and saves battery on most phones</span></div>
+          <button id="darkTgl" class="switch" role="switch" aria-checked="false" aria-label="Dark map"></button></div>
+        <div class="set"><div><b>Saved map tiles</b><span id="cacheSub">Map areas you've viewed load from the phone instead of mobile data</span></div>
+          <button id="cacheClear" class="mini">Clear</button></div>
       </div>
-      <div id="teamList"></div>
+      <p class="hint2" id="bgHint" hidden>If your dot freezes after a while with the screen off, set this app's battery use to <b>Unrestricted</b>: <button id="bgSettings">open app settings</button></p>
+      <p class="lbl2">Nearby alerts</p>
+      <div class="settings">
+        <div class="set"><div><b>Alert me when members are close</b><span>A sound and voice when someone enters your range, even with the screen off</span></div>
+          <button id="proxTgl" class="switch" role="switch" aria-checked="true" aria-label="Nearby alerts"></button></div>
+        <div id="proxBody">
+          <div class="set col"><div><b>Distances</b><span>Pick one or more. Each one alerts once as someone gets closer.</span></div><div id="proxDist" class="chips" role="group" aria-label="Alert distances"></div></div>
+          <div class="set col"><div><b>Alert sound</b><span>Tap one to hear it</span></div><div id="proxSnd" class="chips" role="radiogroup" aria-label="Alert sound"></div></div>
+          <div class="set"><div><b>Voice alert</b><span>Says who is near you</span></div><button id="voiceTgl" class="switch" role="switch" aria-label="Voice alert"></button></div>
+          <div class="set"><div><b>Voice language</b></div><div class="seg" role="radiogroup" aria-label="Voice language"><button role="radio" data-lang="en">English</button><button role="radio" data-lang="fil">Filipino</button></div></div>
+          <div class="set"><div><b>Happy sound for 3 or more</b><span>Plays when 3 or more members are within your closest distance</span></div><button id="partyTgl" class="switch" role="switch" aria-label="Happy sound for 3 or more"></button></div>
+          <div class="set"><div><b>Show rings on the map</b></div><button id="ringsTgl" class="switch" role="switch" aria-label="Show rings on the map"></button></div>
+          <div class="set"><div><b>Try it</b></div><div class="seg"><button id="proxTest">Near alert</button><button id="partyTest">Happy sound</button></div></div>
+        </div>
+      </div>
     </div>
     <div class="panel" id="p-routes" hidden>
       <div class="actions">
@@ -288,11 +413,30 @@ input{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var
     <h2 id="nTitle">Before you join</h2>
     <ul>
       <li>The group sees your <b>callsign</b>, your <b>live location</b> and <b>speed</b> while the app is open, and hears you when you transmit.</li>
-      <li>You can pause location sharing anytime in the <b>Team</b> tab. When you leave a group, your location is deleted.</li>
+      <li>You can pause location sharing anytime in the <b>Me</b> tab. When you leave a group, your location is deleted.</li>
       <li>Voice clips are deleted from the server about 20 seconds after each transmission.</li>
     </ul>
     <div class="warn"><b>Driving?</b> Don't hold the phone or press Talk while moving. Let a passenger handle the radio, or mount the phone and turn on <b>hands-free voice mode</b>. The Anti-Distracted Driving Act (RA 10913) fines start at ₱5,000.</div>
     <div class="btns"><button id="nCancel">Cancel</button><button id="nOk" class="ok">I understand</button></div>
+  </div>
+</div>
+
+<div id="avModal" hidden>
+  <div class="avdlg" role="dialog" aria-modal="true" aria-labelledby="avTitle">
+    <h2 id="avTitle">Make your avatar</h2>
+    <canvas id="avCanvas" width="320" height="320" aria-label="16 by 16 pixel drawing grid"></canvas>
+    <div class="avtools">
+      <button data-tool="pen" aria-pressed="true">Pen</button>
+      <button data-tool="erase" aria-pressed="false">Eraser</button>
+      <button data-tool="fill" aria-pressed="false">Fill</button>
+      <button id="avMirror" aria-pressed="false">Mirror</button>
+      <button id="avUndo">Undo</button>
+      <button id="avClear">Clear</button>
+    </div>
+    <div id="avPal" class="avpal" role="radiogroup" aria-label="Pixel colors"></div>
+    <p class="lbl2" style="margin:0 0 6px">Start from</p>
+    <div id="avPre" class="avpre"></div>
+    <div class="btns"><button id="avRemove" class="left">Remove</button><button id="avCancel">Cancel</button><button id="avSave" class="ok">Save</button></div>
   </div>
 </div>
 
@@ -314,11 +458,13 @@ const store = {
   get(k, d){ try { const v = localStorage.getItem('sabay_' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v){ try { localStorage.setItem('sabay_' + k, JSON.stringify(v)); } catch {} }
 };
-const ANIMALS = ['Agila','Lawin','Maya','Tarsier','Tamaraw','Pawikan','Kalaw','Kuwago','Tikling','Bayawak','Dugong','Haribon','Banog','Pugo'];
-const COLORS = ['#F2661B','#23897D','#3A6EA5','#C2362B','#8E44AD','#C9A227','#2E8B57','#D63384'];
-const ROUTE_COLORS = ['#3A6EA5','#C2362B','#8E44AD','#2E8B57','#D63384','#C9A227','#23897D'];
+const CS_FUNNY = ["Tito Convoy", "Kuya Driver", "Pa-Ihi Muna", "Busina King", "Kambyo Queen", "Sunog Clutch", "Turbo Tsinelas", "Tsuper Hero", "Hari ng Rotonda", "Rotonda Rider", "Anti-Kamote", "Sir Overtake", "Madam Parking", "Late Lagi", "Bossing Biyahe", "Lodi Lakbay", "Manong Gasolina", "Petrol Pogi", "Kuya Seatbelt", "Tropang Every", "Batang EDSA", "Sakay Na Bes", "Kain Muna Tayo", "Traffic Tita", "Preno Pogi", "Waze Whisperer", "Ninja Kambyo", "Chismis Patrol", "Lolo Low Gear", "Tita Sidemirror", "Sir Silencer", "Baon Master", "Ube Express", "Taho Rider", "Silog Squad", "Sorry Late Na"];
+const CS_COOL = ["Ghost Van", "Iron Mule", "Midnight Kalesa", "Tikbalang Xpress", "Kapre Cruiser", "Bakunawa", "Tamaraw One", "Agila Lead", "Lawin Scout", "Haribon", "Night Owl", "Silver Fox", "Road Warden", "Kidlat", "Bagyo", "Alon Rider", "Tala", "Sweeper One", "Pathfinder", "Bulalakaw", "Diwata", "Lakan", "Datu Drift", "Apex Every", "Rotonda Ronin", "Delta Van", "Maharlika One", "Sierra Madre"];
+const COLORS = ['#F2661B','#E8453C','#C2362B','#D63384','#F06292','#8E44AD','#6C4AD6','#3A6EA5','#1E88E5','#00A3C4','#23897D','#2E8B57','#6AAF2E','#C9A227','#E0A800','#8D6E63','#546E7A','#111827'];
+const ROUTE_COLORS = ['#3A6EA5','#C2362B','#8E44AD','#2E8B57','#D63384','#C9A227','#23897D','#1E88E5','#E8453C','#6C4AD6','#00A3C4','#E0A800'];
 const CODE_CH = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-const randCS = () => ANIMALS[Math.random() * ANIMALS.length | 0] + '-' + (10 + (Math.random() * 90 | 0));
+const pick = a => a[Math.random() * a.length | 0];
+const randCS = () => pick(Math.random() < .5 ? CS_FUNNY : CS_COOL);
 const randCode = () => Array.from({length:6}, () => CODE_CH[Math.random() * CODE_CH.length | 0]).join('');
 
 let db, R, uid, me = {}, offset = 0, startKey;
@@ -372,16 +518,13 @@ const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch {
 function setupJoin(){
   $('#cs').value = store.get('cs', randCS());
   $('#code').value = store.get('room', '');
-  me.color = store.get('color', COLORS[Math.random() * COLORS.length | 0]);
-  const sw = $('#swatches');
-  COLORS.forEach(c => {
-    const b = document.createElement('button');
-    b.style.setProperty('--c', c); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', 'Color ' + c);
-    b.setAttribute('aria-checked', c === me.color);
-    b.onclick = () => { me.color = c; sw.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', x === b)); };
-    sw.appendChild(b);
-  });
-  $('#reroll').onclick = () => $('#cs').value = randCS();
+  me.color = store.get('color', pick(COLORS));
+  me.av = store.get('av', null);
+  buildSwatches($('#swatches'), c => { me.color = c; renderAvPreviews(); });
+  renderIdeas();
+  renderAvPreviews();
+  $('#joinAvBtn').onclick = () => openAvatar();
+  $('#reroll').onclick = () => { $('#cs').value = randCS(); renderIdeas(); renderAvPreviews(); };
   $('#code').oninput = e => e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
   $('#create').onclick = () => start(randCode(), true);
   $('#joinbtn').onclick = () => {
@@ -389,6 +532,26 @@ function setupJoin(){
     if (c.length !== 6) return $('#joinerr').textContent = 'Group codes have 6 letters and numbers.';
     start(c, false);
   };
+}
+function buildSwatches(el, onPick){
+  el.innerHTML = '';
+  COLORS.forEach(c => {
+    const b = document.createElement('button');
+    b.style.setProperty('--c', c); b.setAttribute('role', 'radio'); b.setAttribute('aria-label', 'Color ' + c);
+    b.setAttribute('aria-checked', c === me.color);
+    b.onclick = () => { el.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', x === b)); onPick(c); };
+    el.appendChild(b);
+  });
+}
+function renderIdeas(){
+  const used = new Set(), out = [];
+  const take = list => { let n; do { n = pick(list); } while (used.has(n)); used.add(n); out.push(n); };
+  take(CS_FUNNY); take(CS_COOL); take(CS_FUNNY); take(CS_COOL);
+  const el = $('#csIdeas');
+  el.innerHTML = out.map(n => `<button>${esc(n)}</button>`).join('') + '<button class="more">More ideas</button>';
+  el.querySelectorAll('button').forEach(b => b.onclick = () => {
+    if (b.classList.contains('more')) renderIdeas(); else { $('#cs').value = b.textContent; renderAvPreviews(); }
+  });
 }
 function validCS(){
   const v = $('#cs').value.trim();
@@ -440,7 +603,13 @@ function showNotice(){
 let meRef;
 async function enterRoom(code){
   meRef = R.child('members/' + uid);
-  await meRef.update({ cs: me.cs, color: me.color, online: true, t: firebase.database.ServerValue.TIMESTAMP });
+  roomCode = code;
+  const others = (await R.child('members').once('value')).val() || {};
+  const taken = c => Object.entries(others).some(([id, m]) => id !== uid && m.cs && m.cs.toLowerCase() === c.toLowerCase() && (m.online || now() - (m.t || 0) < 86400000));
+  let csFinal = me.cs, n = 2;
+  while (taken(csFinal)) csFinal = me.cs.slice(0, 13).trim() + ' ' + n++;
+  if (csFinal !== me.cs) { me.cs = csFinal; setTimeout(() => toast('Someone here already uses that callsign, so you are ' + csFinal), 800); }
+  await meRef.update({ cs: me.cs, color: me.color, av: me.av || null, online: true, t: firebase.database.ServerValue.TIMESTAMP });
   meRef.child('online').onDisconnect().set(false);
   startKey = R.child('ptt').push().key;
 
@@ -455,7 +624,7 @@ async function enterRoom(code){
     $('#net').style.setProperty('--c', on ? '#23897D' : '#C2362B');
     if (on) meRef.update({ online: true, t: firebase.database.ServerValue.TIMESTAMP });
   });
-  R.child('members').on('value', s => { members = s.val() || {}; renderMembers(); });
+  R.child('members').on('value', s => { members = s.val() || {}; renderMembers(); checkProximity(); });
   const rr = R.child('routes');
   rr.on('child_added', s => { routes[s.key] = s.val(); drawRoute(s.key); renderRoutes(); });
   rr.on('child_changed', s => { routes[s.key] = s.val(); drawRoute(s.key); renderRoutes(); });
@@ -466,9 +635,10 @@ async function enterRoom(code){
     const v = s.val(); if (v && v.uid && v.uid !== uid) receive(s.key, v);
   });
 
-  setInterval(() => meRef.update({ t: firebase.database.ServerValue.TIMESTAMP }), 30000);
-  setInterval(() => { renderMembers(); renderFloor(); }, 10000);
-  renderShare(); renderRadio();
+  heartbeat();
+  uiTick();
+  renderShare(); renderRadio(); renderMe(); applyPower(true); watchBattery(); renderCache(); renderBg(); renderProx();
+  $('#bgHint').hidden = !BGGeo;
   startGPS();
   keepAwake();
 }
@@ -478,6 +648,7 @@ $('#leave').onclick = async () => {
   try {
     if (vox) await setVox(false);
     pttUp();
+    await stopNativeGPS();
     await meRef.child('online').onDisconnect().cancel();
     await meRef.remove();
   } catch {}
@@ -491,18 +662,86 @@ $('#codebtn').onclick = async () => {
 
 let wakeLock;
 async function keepAwake(){
-  try { wakeLock = await navigator.wakeLock.request('screen'); } catch {}
+  const want = () => POWER[power].wake;
+  if (want()) { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
+  else if (wakeLock) { try { await wakeLock.release(); } catch {} wakeLock = null; }
+  if (keepAwake.bound) return; keepAwake.bound = true;
   document.addEventListener('visibilitychange', async () => {
-    if (document.visibilityState === 'visible') { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
+    if (document.visibilityState === 'visible' && want()) { try { wakeLock = await navigator.wakeLock.request('screen'); } catch {} }
   });
 }
+
+/* ---------- map tile cache: tiles you have seen are kept on the phone ---------- */
+const TILE_CACHE = 'qcmo-tiles-v1', TILE_FRESH = 30 * 864e5, TILE_MAX = 6000;
+let tileCache = null, tilesFromPhone = 0, tilesFromNet = 0;
+const tileCacheReady = (async () => { try { tileCache = await caches.open(TILE_CACHE); setTimeout(pruneTiles, 20000); } catch { tileCache = null; } })();
+async function loadTile(url){
+  await tileCacheReady;
+  const key = url.replace(/^https:\/\/[abc]\./, 'https://');
+  let stale = null;
+  if (tileCache) {
+    try {
+      const hit = await tileCache.match(key);
+      if (hit) {
+        if (Date.now() - (+hit.headers.get('x-saved') || 0) < TILE_FRESH || navigator.onLine === false) { tilesFromPhone++; return URL.createObjectURL(await hit.blob()); }
+        stale = hit;
+      }
+    } catch {}
+  }
+  try {
+    const r = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!r.ok) throw new Error('tile ' + r.status);
+    const blob = await r.blob(); tilesFromNet++;
+    if (tileCache) tileCache.put(key, new Response(blob, { headers: { 'content-type': blob.type || 'image/png', 'x-saved': String(Date.now()) } })).catch(() => {});
+    return URL.createObjectURL(blob);
+  } catch (e) {
+    if (stale) { tilesFromPhone++; return URL.createObjectURL(await stale.blob()); }
+    throw e;
+  }
+}
+const CachedTiles = L.TileLayer.extend({
+  createTile(coords, done){
+    const img = document.createElement('img');
+    img.alt = ''; img.setAttribute('role', 'presentation');
+    const url = this.getTileUrl(coords);
+    let direct = false;
+    img.onload = () => { if (img.src.startsWith('blob:')) URL.revokeObjectURL(img.src); done(null, img); };
+    img.onerror = e => { if (!direct) { direct = true; img.src = url; } else done(e, img); };
+    loadTile(url).then(src => { img.src = src; }, () => { direct = true; img.src = url; });
+    return img;
+  }
+});
+async function pruneTiles(){
+  try {
+    const keys = await tileCache.keys();
+    if (keys.length <= TILE_MAX) return;
+    const dated = [];
+    for (const k of keys) { const r = await tileCache.match(k); dated.push([+(r && r.headers.get('x-saved')) || 0, k]); }
+    dated.sort((a, b) => a[0] - b[0]);
+    for (const [, k] of dated.slice(0, keys.length - TILE_MAX + 500)) await tileCache.delete(k);
+  } catch {}
+}
+async function renderCache(){
+  await tileCacheReady;
+  let n = 0, mb = '';
+  try { n = tileCache ? (await tileCache.keys()).length : 0; } catch {}
+  try { const est = await navigator.storage.estimate(); mb = ', about ' + Math.max(1, Math.round((est.usage || 0) / 1048576)) + ' MB'; } catch {}
+  const total = tilesFromPhone + tilesFromNet;
+  const saved = total ? ' This session ' + Math.round(tilesFromPhone / total * 100) + '% came from the phone, not mobile data.' : '';
+  $('#cacheSub').textContent = n + ' map tiles saved' + mb + '.' + saved;
+}
+$('#cacheClear').onclick = async () => {
+  if (!await ask({ title: 'Clear saved map tiles?', text: 'Maps will download again as you look around.', input: false, ok: 'Clear' })) return;
+  try { await caches.delete(TILE_CACHE); tileCache = await caches.open(TILE_CACHE); } catch {}
+  tilesFromPhone = tilesFromNet = 0; renderCache(); toast('Saved map tiles cleared');
+};
 
 /* ---------- map ---------- */
 function initMap(){
   if (map) return;
   map = L.map('map', { zoomControl: false }).setView([12.5, 122], 6);
-  baseStreets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
-  baseTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '© OpenStreetMap, SRTM | © OpenTopoMap' });
+  baseStreets = new CachedTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
+  baseTopo = new CachedTiles('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '© OpenStreetMap, SRTM | © OpenTopoMap' });
   map.on('click', e => { if (draw) { draw.pts.push([+e.latlng.lat.toFixed(6), +e.latlng.lng.toFixed(6)]); updDraw(); } });
   map.on('contextmenu', e => { if (!draw) dropPin(e.latlng); });
   $('#btnMe').onclick = () => myPos ? map.setView(myPos, Math.max(map.getZoom(), 16)) : toast('Waiting for your GPS fix');
@@ -521,14 +760,17 @@ function fitGroup(){
 }
 
 /* ---------- GPS ---------- */
-let lastSent = null, lastSentT = 0;
+let lastSent = null, lastSentT = 0, gpsWatch = null;
 function startGPS(){
+  if (BGGeo) { if (gpsWatch !== null) { navigator.geolocation.clearWatch(gpsWatch); gpsWatch = null; } if (!myPos) setGps('Finding you', '#C9A227'); startNativeGPS(); return; }
   if (!navigator.geolocation) return setGps('No GPS', '#C2362B');
-  setGps('Finding you', '#C9A227');
-  navigator.geolocation.watchPosition(onPos, err => {
+  if (gpsWatch !== null) navigator.geolocation.clearWatch(gpsWatch);
+  if (!myPos) setGps('Finding you', '#C9A227');
+  const P = POWER[power];
+  gpsWatch = navigator.geolocation.watchPosition(onPos, err => {
     setGps(err.code === 1 ? 'Location blocked' : 'Weak GPS', '#C2362B');
     if (err.code === 1) toast('Allow location for QC Minivan Owners in Android Settings so your group can see you.', 5000);
-  }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 });
+  }, { enableHighAccuracy: P.hi, maximumAge: P.every, timeout: 30000 });
 }
 function setGps(t, c){ $('#gps').textContent = t; $('#gps').style.setProperty('--c', c); }
 let sharing = store.get('share', true), mySpeed = 0, lastDriveNag = 0;
@@ -546,9 +788,10 @@ function drivingNudge(force){
   if (vox || mySpeed < 4.2) return;
   if (!force && Date.now() - lastDriveNag < 600000) return;
   lastDriveNag = Date.now();
-  toast('Moving at ' + Math.round(mySpeed * 3.6) + ' km/h. Driving? Let a passenger talk, or turn on hands-free voice mode in the Team tab.', 7000);
+  toast('Moving at ' + Math.round(mySpeed * 3.6) + ' km/h. Driving? Let a passenger talk, or turn on hands-free voice mode in the Me tab.', 7000);
 }
-function onPos(p){
+function onPos(p){ onPosCore(p); maybeRings(); checkProximity(); }
+function onPosCore(p){
   const c = p.coords;
   myPos = [c.latitude, c.longitude]; myAcc = c.accuracy;
   mySpeed = c.speed != null && !isNaN(c.speed) ? c.speed : 0;
@@ -559,14 +802,306 @@ function onPos(p){
   updateMyMarker();
   const moved = lastSent ? hav(lastSent, myPos) : Infinity;
   const dt = Date.now() - lastSentT;
-  if ((dt > 3000 && moved > 6) || dt > 25000) {
+  const P = POWER[power];
+  if ((dt > P.every && moved > P.move) || dt > P.idle) {
     lastSent = myPos; lastSentT = Date.now();
     const d = { lat: +c.latitude.toFixed(6), lng: +c.longitude.toFixed(6), acc: Math.round(c.accuracy),
       lt: firebase.database.ServerValue.TIMESTAMP, t: firebase.database.ServerValue.TIMESTAMP };
     d.spd = c.speed != null && !isNaN(c.speed) ? +c.speed.toFixed(1) : null;
     d.hdg = c.heading != null && !isNaN(c.heading) ? Math.round(c.heading) : null;
-    meRef.update(d);
+    if (batt) d.bat = Math.round(batt.level * 100);
+    writeMe(d);
   }
+}
+
+/* ---------- battery saver ---------- */
+const POWER = {
+  normal: { hi: true,  every: 3000,  move: 6,  idle: 25000,  beat: 30000, ui: 10000, wake: true,  sub: 'Off: smoothest tracking, screen stays on' },
+  saver:  { hi: true,  every: 10000, move: 25, idle: 60000,  beat: 45000, ui: 20000, wake: true,  sub: 'Saver: sends your position every 10 s or 25 m, fewer animations' },
+  max:    { hi: false, every: 30000, move: 80, idle: 120000, beat: 90000, ui: 30000, wake: false, sub: 'Max: every 30 s, dark map, and the screen can turn off (background sharing keeps you on the map)' }
+};
+let power = store.get('power', 'normal'); if (!POWER[power]) power = 'normal';
+let batt = null, beatT, uiT, autoSaved = false;
+function heartbeat(){ clearInterval(beatT); beatT = setInterval(() => writeMe({ t: firebase.database.ServerValue.TIMESTAMP }), POWER[power].beat); }
+function uiTick(){ clearInterval(uiT); uiT = setInterval(() => { renderMembers(); renderFloor(); }, POWER[power].ui); }
+function powText(){ return POWER[power].sub + (batt ? '. Battery ' + Math.round(batt.level * 100) + '%' + (batt.charging ? ', charging' : '') : ''); }
+function applyPower(initial){
+  document.body.classList.toggle('lowpower', power !== 'normal');
+  if (power === 'max' && !dark) setDark(true);
+  document.querySelectorAll('[data-p]').forEach(b => b.setAttribute('aria-checked', b.dataset.p === power));
+  $('#powSub').textContent = powText();
+  if (!initial) { lastSentT = 0; startGPS(); heartbeat(); uiTick(); keepAwake(); }
+}
+document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { power = b.dataset.p; store.set('power', power); applyPower(false); toast('Battery saver: ' + b.textContent); });
+async function watchBattery(){
+  try {
+    batt = await navigator.getBattery();
+    const check = () => {
+      if (!autoSaved && power === 'normal' && !batt.charging && batt.level <= .2) {
+        autoSaved = true; power = 'saver'; store.set('power', power); applyPower(false);
+        toast('Battery at ' + Math.round(batt.level * 100) + '%. Battery saver turned on.', 5000);
+      }
+      $('#powSub').textContent = powText();
+    };
+    batt.addEventListener('levelchange', check); batt.addEventListener('chargingchange', check); check();
+  } catch { batt = null; }
+}
+let dark = store.get('dark', false);
+function setDark(on){ dark = on; store.set('dark', on); document.body.classList.toggle('darkmap', on); $('#darkTgl').setAttribute('aria-checked', on); }
+$('#darkTgl').onclick = () => setDark(!dark);
+setDark(dark);
+
+/* ---------- Me tab ---------- */
+function renderMe(){
+  $('#meCs').textContent = me.cs;
+  buildSwatches($('#meSwatches'), c => {
+    me.color = c; store.set('color', c);
+    if (meRef) meRef.update({ color: c });
+    if (accCircle) accCircle.setStyle({ color: c });
+    renderAvPreviews(); renderMembers();
+  });
+  renderAvPreviews();
+}
+$('#meAvBtn').onclick = () => openAvatar();
+
+/* ---------- native plugins: background location, notifications, speech, native HTTP ---------- */
+const CapRT = window.Capacitor;
+const isNative = !!(CapRT && CapRT.isNativePlatform && CapRT.isNativePlatform());
+const plug = n => { try { return isNative && CapRT.isPluginAvailable(n) ? CapRT.registerPlugin(n) : null; } catch { return null; } };
+const BGGeo = plug('BackgroundGeolocation'), LNotif = plug('LocalNotifications'), Speech = plug('TextToSpeech');
+const NHttp = isNative ? ((window.capacitorExports && capacitorExports.CapacitorHttp) || (CapRT.Plugins && CapRT.Plugins.CapacitorHttp)) : null;
+let bgShare = store.get('bg', true), bgWatchId = null, roomCode = null, hiddenSince = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { hiddenSince = Date.now(); if (uid) idToken(true); }
+  else { hiddenSince = 0; if (meRef) meRef.update({ online: true, t: firebase.database.ServerValue.TIMESTAMP }); }
+});
+
+/* Firebase ID token for REST calls made while the app is in the background */
+let tok = null, tokExp = 0;
+async function idToken(force){
+  if (!force && tok && Date.now() < tokExp - 300000) return tok;
+  const u = firebase.auth().currentUser;
+  if (!u) return tok;
+  if (!document.hidden || force) {
+    try { tok = await u.getIdToken(!!force); tokExp = Date.now() + 3300000; return tok; } catch {}
+  }
+  if (NHttp && u.refreshToken) {
+    try {
+      const r = await NHttp.request({ url: 'https://securetoken.googleapis.com/v1/token?key=' + encodeURIComponent(CFG.apiKey), method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, data: { grant_type: 'refresh_token', refresh_token: u.refreshToken } });
+      const j = typeof r.data === 'string' ? JSON.parse(r.data) : r.data;
+      if (j && j.id_token) { tok = j.id_token; tokExp = Date.now() + ((+j.expires_in || 3600) * 1000); }
+    } catch {}
+  }
+  return tok;
+}
+function restURL(path, t){ return CFG.databaseURL.replace(/\/$/, '') + '/' + path + '.json?auth=' + encodeURIComponent(t); }
+async function restPatch(path, data){
+  const t = await idToken(); if (!t || !NHttp) return false;
+  try { const r = await NHttp.request({ url: restURL(path, t), method: 'PATCH', headers: { 'Content-Type': 'application/json' }, data }); return r.status < 300; } catch { return false; }
+}
+async function restGet(path){
+  const t = await idToken(); if (!t || !NHttp) return null;
+  try { const r = await NHttp.request({ url: restURL(path, t), method: 'GET' }); return typeof r.data === 'string' ? JSON.parse(r.data) : r.data; } catch { return null; }
+}
+/* write my own member data: normal SDK in front, native HTTP when backgrounded (Android throttles the WebView) */
+function writeMe(d){
+  if (document.hidden && NHttp && roomCode) {
+    restPatch('rooms/' + roomCode + '/members/' + uid, Object.assign({ online: true }, d)).then(ok => { if (!ok) meRef.update(d); });
+  } else meRef.update(d);
+}
+let lastBgPull = 0;
+async function backgroundPull(){
+  if (!document.hidden || !roomCode || Date.now() - lastBgPull < 15000) return;
+  lastBgPull = Date.now();
+  const m = await restGet('rooms/' + roomCode + '/members');
+  if (m && typeof m === 'object') { members = m; checkProximity(); }
+}
+
+/* background watcher (foreground service with a persistent notification) */
+async function startNativeGPS(){
+  if (!BGGeo) return false;
+  if (bgWatchId) { try { await BGGeo.removeWatcher({ id: bgWatchId }); } catch {} bgWatchId = null; }
+  if (LNotif) { try { await LNotif.requestPermissions(); } catch {} }
+  const P = POWER[power];
+  const opts = { requestPermissions: true, stale: false, distanceFilter: Math.max(5, Math.round(P.move / 2)) };
+  if (bgShare) { opts.backgroundTitle = 'QC Minivan Owners'; opts.backgroundMessage = 'Sharing your location with your group. Leave the group to stop.'; }
+  try {
+    bgWatchId = await BGGeo.addWatcher(opts, (loc, err) => {
+      if (err) {
+        if (err.code === 'NOT_AUTHORIZED') {
+          setGps('Location blocked', '#C2362B');
+          ask({ title: 'Location is off for this app', text: 'Your group can only see you if location is allowed. Open settings now?', input: false, ok: 'Open settings' }).then(y => { if (y) BGGeo.openSettings(); });
+        }
+        return;
+      }
+      if (!loc) return;
+      onPos({ coords: { latitude: loc.latitude, longitude: loc.longitude, accuracy: loc.accuracy, speed: loc.speed, heading: loc.bearing } });
+      backgroundPull();
+    });
+    return true;
+  } catch { return false; }
+}
+async function stopNativeGPS(){ if (BGGeo && bgWatchId) { try { await BGGeo.removeWatcher({ id: bgWatchId }); } catch {} bgWatchId = null; } }
+function renderBg(){
+  $('#bgTgl').setAttribute('aria-checked', bgShare);
+  $('#bgRow').hidden = !BGGeo;
+  $('#bgSub').textContent = bgShare
+    ? 'On: the group still sees you with the screen off or in another app. A notification shows while it runs.'
+    : 'Off: sharing pauses when you leave the app';
+}
+$('#bgTgl').onclick = () => { bgShare = !bgShare; store.set('bg', bgShare); renderBg(); startGPS(); toast(bgShare ? 'Background sharing on' : 'Background sharing off'); };
+$('#bgSettings').onclick = () => BGGeo && BGGeo.openSettings();
+if (LNotif) { try { LNotif.createChannel({ id: 'nearby', name: 'Nearby members', description: 'When a member comes close to you', importance: 4, visibility: 1, vibration: true }); } catch {} }
+
+/* ---------- nearby alerts: sounds, voice, rings ---------- */
+const PROX_DIST = [100, 150, 300, 500, 1000];
+const prox = Object.assign({ on: true, d: [150, 300], snd: 'sonar', voice: true, lang: 'en', party: true, rings: true }, store.get('prox', {}));
+const saveProx = () => store.set('prox', prox);
+const bands = {}, lastAlertAt = {};
+let proxSeeded = false, partyOn = false, lastParty = 0, speakQ = Promise.resolve();
+const fmtM = m => m >= 1000 ? (m / 1000) + ' km' : m + ' m';
+const spokenM = (m, lang) => m >= 1000 ? (m / 1000) + (lang === 'fil' ? ' kilometro' : (m === 1000 ? ' kilometer' : ' kilometers')) : m + (lang === 'fil' ? ' metro' : ' meters');
+
+function env(g, t, a, peak, d){ g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(.0001, t + d); }
+function voice(type, f, t, dur, vol, dest, a = .01){
+  const c = ac(), o = c.createOscillator(), g = c.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t); env(g, t, a, vol, dur);
+  o.connect(g).connect(dest || c.destination); o.start(t); o.stop(t + dur + .05); return o;
+}
+const SOUNDS = {
+  sonar(){ const c = ac(), t = c.currentTime; voice('sine', 1180, t, 1.1, .35); voice('sine', 1180, t + .32, .8, .12); },
+  chime(){ const c = ac(), t = c.currentTime; voice('sine', 988, t, .9, .28); voice('sine', 1319, t + .16, 1.1, .26); voice('sine', 1976, t + .16, .5, .06); },
+  beep(){ const c = ac(), t = c.currentTime, lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400; lp.connect(c.destination);
+    voice('square', 460, t, .16, .16, lp, .005); voice('square', 460, t + .22, .2, .16, lp, .005); },
+  horn(){ const c = ac(), t = c.currentTime, lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1500; lp.connect(c.destination);
+    voice('sawtooth', 349, t, .55, .12, lp, .02); voice('sawtooth', 440, t, .55, .1, lp, .02); },
+  bell(){ const c = ac(), t = c.currentTime; voice('triangle', 1047, t, 1.6, .3); voice('sine', 2093, t, .9, .08); voice('sine', 3136, t, .5, .04); },
+  off(){}
+};
+const SOUND_NAMES = { sonar: 'Sonar', chime: 'Chime', beep: 'Beep-beep', horn: 'Horn', bell: 'Bell', off: 'Silent' };
+function happySound(){
+  try {
+    const c = ac(), t = c.currentTime;
+    [523, 659, 784, 1047].forEach((f, i) => voice('triangle', f, t + i * .11, .35, .22));
+    voice('sine', 1568, t + .44, .7, .14); voice('sine', 2093, t + .52, .6, .08);
+    [2637, 3136, 2637, 3520].forEach((f, i) => voice('sine', f, t + .62 + i * .07, .18, .05));
+  } catch {}
+}
+function speak(text){
+  if (!prox.voice) return;
+  const lang = prox.lang === 'fil' ? 'fil-PH' : 'en-US';
+  speakQ = speakQ.then(async () => {
+    if (Speech) {
+      try { await Speech.speak({ text, lang, rate: 1.0, pitch: 1.0, volume: 1.0, category: 'playback' }); return; }
+      catch { try { await Speech.speak({ text, lang: 'en-US', rate: 1.0, pitch: 1.0, volume: 1.0, category: 'playback' }); return; } catch {} }
+    }
+    if (window.speechSynthesis) {
+      await new Promise(res => { const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.onend = u.onerror = res; speechSynthesis.speak(u); setTimeout(res, 6000); });
+    }
+  });
+}
+function notifyNative(title, body){
+  if (!LNotif) return;
+  try { LNotif.schedule({ notifications: [{ id: (Date.now() % 2000000000) | 0, title, body, channelId: 'nearby', smallIcon: 'ic_stat_van', iconColor: '#1FA2B5' }] }); } catch {}
+}
+function nearLine(cs, m){ return prox.lang === 'fil' ? 'Malapit na si ' + cs + ', ' + spokenM(m, 'fil') + '.' : cs + ' is within ' + spokenM(m, 'en') + '.'; }
+function partyLine(n){ return prox.lang === 'fil' ? 'Kumpleto na ang tropa! ' + n + ' kayong magkakasama.' : 'Convoy assembled! ' + n + ' of you are together.'; }
+function alertNear(m, th){
+  if (document.hidden) notifyNative('📍 ' + m.cs + ' is near', 'Within ' + fmtM(th) + ' of you');
+  else { try { SOUNDS[prox.snd](); } catch {} buzz([60, 40, 60]); toast('📍 ' + m.cs + ' is within ' + fmtM(th), 4000); }
+  speak(nearLine(m.cs, th));
+}
+function alertParty(n){
+  if (document.hidden) notifyNative('🎉 Convoy assembled!', n + ' of you are together');
+  else { happySound(); buzz([40, 30, 40, 30, 120]); toast('🎉 Convoy assembled! ' + n + ' of you are together', 4500); confetti(); }
+  speak(partyLine(n));
+}
+function checkProximity(){
+  if (!myPos) return;
+  const th = prox.d.slice().sort((a, b) => a - b);
+  if (!prox.on || !th.length) { proxSeeded = true; return; }
+  const near = [];
+  for (const [id, m] of Object.entries(members)) {
+    if (id === uid || m.lat == null || !m.online || now() - (m.lt || m.t || 0) > 300000) { if (id !== uid) delete bands[id]; continue; }
+    const d = hav(myPos, [m.lat, m.lng]);
+    let b = th.findIndex(x => d <= x); if (b < 0) b = th.length;
+    const prev = bands[id] === undefined ? th.length : bands[id];
+    if (b < prev) {
+      bands[id] = b;
+      if (proxSeeded && Date.now() - (lastAlertAt[id] || 0) > 60000) { lastAlertAt[id] = Date.now(); alertNear(m, th[b]); }
+    } else if (b > prev && d > th[prev] * 1.25) bands[id] = b;
+    if (d <= th[th.length - 1]) near.push([id, m, d]);
+  }
+  const close = near.filter(x => x[2] <= th[0]).length;
+  if (prox.party && close >= 3 && !partyOn && proxSeeded && Date.now() - lastParty > 300000) { partyOn = true; lastParty = Date.now(); alertParty(close + 1); }
+  if (close < 3) partyOn = false;
+  proxSeeded = true;
+  renderNearby(near.sort((a, b) => a[2] - b[2]), th);
+}
+/* convoy strip: who is inside your alert range, closest first */
+function renderNearby(near, th){
+  const el = $('#nearby');
+  if (!near.length || !prox.on) { el.hidden = true; return; }
+  el.hidden = false;
+  el.innerHTML = near.slice(0, 6).map(([id, m, d]) => {
+    const au = avatarURL(m.av), tier = d <= th[0] ? 'hot' : 'warm';
+    return `<button class="nb ${tier}" data-goto="${esc(id)}" style="--c:${esc(m.color)}"><span class="nbav"${au ? ` style="background-image:url(${au})"` : ''}>${au ? '' : esc((m.cs || '?')[0].toUpperCase())}</span><span class="nbt"><b>${esc(m.cs)}</b><i>${fmtDist(d)}</i></span></button>`;
+  }).join('');
+  el.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => { const m = members[b.dataset.goto]; if (m) map.setView([m.lat, m.lng], 17); });
+}
+/* alert rings around me on the map */
+let ringLayer = null;
+function drawRings(){
+  if (!map) return;
+  if (ringLayer) { map.removeLayer(ringLayer); ringLayer = null; }
+  if (!myPos || !prox.on || !prox.rings || !prox.d.length) return;
+  ringLayer = L.layerGroup();
+  prox.d.slice().sort((a, b) => a - b).forEach((r, i) => {
+    L.circle(myPos, { radius: r, color: i ? '#1FA2B5' : '#2BC4C9', weight: 2, opacity: .7, dashArray: i ? '6 8' : '2 6', fill: !i, fillColor: '#2BC4C9', fillOpacity: .05, interactive: false }).addTo(ringLayer);
+    const lab = L.latLng(myPos[0] + r / 111320, myPos[1]);
+    L.marker(lab, { interactive: false, icon: L.divIcon({ className: '', iconSize: [0, 0], html: `<span class="ringlbl">${fmtM(r)}</span>` }) }).addTo(ringLayer);
+  });
+  ringLayer.addTo(map);
+}
+let lastRingPos = null;
+function maybeRings(){ if (!lastRingPos || !myPos || hav(lastRingPos, myPos) > 8) { lastRingPos = myPos; drawRings(); } }
+/* settings UI */
+function renderProx(){
+  $('#proxTgl').setAttribute('aria-checked', prox.on);
+  $('#proxBody').hidden = !prox.on;
+  $('#proxDist').innerHTML = PROX_DIST.map(d => `<button role="checkbox" aria-checked="${prox.d.includes(d)}" data-d="${d}">${fmtM(d)}</button>`).join('');
+  $('#proxDist').querySelectorAll('[data-d]').forEach(b => b.onclick = () => {
+    const d = +b.dataset.d;
+    prox.d = prox.d.includes(d) ? prox.d.filter(x => x !== d) : prox.d.concat(d);
+    saveProx(); renderProx(); Object.keys(bands).forEach(k => delete bands[k]); proxSeeded = false; drawRings(); checkProximity();
+  });
+  $('#proxSnd').innerHTML = Object.entries(SOUND_NAMES).map(([k, n]) => `<button role="radio" aria-checked="${prox.snd === k}" data-k="${k}">${n}</button>`).join('');
+  $('#proxSnd').querySelectorAll('[data-k]').forEach(b => b.onclick = () => { prox.snd = b.dataset.k; saveProx(); renderProx(); try { SOUNDS[prox.snd](); } catch {} });
+  $('#voiceTgl').setAttribute('aria-checked', prox.voice);
+  $('#partyTgl').setAttribute('aria-checked', prox.party);
+  $('#ringsTgl').setAttribute('aria-checked', prox.rings);
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-checked', b.dataset.lang === prox.lang));
+}
+$('#proxTgl').onclick = () => { prox.on = !prox.on; saveProx(); renderProx(); drawRings(); checkProximity(); };
+$('#voiceTgl').onclick = () => { prox.voice = !prox.voice; saveProx(); renderProx(); };
+$('#partyTgl').onclick = () => { prox.party = !prox.party; saveProx(); renderProx(); };
+$('#ringsTgl').onclick = () => { prox.rings = !prox.rings; saveProx(); renderProx(); drawRings(); };
+document.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => { prox.lang = b.dataset.lang; saveProx(); renderProx(); });
+$('#proxTest').onclick = () => { ac(); try { SOUNDS[prox.snd](); } catch {} speak(nearLine('Tito Convoy', prox.d.slice().sort((a, b) => a - b)[0] || 150)); };
+$('#partyTest').onclick = () => { ac(); happySound(); confetti(); speak(partyLine(4)); };
+
+/* a little celebration */
+function confetti(){
+  if (document.body.classList.contains('lowpower')) return;
+  const box = document.createElement('div'); box.className = 'confetti';
+  const cols = ['#F2661B', '#2BC4C9', '#FFEC27', '#E8453C', '#6C4AD6', '#2E8B57', '#F3EEDF'];
+  for (let i = 0; i < 46; i++) {
+    const s = document.createElement('i');
+    s.style.cssText = `left:${Math.random() * 100}%;background:${pick(cols)};animation-delay:${Math.random() * .4}s;animation-duration:${1.6 + Math.random() * 1.2}s;transform:rotate(${Math.random() * 360}deg)`;
+    box.appendChild(s);
+  }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 3400);
 }
 
 /* ---------- members ---------- */
@@ -575,7 +1110,8 @@ function markerHtml(m, id){
   const talking = floor && floor.uid === id && fresh(floor);
   const stale = !(m.online && now() - (m.t || 0) < 120000);
   const arr = m.hdg != null && m.spd > 0.8 ? `<span class="arr" style="transform:rotate(${m.hdg}deg)"></span>` : '';
-  return `<div class="mk${stale ? ' stale' : ''}${talking ? ' talking' : ''}" style="--c:${esc(m.color)}">${arr}<span class="dot"></span><span class="lbl">${esc(m.cs)}${id === uid ? ' (you)' : ''}</span></div>`;
+  const au = avatarURL(m.av);
+  return `<div class="mk${id === uid ? ' me' : ''}${stale ? ' stale' : ''}${talking ? ' talking' : ''}${au ? ' hasav' : ''}" style="--c:${esc(m.color)}">${arr}<span class="dot"${au ? ` style="background-image:url(${au})"` : ''}></span><span class="lbl">${esc(m.cs)}${id === uid ? ' (you)' : ''}</span></div>`;
 }
 function placeMarker(id, m, ll){
   const html = markerHtml(m, id);
@@ -590,7 +1126,7 @@ function placeMarker(id, m, ll){
 }
 function updateMyMarker(){
   if (!myPos || !map) return;
-  const m = Object.assign({}, members[uid] || {}, { cs: me.cs, color: me.color, online: true, t: now() });
+  const m = Object.assign({}, members[uid] || {}, { cs: me.cs, color: me.color, av: me.av, online: true, t: now() });
   placeMarker(uid, m, myPos);
   if (!accCircle) accCircle = L.circle(myPos, { radius: myAcc, color: me.color, weight: 1, fillOpacity: .08, interactive: false }).addTo(map);
   else accCircle.setLatLng(myPos).setRadius(myAcc);
@@ -612,11 +1148,13 @@ function renderMembers(){
     const talking = floor && floor.uid === id && fresh(floor);
     const bits = [];
     if (id === uid) bits.push('You');
-    else if (m.lat != null && myPos) bits.push(fmtDist(hav(myPos, [m.lat, m.lng])) + ' away');
     if (m.spd > 0.8) bits.push(Math.round(m.spd * 3.6) + ' km/h');
+    if (m.bat != null && on) bits.push((m.bat <= 20 ? 'low battery ' : 'battery ') + m.bat + '%');
     bits.push(on ? (id === uid && !sharing ? 'location paused' : m.lt ? 'seen ' + ago(m.lt) : 'location not shared') : 'offline');
-    return `<div class="item${on ? '' : ' off'}${talking ? ' talking' : ''}"><span class="sw" style="--c:${esc(m.color)}"></span>
+    const au = avatarURL(id === uid ? me.av : m.av);
+    return `<div class="item${on ? '' : ' off'}${talking ? ' talking' : ''}"><span class="sw${au ? ' av' : ''}" style="--c:${esc(m.color)}${au ? `;background-image:url(${au})` : ''}"></span>
       <div class="main"><div class="name">${esc(m.cs)}</div><div class="meta">${esc(bits.join(', '))}</div></div>
+      ${id !== uid && m.lat != null && myPos ? (() => { const dd = hav(myPos, [m.lat, m.lng]), t0 = Math.min(...(prox.d.length ? prox.d : [150])); return `<span class="dist ${dd <= t0 ? 'hot' : dd <= Math.max(...(prox.d.length ? prox.d : [300])) ? 'warm' : ''}">${fmtDist(dd)}</span>`; })() : ''}
       ${m.lat != null ? `<button class="mini" data-goto="${esc(id)}">Find</button>` : ''}</div>`;
   }).join('') || '<div class="empty">Share the group code so others can join.</div>';
   $('#teamList').querySelectorAll('[data-goto]').forEach(b => b.onclick = () => {
@@ -633,7 +1171,8 @@ function setTab(t, keepCollapsed){
   else if (!keepCollapsed) sheet.classList.remove('collapsed');
   curTab = t;
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
-  $('#p-team').hidden = t !== 'team'; $('#p-routes').hidden = t !== 'routes';
+  $('#p-team').hidden = t !== 'team'; $('#p-routes').hidden = t !== 'routes'; $('#p-me').hidden = t !== 'me';
+  if (t === 'me') renderCache();
 }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => setTab(b.dataset.tab));
 
@@ -1023,6 +1562,118 @@ function receive(id, meta){
   setTimeout(() => { if (!stopped && total === null) done(); }, MAX_TX + 15000);
 }
 
+/* ---------- pixel avatar (16x16, stored as 256 characters) ---------- */
+const AV_PAL = ['#000000','#1D2B53','#7E2553','#008751','#AB5236','#5F574F','#C2C3C7','#FFF1E8','#FF004D','#FFA300','#FFEC27','#00E436','#29ADFF','#83769C','#FF77A8','#FFCCAA','#E0A07A','#A86A45','#6B4226','#F2661B','#1E3B2F','#23897D','#3A6EA5','#FFFFFF'];
+const AV_CH = '0123456789abcdefghijklmn';
+const AV_PRESETS = {"smiley": ".....................aaaaaa........aaaaaaaaaa.....aaaaaaaaaaaa....aaaaaaaaaaaa...aaa00aaaa00aaa..aaa00aaaa00aaa..aaaaaaaaaaaaaa..aaaaaaaaaaaaaa..aa0aaaaaaaa0aa..aaa0aaaaaa0aaa...aaa000000aaa....aaaaaaaaaaaa.....aaaaaaaaaa........aaaaaa.....................", "cat": ".................99..........99..999........999..9e99......99e9..99999999999999.9999999999999999999bb999999bb999999b09999990b99999999999999999999999nnneennn9999999nnnnnnnnnn9999999nnnnnnnn9999.99999999999999...999999999999......99999999....................", "robot": ".......jj..............55.........666666666666...66666666666666..65555555555556..655cc5555cc556..655cc5555cc556..65555555555556..66666666666666..665j5j55j5j566..66666666666666...666666666666......55555555......666666666666....666666666666..................", "driver": "....................11111111......111111111111...11111111111111..1111cccccc1111...ffffffffffff....fff0ffff0fff....fff0ffff0fff....ffffffffffff.....ffffffffff......ffffffffff.......ff0000ff.........ffffff.......mmmmmmmmmmmm...mmmmmmmmmmmmmm..mmmmmmmmmmmmmm.", "van": "....................................................1111111111.....1cc1ccc1ccc1...1ccc1ccc1ccc1..11111111111111..a11111111111118.11111111111111..11111111111111..100611111100611..0660....0660.....00......00..................................................."};
+const avCacheURL = {};
+function avatarURL(a){
+  if (typeof a !== 'string' || a.length !== 256 || /[^.0-9a-n]/.test(a)) return null;
+  if (avCacheURL[a]) return avCacheURL[a];
+  const c = document.createElement('canvas'); c.width = c.height = 16;
+  const x = c.getContext('2d');
+  for (let i = 0; i < 256; i++) { const k = AV_CH.indexOf(a[i]); if (k >= 0) { x.fillStyle = AV_PAL[k]; x.fillRect(i % 16, i >> 4, 1, 1); } }
+  return avCacheURL[a] = c.toDataURL();
+}
+function renderAvPreviews(){
+  const au = avatarURL(me.av);
+  ['#joinAv', '#meAv'].forEach(sel => {
+    const el = $(sel); if (!el) return;
+    el.style.setProperty('--c', me.color);
+    el.style.backgroundImage = au ? `url(${au})` : '';
+    el.textContent = au ? '' : ((me.cs || $('#cs').value || '?').trim()[0] || '?').toUpperCase();
+  });
+  $('#joinAvBtn').textContent = au ? 'Edit your pixel avatar' : 'Make a pixel avatar for the map';
+}
+let avGrid = Array(256).fill('.'), avTool = 'pen', avColor = 10, avMirror = false, avUndo = [], avDown = false;
+const avCv = $('#avCanvas'), avX = avCv.getContext('2d');
+function avDraw(){
+  const S = 20;
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    const k = AV_CH.indexOf(avGrid[y * 16 + x]);
+    avX.fillStyle = k >= 0 ? AV_PAL[k] : ((x + y) % 2 ? '#E9E6DC' : '#F7F5EF');
+    avX.fillRect(x * S, y * S, S, S);
+  }
+  avX.strokeStyle = 'rgba(0,0,0,.08)'; avX.lineWidth = 1;
+  for (let i = 1; i < 16; i++) { avX.beginPath(); avX.moveTo(i * S + .5, 0); avX.lineTo(i * S + .5, 320); avX.moveTo(0, i * S + .5); avX.lineTo(320, i * S + .5); avX.stroke(); }
+  if (avMirror) { avX.strokeStyle = 'rgba(242,102,27,.8)'; avX.lineWidth = 2; avX.beginPath(); avX.moveTo(160, 0); avX.lineTo(160, 320); avX.stroke(); }
+}
+function avFill(x, y, ch){
+  const from = avGrid[y * 16 + x]; if (from === ch) return;
+  const st = [[x, y]];
+  while (st.length) {
+    const [cx, cy] = st.pop();
+    if (cx < 0 || cy < 0 || cx > 15 || cy > 15 || avGrid[cy * 16 + cx] !== from) continue;
+    avGrid[cy * 16 + cx] = ch;
+    st.push([cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]);
+  }
+}
+function avCell(e){
+  const r = avCv.getBoundingClientRect();
+  return [Math.min(15, Math.max(0, Math.floor((e.clientX - r.left) / r.width * 16))), Math.min(15, Math.max(0, Math.floor((e.clientY - r.top) / r.height * 16)))];
+}
+function avPaint(e){
+  const [x, y] = avCell(e), ch = avTool === 'erase' ? '.' : AV_CH[avColor];
+  if (avTool === 'fill') { avFill(x, y, ch); if (avMirror) avFill(15 - x, y, ch); }
+  else { avGrid[y * 16 + x] = ch; if (avMirror) avGrid[y * 16 + 15 - x] = ch; }
+  avDraw();
+}
+avCv.addEventListener('pointerdown', e => { e.preventDefault(); avUndo.push(avGrid.slice()); if (avUndo.length > 40) avUndo.shift(); avDown = true; try { avCv.setPointerCapture(e.pointerId); } catch {} avPaint(e); });
+avCv.addEventListener('pointermove', e => { if (avDown && avTool !== 'fill') avPaint(e); });
+['pointerup', 'pointercancel'].forEach(ev => avCv.addEventListener(ev, () => { avDown = false; }));
+document.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { avTool = b.dataset.tool; document.querySelectorAll('[data-tool]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+$('#avMirror').onclick = () => { avMirror = !avMirror; $('#avMirror').setAttribute('aria-pressed', avMirror); avDraw(); };
+$('#avUndo').onclick = () => { if (avUndo.length) { avGrid = avUndo.pop(); avDraw(); } };
+$('#avClear').onclick = () => { avUndo.push(avGrid.slice()); avGrid = Array(256).fill('.'); avDraw(); };
+function randomCritter(){
+  const g = Array(256).fill('.'), body = AV_CH[pick([2, 3, 8, 9, 10, 11, 12, 13, 14, 19, 21, 22])], eye = pick(['0', '1']);
+  for (let y = 2; y < 14; y++) for (let x = 2; x < 8; x++) {
+    if (Math.random() < ((x === 2 || y === 2 || y === 13) ? .45 : .82)) { g[y * 16 + x] = body; g[y * 16 + 15 - x] = body; }
+  }
+  const ey = 5 + (Math.random() * 3 | 0), ex = 5 + (Math.random() * 2 | 0);
+  [ex, 15 - ex].forEach(x => { g[ey * 16 + x] = 'n'; g[(ey + 1) * 16 + x] = eye; });
+  return g;
+}
+(function buildAvUI(){
+  $('#avPal').innerHTML = AV_PAL.map((c, i) => `<button role="radio" aria-label="Color ${c}" data-i="${i}" style="--c:${c}"></button>`).join('');
+  $('#avPal').querySelectorAll('button').forEach(b => b.onclick = () => {
+    avColor = +b.dataset.i;
+    if (avTool === 'erase') document.querySelector('[data-tool=pen]').click();
+    $('#avPal').querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', x === b));
+  });
+  const pre = $('#avPre');
+  Object.entries(AV_PRESETS).forEach(([name, a]) => {
+    const b = document.createElement('button'); b.setAttribute('aria-label', 'Start from ' + name);
+    b.style.backgroundImage = `url(${avatarURL(a)})`;
+    b.onclick = () => { avUndo.push(avGrid.slice()); avGrid = a.split(''); avDraw(); };
+    pre.appendChild(b);
+  });
+  const rnd = document.createElement('button'); rnd.className = 'txt'; rnd.textContent = 'Surprise me';
+  rnd.onclick = () => { avUndo.push(avGrid.slice()); avGrid = randomCritter(); avDraw(); };
+  pre.appendChild(rnd);
+})();
+function openAvatar(){
+  avGrid = (typeof me.av === 'string' && me.av.length === 256 ? me.av : AV_PRESETS.smiley).split('');
+  avUndo = [];
+  $('#avPal').querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', +x.dataset.i === avColor));
+  $('#avRemove').hidden = !me.av;
+  avDraw(); $('#avModal').hidden = false;
+}
+function closeAvatar(){ $('#avModal').hidden = true; }
+function saveAvatar(a){
+  me.av = a; store.set('av', a);
+  if (meRef) meRef.update({ av: a || null });
+  renderAvPreviews(); renderMembers();
+}
+$('#avCancel').onclick = closeAvatar;
+$('#avRemove').onclick = () => { saveAvatar(null); closeAvatar(); toast('Avatar removed'); };
+$('#avSave').onclick = () => {
+  const a = avGrid.join('');
+  if (/^\.+$/.test(a)) { toast('Draw something first, or tap Remove'); return; }
+  saveAvatar(a); closeAvatar(); toast('Avatar saved');
+};
+$('#cs').addEventListener('input', renderAvPreviews);
+
 /* ---------- invite QR ---------- */
 const DOWNLOAD_URL = window.APP_DOWNLOAD_URL || 'https://github.com/gnotesamsung7-hue/qc-minivan-owners/releases/latest/download/QC-Minivan-Owners.apk';
 function showInvite(){
@@ -1044,6 +1695,7 @@ $('#qrCopy').onclick = async () => {
 };
 
 /* ---------- boot ---------- */
+setTimeout(() => { const sp = $('#splash'); if (sp) { sp.classList.add('gone'); setTimeout(() => sp.remove(), 500); } }, 1300);
 setupJoin();
 const CFG = window.FIREBASE_CONFIG;
 if (!window.firebase || !CFG || !CFG.apiKey || /PASTE/i.test(CFG.apiKey)) {
