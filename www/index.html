@@ -247,6 +247,79 @@ body.lowpower .mk.me::before{animation:none;opacity:0}
 .sp-txt b{display:block;color:#F3EEDF;font-size:24px;letter-spacing:.5px;text-transform:none;margin-bottom:6px}
 @keyframes sweep{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.sp-disc::before,.mk.me::before{animation:none}}
+/* ---- phase 5: chat, fuel, van photo ---- */
+@media (max-width:400px){.tab svg{display:none}.tabs .tab{padding:10px 9px}}
+
+.chatfab{position:absolute;left:14px;top:-74px;width:58px;height:58px;border-radius:50%;background:linear-gradient(160deg,#17324A,#0D1B2A);color:#F3EEDF;display:grid;place-items:center;box-shadow:0 0 0 3px #2BC4C966,0 8px 18px #0007}
+.chatfab svg{width:26px;height:26px}
+.badge{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;border-radius:11px;background:#E8453C;color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px;border:2px solid #fff}
+.chat{position:fixed;left:8px;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 8px);height:min(64vh,560px);z-index:950;background:var(--paper);border-radius:18px;box-shadow:0 12px 40px #000a;display:flex;flex-direction:column;overflow:hidden;border:1px solid #2BC4C944}
+.chat header{display:flex;align-items:center;gap:8px;padding:12px 12px 10px;background:linear-gradient(135deg,#0D1B2A,#17324A);color:#F3EEDF;position:relative}
+.chat header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--stripes)}
+.chat header b{font-size:18px;flex:1}
+.chat header button{color:#F3EEDF;font-size:13px;font-weight:700;padding:7px 10px;border-radius:9px;background:#ffffff1a}
+.chat header #chatMin{font-size:22px;line-height:1;padding:4px 12px 10px}
+.chatlist{flex:1;overflow-y:auto;padding:12px 10px 6px;display:flex;flex-direction:column;gap:6px}
+.chatempty{color:var(--muted);text-align:center;margin:auto;padding:20px;line-height:1.4}
+.msg{display:flex;align-items:flex-end;gap:7px;max-width:86%}
+.msg.mine{align-self:flex-end;flex-direction:row-reverse}
+.msg.cont:not(.mine){padding-left:37px}
+.cav{width:30px;height:30px;border-radius:50%;flex:none;background:var(--c) center/cover no-repeat;image-rendering:pixelated;border:2px solid var(--c);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+.cav.photo{image-rendering:auto}
+.bub{background:var(--khaki);border-radius:14px 14px 14px 4px;padding:7px 11px 5px;line-height:1.35;font-size:16px;overflow-wrap:anywhere}
+.msg.mine .bub{background:linear-gradient(160deg,#1FA2B5,#17806A);color:#fff;border-radius:14px 14px 4px 14px}
+.bub b{display:block;font-size:13px;margin-bottom:1px}
+.bub i{display:block;font-style:normal;font-size:11px;opacity:.65;text-align:right;margin-top:2px}
+.quick{display:flex;gap:6px;overflow-x:auto;padding:6px 10px;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.quick button{flex:none;background:var(--khaki);border-radius:16px;padding:7px 11px;font-size:14px;font-weight:700}
+.chatin{display:flex;gap:8px;padding:8px 10px 12px;border-top:1px solid var(--line)}
+.chatin input{font-size:16px;padding:11px 12px;border-radius:22px}
+.chatin button{background:var(--orange);color:#fff;font-weight:700;border-radius:22px;padding:0 18px}
+.mk.pic .dot{border-radius:50%;image-rendering:auto;inset:-9px}
+.mk.pic .lbl{left:38px}
+.item .sw.av.photo,.avprev.photo,.nbav.photo{image-rendering:auto}
+.avprev.photo{border-radius:50%}
+.btnrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.btnrow .seg{flex:none}
+.seg button:disabled{opacity:.35}
+#picModal,#fuelModal{position:fixed;inset:0;z-index:1100;background:#000a;display:grid;place-items:center;padding:10px}
+#picCv{display:block;margin:0 auto 10px;width:min(300px,78vw);aspect-ratio:1;border-radius:12px;touch-action:none;background:#0B1724}
+#picZoom{width:100%;accent-color:var(--teal)}
+.fuelhead{position:relative;border-radius:16px;padding:10px 10px 12px;margin:4px 0 10px;background:linear-gradient(160deg,var(--khaki),var(--paper));overflow:hidden;border:1px solid var(--line)}
+.fuelhead.hasvan::before{content:"";position:absolute;inset:0;background:var(--van) center/cover;opacity:.16;filter:blur(1px)}
+.fuelhead>*{position:relative}
+.gaugebox{display:flex;align-items:center;gap:10px}
+.gauge{width:52%;max-width:220px;flex:none}
+.grange b{display:block;font-size:30px;line-height:1}
+.grange{font-size:15px;color:var(--muted)}
+.grange b{color:var(--ink)}
+.grange.low b{color:#E8453C}
+.grange span{display:block;font-size:13px;margin-top:4px;line-height:1.3}
+.gaugeset{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--muted)}
+.gaugeset span{width:100%}
+.gaugeset button{width:42px;height:34px;border-radius:9px;background:var(--paper);font-weight:700;font-size:16px;box-shadow:inset 0 0 0 1px var(--line)}
+.fuelacts{display:flex;gap:8px}
+.addfill{flex:1.2;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(180deg,#FF7A30,var(--orange));color:#fff;font-weight:700;font-size:17px;border-radius:12px;padding:8px 10px;box-shadow:0 4px 0 #A8420C}
+.pumpguy{width:36px;height:36px;background:center/contain no-repeat;image-rendering:pixelated;flex:none;display:inline-block;vertical-align:middle}
+.fuelacts .secondary{flex:1;padding:10px 8px;white-space:normal;line-height:1.15}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 6px}
+.stats div{background:var(--khaki);border-radius:12px;padding:9px 4px;text-align:center}
+.stats b{display:block;font-size:17px}
+.stats span{font-size:11px;color:var(--muted)}
+.spark{margin:8px 0;font-size:12px;color:var(--muted)}
+.spark svg{width:100%;height:60px;display:block;background:var(--khaki);border-radius:10px;margin-top:4px}
+.ftype{min-width:46px;height:30px;border-radius:8px;background:var(--forest);color:#F3EEDF;font-weight:700;font-size:12px;display:grid;place-items:center;padding:0 4px}
+.item small{font-weight:400;color:var(--muted);font-size:13px}
+.gasmk{width:30px;height:30px;border-radius:50%;background:#E8453C;color:#fff;display:grid;place-items:center;font-size:15px;border:3px solid #fff;box-shadow:0 2px 6px #0006}
+.gasmk.first{background:#17806A;width:34px;height:34px;box-shadow:0 0 0 4px #2BC4C966,0 2px 6px #0006}
+.gasmk.sm{width:30px;height:30px;flex:none}
+#fuelForm h2{display:flex;align-items:center;gap:8px}
+#fuelForm label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:8px 0 0}
+#fuelForm label input{margin-top:4px;font-size:17px;padding:10px}
+.row3{display:flex;gap:8px}.row3 label{flex:1;min-width:0}
+input.num{width:84px;padding:8px;font-size:16px;text-align:right}
+.lbl2 .mini{margin-left:8px;vertical-align:middle}
 /* markers */
 .mk{position:relative;width:24px;height:24px}
 .mk .dot{position:absolute;inset:3px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 4px #0007}
@@ -284,7 +357,7 @@ body.lowpower .mk.me::before{animation:none;opacity:0}
     <div id="csIdeas" class="ideas" aria-label="Callsign ideas"></div>
     <p class="hint">This is all the group sees. Use a handle, not your real name.</p>
     <div id="swatches" class="swatches" role="radiogroup" aria-label="Marker color"></div>
-    <div class="avrow"><span id="joinAv" class="avprev" aria-hidden="true"></span><button id="joinAvBtn" class="linkbtn">Make a pixel avatar for the map</button></div>
+    <div class="avrow"><span id="joinAv" class="avprev" aria-hidden="true"></span><div><button id="joinAvBtn" class="linkbtn">Make a pixel avatar for the map</button><br><button id="joinPicBtn" class="linkbtn">or use a photo of your minivan</button></div></div>
 
     <button id="create" class="primary">Start a new group</button>
     <div class="or">or join with a code</div>
@@ -319,6 +392,7 @@ body.lowpower .mk.me::before{animation:none;opacity:0}
     <button id="btnMe" aria-label="Center on me"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
     <button id="btnGroup" aria-label="Show the whole group"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     <button id="btnLayer" aria-label="Switch map style">Topo</button>
+    <button id="btnGas" aria-label="Find nearest gas stations" style="font-size:20px">⛽</button>
   </div>
 
   <div id="talk" class="talk" hidden><span class="wave"><i></i><i></i><i></i><i></i></span><span id="talkTxt"></span></div>
@@ -331,20 +405,26 @@ body.lowpower .mk.me::before{animation:none;opacity:0}
   </div>
 
   <div id="sheet" class="sheet collapsed">
+    <button id="chatFab" class="chatfab" aria-label="Open group chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg><span id="chatBadge" class="badge" hidden>0</span></button>
     <button id="ptt" aria-label="Hold to talk"><span class="led"></span><span class="ptt-txt">Hold to talk</span></button>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" data-tab="team" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.2 6-5.2s5.4 1.8 6 5.2"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.2c2.4.2 4 1.8 4.5 4.6"/></svg>Team <span id="teamCount"></span></button>
       <button class="tab" role="tab" data-tab="routes" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="6" r="2.4"/><path d="M8.4 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.6"/></svg>Routes <span id="routeCount"></span></button>
+      <button class="tab" role="tab" data-tab="fuel" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v15M4 20h11M7 8h5"/><path d="M14 10h2a1.5 1.5 0 0 1 1.5 1.5V16a1.5 1.5 0 0 0 3 0V8.5L18 6"/></svg>Fuel</button>
       <button class="tab" role="tab" data-tab="me" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="4" width="14" height="16" rx="3"/><circle cx="12" cy="10" r="2.6"/><path d="M8.5 16.5c.8-1.6 2-2.3 3.5-2.3s2.7.7 3.5 2.3"/></svg>Me</button>
     </div>
     <div class="panel" id="p-team">
       <div class="actions"><button id="btnInvite" class="secondary">Invite with QR code</button></div>
       <div id="teamList"></div>
     </div>
+    <div class="panel" id="p-fuel" hidden></div>
     <div class="panel" id="p-me" hidden>
       <div class="me-card"><span id="meAv" class="avprev" aria-hidden="true"></span>
         <div class="main"><b id="meCs"></b><span>Your callsign</span></div>
         <button id="meAvBtn" class="mini">Edit avatar</button></div>
+      <div class="btnrow"><button id="mePicBtn" class="mini">Upload van photo</button>
+        <span class="hint2" style="margin:0">Show me as</span>
+        <div class="seg" role="radiogroup" aria-label="Show me on the map as"><button role="radio" data-mk="pic">Photo</button><button role="radio" data-mk="av">Pixel</button><button role="radio" data-mk="dot">Dot</button></div></div>
       <p class="lbl2">Marker color</p>
       <div id="meSwatches" class="swatches light" role="radiogroup" aria-label="Marker color"></div>
       <div class="settings">
@@ -439,6 +519,26 @@ body.lowpower .mk.me::before{animation:none;opacity:0}
     <div class="btns"><button id="avRemove" class="left">Remove</button><button id="avCancel">Cancel</button><button id="avSave" class="ok">Save</button></div>
   </div>
 </div>
+
+<section id="chat" class="chat" hidden aria-label="Group chat">
+  <header><b>Group chat</b><button id="chatSpeak" aria-pressed="false">🔈 Read aloud: off</button><button id="chatMin" aria-label="Minimize chat">–</button></header>
+  <div id="chatList" class="chatlist" aria-live="polite"></div>
+  <div id="chatQuick" class="quick" aria-label="Quick replies"></div>
+  <div class="chatin"><input id="chatInput" maxlength="300" placeholder="Message the group" autocomplete="off"><button id="chatSend">Send</button></div>
+</section>
+
+<div id="picModal" hidden>
+  <div class="avdlg" role="dialog" aria-modal="true" aria-labelledby="picTitle">
+    <h2 id="picTitle">Your minivan photo</h2>
+    <canvas id="picCv" width="512" height="512" aria-label="Photo crop area"></canvas>
+    <input type="range" id="picZoom" min="1" max="3" step="0.01" value="1" aria-label="Zoom">
+    <p class="hint2">Drag to move, slide to zoom. The circle is what the group sees on the map.</p>
+    <div class="btns"><button id="picRemove" class="left">Remove</button><button id="picCancel">Cancel</button><button id="picSave" class="ok">Use photo</button></div>
+  </div>
+</div>
+<input type="file" id="picFile" accept="image/*" hidden>
+
+<div id="fuelModal" hidden><div class="avdlg" role="dialog" aria-modal="true" id="fuelForm"></div></div>
 
 <div id="modal" hidden>
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mTitle">
@@ -609,7 +709,8 @@ async function enterRoom(code){
   let csFinal = me.cs, n = 2;
   while (taken(csFinal)) csFinal = me.cs.slice(0, 13).trim() + ' ' + n++;
   if (csFinal !== me.cs) { me.cs = csFinal; setTimeout(() => toast('Someone here already uses that callsign, so you are ' + csFinal), 800); }
-  await meRef.update({ cs: me.cs, color: me.color, av: me.av || null, online: true, t: firebase.database.ServerValue.TIMESTAMP });
+  await meRef.update({ cs: me.cs, color: me.color, av: me.av || null, mk: me.mk || null, online: true, t: firebase.database.ServerValue.TIMESTAMP });
+  if (me.pic) R.child('pics/' + uid).set(me.pic);
   meRef.child('online').onDisconnect().set(false);
   startKey = R.child('ptt').push().key;
 
@@ -625,6 +726,8 @@ async function enterRoom(code){
     if (on) meRef.update({ online: true, t: firebase.database.ServerValue.TIMESTAMP });
   });
   R.child('members').on('value', s => { members = s.val() || {}; renderMembers(); checkProximity(); });
+  R.child('pics').on('value', s => { const v = s.val() || {}; pics = {}; Object.keys(v).forEach(k => { if (validPic(v[k])) pics[k] = v[k]; }); renderMembers(); if (chatOpen) renderChat(); });
+  startChat();
   const rr = R.child('routes');
   rr.on('child_added', s => { routes[s.key] = s.val(); drawRoute(s.key); renderRoutes(); });
   rr.on('child_changed', s => { routes[s.key] = s.val(); drawRoute(s.key); renderRoutes(); });
@@ -637,7 +740,7 @@ async function enterRoom(code){
 
   heartbeat();
   uiTick();
-  renderShare(); renderRadio(); renderMe(); applyPower(true); watchBattery(); renderCache(); renderBg(); renderProx();
+  renderShare(); renderRadio(); renderMe(); applyPower(true); watchBattery(); renderCache(); renderBg(); renderProx(); renderMkStyle();
   $('#bgHint').hidden = !BGGeo;
   startGPS();
   keepAwake();
@@ -649,6 +752,7 @@ $('#leave').onclick = async () => {
     if (vox) await setVox(false);
     pttUp();
     await stopNativeGPS();
+    if (me.pic) await R.child('pics/' + uid).remove();
     await meRef.child('online').onDisconnect().cancel();
     await meRef.remove();
   } catch {}
@@ -790,7 +894,7 @@ function drivingNudge(force){
   lastDriveNag = Date.now();
   toast('Moving at ' + Math.round(mySpeed * 3.6) + ' km/h. Driving? Let a passenger talk, or turn on hands-free voice mode in the Me tab.', 7000);
 }
-function onPos(p){ onPosCore(p); maybeRings(); checkProximity(); }
+function onPos(p){ onPosCore(p); maybeRings(); checkProximity(); fuelTrack(p.coords); fuelCheck(); }
 function onPosCore(p){
   const c = p.coords;
   myPos = [c.latitude, c.longitude]; myAcc = c.accuracy;
@@ -916,6 +1020,7 @@ async function backgroundPull(){
   lastBgPull = Date.now();
   const m = await restGet('rooms/' + roomCode + '/members');
   if (m && typeof m === 'object') { members = m; checkProximity(); }
+  backgroundChat();
 }
 
 /* background watcher (foreground service with a persistent notification) */
@@ -1045,8 +1150,8 @@ function renderNearby(near, th){
   if (!near.length || !prox.on) { el.hidden = true; return; }
   el.hidden = false;
   el.innerHTML = near.slice(0, 6).map(([id, m, d]) => {
-    const au = avatarURL(m.av), tier = d <= th[0] ? 'hot' : 'warm';
-    return `<button class="nb ${tier}" data-goto="${esc(id)}" style="--c:${esc(m.color)}"><span class="nbav"${au ? ` style="background-image:url(${au})"` : ''}>${au ? '' : esc((m.cs || '?')[0].toUpperCase())}</span><span class="nbt"><b>${esc(m.cs)}</b><i>${fmtDist(d)}</i></span></button>`;
+    const img = memberImg(id, m), au = img && img.url, tier = d <= th[0] ? 'hot' : 'warm';
+    return `<button class="nb ${tier}" data-goto="${esc(id)}" style="--c:${esc(m.color)}"><span class="nbav${img && img.photo ? ' photo' : ''}"${au ? ` style="background-image:url(${au})"` : ''}>${m.lowfuel ? '' : ''}${au ? '' : esc((m.cs || '?')[0].toUpperCase())}</span><span class="nbt"><b>${esc(m.cs)}</b><i>${fmtDist(d)}</i></span></button>`;
   }).join('');
   el.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => { const m = members[b.dataset.goto]; if (m) map.setView([m.lat, m.lng], 17); });
 }
@@ -1104,14 +1209,405 @@ function confetti(){
   document.body.appendChild(box); setTimeout(() => box.remove(), 3400);
 }
 
+/* ---------- minivan photo for the map (128 px JPEG, kept apart from location data) ---------- */
+let pics = {}, picImg = null, picZoom = 1, picOff = [0, 0], picDrag = null;
+me.pic = store.get('pic', null); me.mk = store.get('mk', null);
+const picCv = $('#picCv'), picX = picCv.getContext('2d');
+const validPic = d => typeof d === 'string' && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(d) && d.length < 30000;
+function picLayout(){
+  const S = picCv.width, iw = picImg.naturalWidth, ih = picImg.naturalHeight;
+  const base = Math.max(S / iw, S / ih), sc = base * picZoom, w = iw * sc, h = ih * sc;
+  const maxX = Math.max(0, (w - S) / 2), maxY = Math.max(0, (h - S) / 2);
+  picOff = [Math.max(-maxX, Math.min(maxX, picOff[0])), Math.max(-maxY, Math.min(maxY, picOff[1]))];
+  return { x: (S - w) / 2 + picOff[0], y: (S - h) / 2 + picOff[1], w, h };
+}
+function picDraw(){
+  const S = picCv.width; picX.clearRect(0, 0, S, S);
+  if (!picImg) return;
+  const L2 = picLayout(); picX.drawImage(picImg, L2.x, L2.y, L2.w, L2.h);
+  picX.save(); picX.fillStyle = 'rgba(10,20,32,.62)'; picX.beginPath(); picX.rect(0, 0, S, S); picX.arc(S / 2, S / 2, S / 2 - 6, 0, Math.PI * 2, true); picX.fill('evenodd');
+  picX.strokeStyle = me.color || '#2BC4C9'; picX.lineWidth = 6; picX.beginPath(); picX.arc(S / 2, S / 2, S / 2 - 6, 0, Math.PI * 2); picX.stroke(); picX.restore();
+}
+function openPic(){ $('#picFile').value = ''; $('#picFile').click(); }
+$('#picFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const url = URL.createObjectURL(f), img = new Image();
+  img.onload = () => { picImg = img; picZoom = 1; picOff = [0, 0]; $('#picZoom').value = 1; $('#picRemove').hidden = !me.pic; $('#picModal').hidden = false; picDraw(); };
+  img.onerror = () => toast('That image could not be opened. Try a JPG or PNG photo.');
+  img.src = url;
+};
+$('#picZoom').oninput = e => { picZoom = +e.target.value; picDraw(); };
+picCv.addEventListener('pointerdown', e => { e.preventDefault(); picDrag = [e.clientX, e.clientY, picOff[0], picOff[1]]; try { picCv.setPointerCapture(e.pointerId); } catch {} });
+picCv.addEventListener('pointermove', e => {
+  if (!picDrag || !picImg) return;
+  const k = picCv.width / picCv.getBoundingClientRect().width;
+  picOff = [picDrag[2] + (e.clientX - picDrag[0]) * k, picDrag[3] + (e.clientY - picDrag[1]) * k]; picDraw();
+});
+['pointerup', 'pointercancel'].forEach(ev => picCv.addEventListener(ev, () => { picDrag = null; }));
+$('#picCancel').onclick = () => { $('#picModal').hidden = true; };
+$('#picRemove').onclick = () => { savePic(null); $('#picModal').hidden = true; toast('Photo removed'); };
+$('#picSave').onclick = () => {
+  const out = document.createElement('canvas'); out.width = out.height = 128;
+  const o = out.getContext('2d'), L2 = picLayout(), k = 128 / picCv.width;
+  o.fillStyle = '#fff'; o.fillRect(0, 0, 128, 128);
+  o.drawImage(picImg, L2.x * k, L2.y * k, L2.w * k, L2.h * k);
+  let d = out.toDataURL('image/jpeg', .82);
+  if (d.length > 29000) d = out.toDataURL('image/jpeg', .6);
+  savePic(d); if (!me.mk || me.mk === 'dot') setMk('pic');
+  $('#picModal').hidden = true; toast('Van photo saved. The group sees it on the map.');
+};
+function savePic(d){
+  me.pic = d; store.set('pic', d);
+  if (R && uid) R.child('pics/' + uid).set(d || null);
+  if (!d && me.mk === 'pic') setMk(me.av ? 'av' : 'dot');
+  renderMkStyle(); renderAvPreviews(); renderMembers();
+}
+function setMk(v){ me.mk = v; store.set('mk', v); if (meRef) meRef.update({ mk: v }); renderMkStyle(); renderAvPreviews(); renderMembers(); }
+function renderMkStyle(){
+  document.querySelectorAll('[data-mk]').forEach(b => {
+    const v = b.dataset.mk; b.setAttribute('aria-checked', (me.mk || (me.pic ? 'pic' : me.av ? 'av' : 'dot')) === v);
+    b.disabled = (v === 'pic' && !me.pic) || (v === 'av' && !me.av);
+  });
+  $('#mePicBtn').textContent = me.pic ? 'Change van photo' : 'Upload van photo';
+}
+document.querySelectorAll('[data-mk]').forEach(b => b.onclick = () => { if (!b.disabled) setMk(b.dataset.mk); });
+$('#mePicBtn').onclick = openPic;
+$('#joinPicBtn').onclick = openPic;
+
+/* ---------- group chat (minimizable) ---------- */
+const QUICK = ['Pa-ihi muna 🚻', 'Gas stop ⛽', 'Sunod lang 👍', 'Traffic ahead 🚦', 'Wait for me ✋', 'Kain tayo 🍜', 'Nandito na ako 📍', 'Ingat sa daan 🙏'];
+const seenChat = new Set();
+let chatOpen = false, unread = 0, chatSpeak = store.get('chatSpeak', false), chatMsgs = [], chatStartKey = null, lastChatKey = null;
+function fmtTime(t){ const d = new Date(t || Date.now()); return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0'); }
+function memberImg(id, m){
+  const style = m && m.mk;
+  if (style === 'dot') return null;
+  const pp = id === uid ? me.pic : pics[id];
+  if (style !== 'av' && pp) return { url: pp, photo: true };
+  const au = avatarURL(m && m.av); return au ? { url: au, photo: false } : null;
+}
+function renderChat(){
+  const list = $('#chatList');
+  if (!chatMsgs.length) { list.innerHTML = '<div class="chatempty">No messages yet. Say hi, or tap a quick reply below.</div>'; return; }
+  let prevUid = null;
+  list.innerHTML = chatMsgs.map(([k, m]) => {
+    const mine = m.uid === uid, same = prevUid === m.uid; prevUid = m.uid;
+    const mem = members[m.uid] || { cs: m.cs, color: m.color };
+    const img = memberImg(m.uid, mem);
+    const av = mine || same ? '' : `<span class="cav${img && img.photo ? ' photo' : ''}" style="--c:${esc(mem.color || m.color)}${img ? `;background-image:url(${img.url})` : ''}">${img ? '' : esc((m.cs || '?')[0].toUpperCase())}</span>`;
+    return `<div class="msg${mine ? ' mine' : ''}${same ? ' cont' : ''}">${av}<div class="bub">${mine || same ? '' : `<b style="color:${esc(m.color)}">${esc(m.cs)}</b>`}<span class="tx">${esc(m.text)}</span><i>${fmtTime(m.t)}</i></div></div>`;
+  }).join('');
+  list.scrollTop = list.scrollHeight;
+}
+function setUnread(n){ unread = n; const b = $('#chatBadge'); b.hidden = !n; b.textContent = n > 9 ? '9+' : n; }
+function openChat(){ chatOpen = true; $('#chat').hidden = false; $('#chatFab').hidden = true; setUnread(0); renderChat(); setTimeout(() => $('#chatInput').focus(), 80); }
+function minimizeChat(){ chatOpen = false; $('#chat').hidden = true; $('#chatFab').hidden = false; $('#chatInput').blur(); }
+function popSound(){ try { const c = ac(), t = c.currentTime; voice('sine', 880, t, .12, .15); voice('sine', 1320, t + .06, .14, .12); } catch {} }
+function sendChat(text){
+  text = (text || '').trim().slice(0, 300);
+  if (!text || !R) return;
+  R.child('chat').push({ uid, cs: me.cs, color: me.color, text, t: firebase.database.ServerValue.TIMESTAMP });
+}
+function onChatMsg(k, m, live){
+  if (seenChat.has(k)) return; seenChat.add(k);
+  chatMsgs.push([k, m]); if (chatMsgs.length > 80) chatMsgs.shift();
+  lastChatKey = k;
+  if (chatOpen) renderChat();
+  if (!live || m.uid === uid) return;
+  if (document.hidden) { notifyNative('💬 ' + m.cs, m.text); if (chatSpeak) speakAny(m.cs + ' says: ' + m.text); return; }
+  if (!chatOpen) { setUnread(unread + 1); popSound(); toast('💬 ' + m.cs + ': ' + m.text, 3500); }
+  if (chatSpeak) speakAny(m.cs + ' says: ' + m.text);
+}
+function speakAny(text){ const v = prox.voice; prox.voice = true; speak(text); prox.voice = v; }
+function startChat(){
+  chatStartKey = R.child('chat').push().key;
+  R.child('chat').limitToLast(60).on('child_added', s => { const m = s.val(); if (m && m.text) onChatMsg(s.key, m, s.key > chatStartKey); });
+  $('#chatQuick').innerHTML = QUICK.map(q => `<button>${esc(q)}</button>`).join('');
+  $('#chatQuick').querySelectorAll('button').forEach(b => b.onclick = () => sendChat(b.textContent));
+  renderChatSpeak();
+}
+function renderChatSpeak(){ $('#chatSpeak').setAttribute('aria-pressed', chatSpeak); $('#chatSpeak').textContent = chatSpeak ? '🔊 Read aloud: on' : '🔈 Read aloud: off'; }
+$('#chatFab').onclick = openChat;
+$('#chatMin').onclick = minimizeChat;
+$('#chatSend').onclick = () => { sendChat($('#chatInput').value); $('#chatInput').value = ''; $('#chatInput').focus(); };
+$('#chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#chatSend').click(); } });
+$('#chatSpeak').onclick = () => { chatSpeak = !chatSpeak; store.set('chatSpeak', chatSpeak); renderChatSpeak(); toast(chatSpeak ? 'New messages will be read aloud' : 'Read aloud off'); };
+/* background: fetch the newest messages over native HTTP */
+async function backgroundChat(){
+  if (!document.hidden || !roomCode || !NHttp) return;
+  const t = await idToken(); if (!t) return;
+  try {
+    const url = restURL('rooms/' + roomCode + '/chat', t) + '&orderBy=%22%24key%22&limitToLast=5';
+    const r = await NHttp.request({ url, method: 'GET' });
+    const d = typeof r.data === 'string' ? JSON.parse(r.data) : r.data;
+    if (!d) return;
+    Object.keys(d).sort().forEach(k => { if ((!lastChatKey || k > lastChatKey) && k > chatStartKey && d[k] && d[k].text) onChatMsg(k, d[k], true); });
+  } catch {}
+}
+
+/* ---------- fuel tracker (FillUp+ inside the convoy app; data stays on this phone) ---------- */
+const PUMP_SPRITE = "..................000............0fff0...888888..0f0f0...8nnnn8..0fff0...8n00n8...0f0....8nnnn8..jjjjj...888888.jjjjjjj0.888888.f.jjj.f00888888...jjj....888888...111....888888...1.1....888888...1.1...66666666.00.00..66666666................................";
+const FUEL_TYPES = ['Diesel', '91', '95', '97+'];
+const BRANDS = ['Petron', 'Shell', 'Caltex', 'Seaoil', 'Phoenix', 'Cleanfuel', 'Unioil', 'Jetti', 'Flying V', 'Other'];
+const EXP_CATS = ['Oil change', 'Maintenance', 'Tires', 'Repair', 'Toll', 'Parking', 'Car wash', 'Insurance', 'Registration', 'Other'];
+const FUEL = Object.assign({ tank: 40, kmL: 10, warnKm: 60, share: true, oilEvery: 5000 }, store.get('fuelCfg', {}));
+let fills = store.get('fills', []), exps = store.get('exps', []), fstate = store.get('fstate', null);
+let fuelWarned = store.get('fuelWarned', false), oilWarned = false, lastFuelPos = null, fuelSaveAt = 0, lowShared = null;
+let gasCache = null, gasLayer = null;
+const peso = n => '₱' + (Math.round(n * 100) / 100).toLocaleString('en-PH', { minimumFractionDigits: n < 100 ? 2 : 0, maximumFractionDigits: 2 });
+const saveFuel = () => { store.set('fuelCfg', FUEL); store.set('fills', fills); store.set('exps', exps); store.set('fstate', fstate); store.set('fuelWarned', fuelWarned); };
+function econ(){
+  const f = fills.filter(x => x.odo > 0).sort((a, b) => a.t - b.t);
+  const segs = []; let lastFull = null, litres = 0;
+  for (const x of f) {
+    if (lastFull) litres += x.L;
+    if (x.full) {
+      if (lastFull && x.odo > lastFull.odo && litres > 0) segs.push({ t: x.t, km: x.odo - lastFull.odo, L: litres, kmL: (x.odo - lastFull.odo) / litres });
+      lastFull = x; litres = 0;
+    }
+  }
+  const km = segs.reduce((a, s) => a + s.km, 0), L = segs.reduce((a, s) => a + s.L, 0);
+  return { segs, avg: L ? km / L : null };
+}
+const effKmL = () => econ().avg || FUEL.kmL;
+function fuelNow(){
+  if (!fstate) return null;
+  const L = Math.max(0, Math.min(FUEL.tank, fstate.L - fstate.km / effKmL()));
+  return { L, pct: L / FUEL.tank, range: L * effKmL(), driven: fstate.km };
+}
+function currentOdo(){
+  const r = fills.concat(exps).filter(x => x.odo > 0).sort((a, b) => b.t - a.t)[0];
+  if (!r) return null;
+  return r.odo + (fstate && fstate.t >= r.t ? fstate.km : 0);
+}
+function oilInfo(){
+  const last = exps.filter(x => x.cat === 'Oil change' && x.odo > 0).sort((a, b) => b.odo - a.odo)[0];
+  const odo = currentOdo();
+  if (!last || odo == null) return null;
+  return { due: last.odo + FUEL.oilEvery - odo };
+}
+/* GPS odometer: counts distance you drive while the app tracks you (background too) */
+function fuelTrack(c){
+  if (!fstate || c.accuracy > 40) return;
+  const p = [c.latitude, c.longitude];
+  if (lastFuelPos) {
+    const d = hav(lastFuelPos, p);
+    if (d < 8) return;
+    if (d < 3000) fstate.km += d / 1000;
+  }
+  lastFuelPos = p;
+  if (Date.now() - fuelSaveAt > 20000) { fuelSaveAt = Date.now(); store.set('fstate', fstate); }
+}
+function fuelCheck(){
+  const f = fuelNow(); if (!f) return;
+  const low = f.range < FUEL.warnKm;
+  if (low && !fuelWarned) { fuelWarned = true; saveFuel(); alertFuel(f); }
+  if (!low && f.range > FUEL.warnKm + 20 && fuelWarned) { fuelWarned = false; saveFuel(); }
+  const share = FUEL.share && low;
+  if (meRef && share !== lowShared) { lowShared = share; writeMe({ lowfuel: share || null }); }
+  const o = oilInfo();
+  if (o && o.due <= 300 && !oilWarned) { oilWarned = true; if (!document.hidden) toast('🛢️ Oil change due in about ' + Math.max(0, Math.round(o.due)) + ' km', 5000); }
+  if (curTab === 'fuel' && !document.hidden) renderFuelGauge();
+}
+async function alertFuel(f){
+  let near = '';
+  try { const g = await findGas(false); if (g && g[0]) near = g[0]; } catch {}
+  const km = Math.round(f.range);
+  const body = 'About ' + km + ' km left' + (near ? '. Nearest: ' + near.name + ', ' + fmtDist(near.d) + ' away' : '');
+  if (document.hidden) notifyNative('⛽ Low fuel', body);
+  else { try { SOUNDS.bell(); } catch {} buzz([200, 100, 200]); toast('⛽ Low fuel. ' + body, 7000); }
+  speakAny(prox.lang === 'fil'
+    ? 'Paubos na ang gas. Mga ' + km + ' kilometro na lang.' + (near ? ' Pinakamalapit na gasolinahan: ' + near.name + ', ' + fmtDist(near.d) + '.' : '')
+    : 'Low fuel. About ' + km + ' kilometers left.' + (near ? ' Nearest gas station is ' + near.name + ', ' + fmtDist(near.d) + ' away.' : ''));
+}
+/* nearest gas stations from OpenStreetMap (Overpass API) */
+async function findGas(show){
+  if (!myPos) { if (show) toast('Waiting for your GPS fix'); return null; }
+  if (!gasCache || hav(gasCache.at, myPos) > 1000 || Date.now() - gasCache.t > 600000) {
+    const q = `[out:json][timeout:20];nwr["amenity"="fuel"](around:6000,${myPos[0].toFixed(5)},${myPos[1].toFixed(5)});out center 40;`;
+    const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(q);
+    let data = null;
+    try {
+      if (document.hidden && NHttp) { const r = await NHttp.request({ url, method: 'GET' }); data = typeof r.data === 'string' ? JSON.parse(r.data) : r.data; }
+      else { const r = await fetch(url); data = await r.json(); }
+    } catch { if (show) toast('Could not reach the gas station map. Check your data connection.'); return gasCache ? gasCache.list : null; }
+    const list = (data.elements || []).map(e => {
+      const lat = e.lat ?? (e.center && e.center.lat), lng = e.lon ?? (e.center && e.center.lon), tg = e.tags || {};
+      return lat == null ? null : { lat, lng, name: tg.brand || tg.name || tg.operator || 'Gas station', addr: [tg['addr:street'], tg['addr:city']].filter(Boolean).join(', '), d: hav(myPos, [lat, lng]) };
+    }).filter(Boolean).sort((a, b) => a.d - b.d);
+    gasCache = { at: myPos.slice(), t: Date.now(), list };
+  } else gasCache.list.forEach(g => g.d = hav(myPos, [g.lat, g.lng]));
+  gasCache.list.sort((a, b) => a.d - b.d);
+  if (show) showGas(gasCache.list);
+  return gasCache.list;
+}
+function openExternal(url){ if (isNative) location.href = url; else window.open(url, '_blank'); }
+const dirURL = g => `https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}&travelmode=driving`;
+function showGas(list){
+  if (gasLayer) map.removeLayer(gasLayer);
+  gasLayer = L.layerGroup();
+  const top = list.slice(0, 10);
+  if (!top.length) { toast('No gas stations found within 6 km'); return; }
+  top.forEach((g, i) => {
+    const el = document.createElement('div');
+    el.innerHTML = `<b>${esc(g.name)}</b><br>${fmtDist(g.d)} away${g.addr ? '<br>' + esc(g.addr) : ''}<br>`;
+    const go = document.createElement('button'); go.className = 'mini'; go.textContent = 'Directions'; go.onclick = () => openExternal(dirURL(g)); el.appendChild(go);
+    L.marker([g.lat, g.lng], { zIndexOffset: 300 - i, icon: L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15], html: `<div class="gasmk${i ? '' : ' first'}">⛽</div>` }) }).bindPopup(el).addTo(gasLayer);
+  });
+  gasLayer.addTo(map);
+  map.fitBounds(top.slice(0, 4).map(g => [g.lat, g.lng]).concat([myPos]), { padding: [70, 70], maxZoom: 16 });
+  $('#sheet').classList.add('collapsed');
+  toast('⛽ Nearest: ' + top[0].name + ', ' + fmtDist(top[0].d), 4000);
+  renderFuel();
+}
+/* ---------- Fuel tab UI ---------- */
+function gaugeSVG(f){
+  const pct = f ? f.pct : 0, ang = Math.PI * (1 - pct), cx = 110, cy = 104, r = 86;
+  const nx = cx + Math.cos(ang) * (r - 18), ny = cy - Math.sin(ang) * (r - 18);
+  const warnPct = Math.min(1, FUEL.warnKm / (FUEL.tank * effKmL()));
+  const arc = (a0, a1) => { const p0 = [cx + Math.cos(Math.PI * (1 - a0)) * r, cy - Math.sin(Math.PI * (1 - a0)) * r], p1 = [cx + Math.cos(Math.PI * (1 - a1)) * r, cy - Math.sin(Math.PI * (1 - a1)) * r]; return `M${p0[0].toFixed(1)} ${p0[1].toFixed(1)} A${r} ${r} 0 0 1 ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`; };
+  return `<svg viewBox="0 0 220 124" class="gauge" role="img" aria-label="Fuel ${Math.round(pct * 100)} percent">
+    <path d="${arc(0, 1)}" stroke="var(--line)" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="${arc(0, warnPct)}" stroke="#E8453C" stroke-width="14" fill="none" stroke-linecap="round" opacity=".85"/>
+    ${pct > .01 ? `<path d="${arc(0, pct)}" stroke="url(#gg)" stroke-width="14" fill="none" stroke-linecap="round"/>` : ''}
+    <defs><linearGradient id="gg"><stop offset="0" stop-color="#E8453C"/><stop offset=".35" stop-color="#E0A800"/><stop offset="1" stop-color="#2BC4C9"/></linearGradient></defs>
+    <line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="7" fill="var(--ink)"/>
+    <text x="22" y="122" font-size="13" font-weight="700" fill="var(--muted)">E</text><text x="190" y="122" font-size="13" font-weight="700" fill="var(--muted)">F</text>
+  </svg>`;
+}
+function renderFuelGauge(){
+  const f = fuelNow(), el = $('#fuelGauge'); if (!el) return;
+  el.innerHTML = gaugeSVG(f) + (f
+    ? `<div class="grange${f.range < FUEL.warnKm ? ' low' : ''}"><b>${Math.round(f.range)} km</b> left<span>about ${f.L.toFixed(1)} L of ${FUEL.tank} L, ${f.driven.toFixed(1)} km driven since your last update</span></div>`
+    : `<div class="grange"><b>No reading yet</b><span>Log a fill-up or tap your gauge level below</span></div>`);
+}
+function sparkSVG(segs){
+  const s = segs.slice(-10); if (s.length < 2) return '';
+  const max = Math.max(...s.map(x => x.kmL)), min = Math.min(...s.map(x => x.kmL)), W = 300, H = 60;
+  const pts = s.map((x, i) => [i / (s.length - 1) * (W - 20) + 10, H - 10 - (max === min ? .5 : (x.kmL - min) / (max - min)) * (H - 24)]);
+  return `<div class="spark"><span>km/L, last ${s.length} full tanks</span><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round"/>${pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--teal)"/>`).join('')}</svg></div>`;
+}
+function renderFuel(){
+  const box = $('#p-fuel'); if (!box) return;
+  const e = econ(), avg = e.avg, since30 = Date.now() - 30 * 864e5;
+  const month = fills.filter(x => x.t > since30).reduce((a, x) => a + x.total, 0) + exps.filter(x => x.t > since30).reduce((a, x) => a + x.amt, 0);
+  const recent = fills.slice().sort((a, b) => b.t - a.t).slice(0, 5), recL = recent.reduce((a, x) => a + x.L, 0);
+  const avgPpl = recL ? recent.reduce((a, x) => a + x.total, 0) / recL : null, perKm = avg && avgPpl ? avgPpl / avg : null, o = oilInfo();
+  const pumpURL = avatarURL(PUMP_SPRITE), vanBg = me.pic ? `style="--van:url(${me.pic})"` : '';
+  box.innerHTML = `
+    <div class="fuelhead${me.pic ? ' hasvan' : ''}" ${vanBg}>
+      <div id="fuelGauge" class="gaugebox"></div>
+      <div class="gaugeset" role="group" aria-label="Set gauge level"><span>Engine on? Tap what your gauge shows:</span>
+        ${[['E', 0.04], ['¼', .25], ['½', .5], ['¾', .75], ['F', 1]].map(([l, v]) => `<button data-gauge="${v}">${l}</button>`).join('')}</div>
+    </div>
+    <div class="fuelacts">
+      <button id="addFill" class="addfill"><span class="pumpguy" style="background-image:url(${pumpURL})"></span>Add fill-up</button>
+      <button id="findGasBtn" class="secondary">⛽ Find gas near me</button>
+    </div>
+    <div class="stats">
+      <div><b>${avg ? avg.toFixed(1) : '–'}</b><span>km/L avg</span></div>
+      <div><b>${avg ? (100 / avg).toFixed(1) : '–'}</b><span>L/100 km</span></div>
+      <div><b>${perKm ? peso(perKm) : '–'}</b><span>per km</span></div>
+      <div><b>${month ? peso(month) : '₱0'}</b><span>last 30 days</span></div>
+    </div>
+    ${sparkSVG(e.segs)}
+    ${o ? `<p class="hint2">🛢️ Next oil change in about <b>${Math.max(0, Math.round(o.due)).toLocaleString()} km</b> (every ${FUEL.oilEvery.toLocaleString()} km)</p>` : '<p class="hint2">🛢️ Log an <b>Oil change</b> expense with the odometer to get oil change reminders.</p>'}
+    ${gasCache && gasCache.list.length ? `<p class="lbl2">Nearest gas</p><div class="gaslist">${gasCache.list.slice(0, 4).map((g, i) => `<div class="item"><span class="gasmk sm">⛽</span><div class="main"><div class="name">${esc(g.name)}</div><div class="meta">${fmtDist(g.d)} away${g.addr ? ', ' + esc(g.addr) : ''}</div></div><button class="mini" data-dir="${i}">Go</button></div>`).join('')}</div>` : ''}
+    <p class="lbl2">Fill-ups</p>
+    <div class="flist">${fills.length ? fills.slice().sort((a, b) => b.t - a.t).slice(0, 30).map(x => {
+      const seg = e.segs.find(s => s.t === x.t);
+      return `<div class="item"><span class="ftype">${esc(x.oct || '')}</span><div class="main"><div class="name">${peso(x.total)} <small>${x.L.toFixed(2)} L at ${peso(x.ppl)}/L</small></div><div class="meta">${new Date(x.t).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}${x.brand ? ', ' + esc(x.brand) : ''}${x.odo ? ', ' + x.odo.toLocaleString() + ' km' : ''}${x.full ? '' : ', partial'}${seg ? ', <b>' + seg.kmL.toFixed(1) + ' km/L</b>' : ''}</div></div><button class="mini danger" data-delfill="${x.id}" aria-label="Delete fill-up">✕</button></div>`;
+    }).join('') : '<div class="empty">No fill-ups yet. Tap <b>Add fill-up</b> at the pump. Two full tanks with odometer readings give you your km/L.</div>'}</div>
+    <p class="lbl2">Other expenses <button class="mini" id="addExp">+ Add</button></p>
+    <div class="flist">${exps.length ? exps.slice().sort((a, b) => b.t - a.t).slice(0, 20).map(x => `<div class="item"><span class="ftype">${esc(x.cat.split(' ')[0].slice(0, 4))}</span><div class="main"><div class="name">${peso(x.amt)} <small>${esc(x.cat)}</small></div><div class="meta">${new Date(x.t).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}${x.odo ? ', ' + x.odo.toLocaleString() + ' km' : ''}${x.note ? ', ' + esc(x.note) : ''}</div></div><button class="mini danger" data-delexp="${x.id}" aria-label="Delete expense">✕</button></div>`).join('') : '<div class="empty">Tolls, parking, oil changes, repairs and more go here.</div>'}</div>
+    <p class="lbl2">Fuel settings</p>
+    <div class="settings">
+      <div class="set"><div><b>Tank size</b><span>Liters</span></div><input class="num" id="fTank" type="number" inputmode="decimal" value="${FUEL.tank}"></div>
+      <div class="set"><div><b>Low fuel reminder</b><span>Remind me when this many km are left</span></div><input class="num" id="fWarn" type="number" inputmode="numeric" value="${FUEL.warnKm}"></div>
+      <div class="set"><div><b>Typical km/L</b><span>Used until your own fill-ups give a real number${avg ? ` (yours: ${avg.toFixed(1)})` : ''}</span></div><input class="num" id="fKmL" type="number" inputmode="decimal" value="${FUEL.kmL}"></div>
+      <div class="set"><div><b>Oil change every</b><span>km</span></div><input class="num" id="fOil" type="number" inputmode="numeric" value="${FUEL.oilEvery}"></div>
+      <div class="set"><div><b>Tell the group when I'm low</b><span>Shows ⛽ next to your callsign. Nothing else about your fuel is shared.</span></div><button id="fShare" class="switch" role="switch" aria-checked="${FUEL.share}" aria-label="Tell the group when I'm low on fuel"></button></div>
+    </div>
+    <div class="actions" style="margin-top:10px"><button id="fuelCsv" class="secondary">Copy log as CSV</button></div>`;
+  renderFuelGauge();
+  box.querySelectorAll('[data-gauge]').forEach(b => b.onclick = () => { fstate = { L: FUEL.tank * +b.dataset.gauge, km: 0, t: Date.now() }; fuelWarned = false; saveFuel(); renderFuelGauge(); fuelCheck(); toast('Fuel gauge updated'); });
+  $('#addFill').onclick = () => openFill();
+  $('#addExp').onclick = () => openExp();
+  $('#findGasBtn').onclick = () => findGas(true);
+  box.querySelectorAll('[data-dir]').forEach(b => b.onclick = () => openExternal(dirURL(gasCache.list[+b.dataset.dir])));
+  box.querySelectorAll('[data-delfill]').forEach(b => b.onclick = async () => { if (await ask({ title: 'Delete this fill-up?', input: false, ok: 'Delete' })) { fills = fills.filter(x => x.id !== b.dataset.delfill); saveFuel(); renderFuel(); } });
+  box.querySelectorAll('[data-delexp]').forEach(b => b.onclick = async () => { if (await ask({ title: 'Delete this expense?', input: false, ok: 'Delete' })) { exps = exps.filter(x => x.id !== b.dataset.delexp); saveFuel(); renderFuel(); } });
+  const num = (id, key, min) => { $(id).onchange = e => { const v = +e.target.value; if (v >= min) { FUEL[key] = v; saveFuel(); renderFuel(); fuelCheck(); } }; };
+  num('#fTank', 'tank', 5); num('#fWarn', 'warnKm', 5); num('#fKmL', 'kmL', 1); num('#fOil', 'oilEvery', 500);
+  $('#fShare').onclick = () => { FUEL.share = !FUEL.share; saveFuel(); lowShared = null; fuelCheck(); renderFuel(); };
+  $('#fuelCsv').onclick = async () => {
+    const rows = [['type', 'date', 'odometer_km', 'liters', 'price_per_liter', 'total_php', 'fuel', 'station_or_category', 'full_tank', 'note']]
+      .concat(fills.map(x => ['fill-up', new Date(x.t).toISOString(), x.odo || '', x.L, x.ppl, x.total, x.oct || '', x.brand || '', x.full ? 'yes' : 'no', '']))
+      .concat(exps.map(x => ['expense', new Date(x.t).toISOString(), x.odo || '', '', '', x.amt, '', x.cat, '', x.note || '']));
+    const csv = rows.map(r => r.map(v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : v).join(',')).join('\n');
+    try { await navigator.clipboard.writeText(csv); toast('Copied ' + (rows.length - 1) + ' rows. Paste into Excel or Google Sheets.'); } catch { toast('Copy failed on this phone'); }
+  };
+}
+/* ---------- fill-up and expense forms ---------- */
+function localDT(t){ const d = new Date(t - new Date(t).getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); }
+function openForm(html, onSave){
+  $('#fuelForm').innerHTML = html; $('#fuelModal').hidden = false;
+  $('#fmCancel').onclick = () => { $('#fuelModal').hidden = true; };
+  $('#fmSave').onclick = () => { if (onSave() !== false) $('#fuelModal').hidden = true; };
+  $('#fuelForm').querySelectorAll('.chips').forEach(g => g.querySelectorAll('button').forEach(b => b.onclick = () => g.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', x === b))));
+}
+const chipVal = id => { const b = $(id + ' [aria-checked=true]'); return b ? b.textContent : ''; };
+function openFill(){
+  const last = fills.slice().sort((a, b) => b.t - a.t)[0] || {};
+  const odoGuess = currentOdo();
+  openForm(`<h2><span class="pumpguy" style="background-image:url(${avatarURL(PUMP_SPRITE)})"></span>Add fill-up</h2>
+    <label>Date and time<input id="fDate" type="datetime-local" value="${localDT(Date.now())}"></label>
+    <label>Odometer (km)<input id="fOdo" type="number" inputmode="numeric" placeholder="${odoGuess ? 'about ' + Math.round(odoGuess) : 'e.g. 45210'}"></label>
+    <div class="row3"><label>Liters<input id="fL" type="number" inputmode="decimal" step="0.01"></label>
+    <label>₱ per liter<input id="fP" type="number" inputmode="decimal" step="0.01" value="${last.ppl || ''}"></label>
+    <label>Total ₱<input id="fT" type="number" inputmode="decimal" step="0.01"></label></div>
+    <p class="lbl2">Fuel</p><div class="chips">${FUEL_TYPES.map(o => `<button role="radio" aria-checked="${(last.oct || 'Diesel') === o}">${o}</button>`).join('')}</div>
+    <p class="lbl2">Station</p><div class="chips" id="fBrandC">${BRANDS.map(o => `<button role="radio" aria-checked="${last.brand === o}">${o}</button>`).join('')}</div>
+    <div class="set" style="padding:12px 0 0;border:0"><div><b>Full tank</b><span>Filled until the pump clicked off. Needed for km/L.</span></div><button id="fFull" class="switch" role="switch" aria-checked="true" aria-label="Full tank"></button></div>
+    <div class="btns"><button id="fmCancel">Cancel</button><button id="fmSave" class="ok">Save</button></div>`, () => {
+    let L2 = +$('#fL').value, P = +$('#fP').value, T = +$('#fT').value;
+    if (!L2 && P && T) L2 = T / P; if (!T && L2 && P) T = L2 * P; if (!P && L2 && T) P = T / L2;
+    if (!(L2 > 0 && T > 0)) { toast('Enter at least two of: liters, price per liter, total'); return false; }
+    const f = { id: 'f' + Date.now(), t: new Date($('#fDate').value).getTime() || Date.now(), odo: +$('#fOdo').value || 0, L: +L2.toFixed(2), ppl: +P.toFixed(2), total: +T.toFixed(2), oct: chipVal('#fuelForm .chips'), brand: chipVal('#fBrandC'), full: $('#fFull').getAttribute('aria-checked') === 'true' };
+    const before = fuelNow();
+    fills.push(f);
+    fstate = { L: f.full ? FUEL.tank : Math.min(FUEL.tank, (before ? before.L : 0) + f.L), km: 0, t: Date.now() };
+    fuelWarned = false; oilWarned = false; saveFuel(); renderFuel(); fuelCheck();
+    const seg = econ().segs.find(s => s.t === f.t);
+    toast(seg ? '⛽ Saved. This tank: ' + seg.kmL.toFixed(1) + ' km/L' : '⛽ Fill-up saved', 4000);
+  });
+  $('#fFull').onclick = e => e.currentTarget.setAttribute('aria-checked', e.currentTarget.getAttribute('aria-checked') !== 'true');
+  const sync = src => { const L2 = +$('#fL').value, P = +$('#fP').value, T = +$('#fT').value; if (src !== 'T' && L2 && P) $('#fT').value = (L2 * P).toFixed(2); else if (src === 'T' && T && P) $('#fL').value = (T / P).toFixed(2); };
+  $('#fL').oninput = () => sync('L'); $('#fP').oninput = () => sync('P'); $('#fT').oninput = () => sync('T');
+}
+function openExp(){
+  openForm(`<h2>Add expense</h2>
+    <p class="lbl2">Category</p><div class="chips" id="eCat">${EXP_CATS.map((o, i) => `<button role="radio" aria-checked="${!i}">${o}</button>`).join('')}</div>
+    <div class="row3"><label>Amount ₱<input id="eAmt" type="number" inputmode="decimal" step="0.01"></label><label>Odometer (km)<input id="eOdo" type="number" inputmode="numeric" placeholder="optional"></label></div>
+    <label>Date<input id="eDate" type="datetime-local" value="${localDT(Date.now())}"></label>
+    <label>Note<input id="eNote" maxlength="60" placeholder="optional, e.g. NLEX, 5W-30"></label>
+    <div class="btns"><button id="fmCancel">Cancel</button><button id="fmSave" class="ok">Save</button></div>`, () => {
+    const amt = +$('#eAmt').value; if (!(amt > 0)) { toast('Enter the amount'); return false; }
+    exps.push({ id: 'e' + Date.now(), t: new Date($('#eDate').value).getTime() || Date.now(), cat: chipVal('#eCat') || 'Other', amt: +amt.toFixed(2), odo: +$('#eOdo').value || 0, note: $('#eNote').value.trim().slice(0, 60) });
+    oilWarned = false; saveFuel(); renderFuel(); toast('Expense saved');
+  });
+}
+$('#btnGas').onclick = () => findGas(true);
+
 /* ---------- members ---------- */
 let accCircle;
 function markerHtml(m, id){
   const talking = floor && floor.uid === id && fresh(floor);
   const stale = !(m.online && now() - (m.t || 0) < 120000);
   const arr = m.hdg != null && m.spd > 0.8 ? `<span class="arr" style="transform:rotate(${m.hdg}deg)"></span>` : '';
-  const au = avatarURL(m.av);
-  return `<div class="mk${id === uid ? ' me' : ''}${stale ? ' stale' : ''}${talking ? ' talking' : ''}${au ? ' hasav' : ''}" style="--c:${esc(m.color)}">${arr}<span class="dot"${au ? ` style="background-image:url(${au})"` : ''}></span><span class="lbl">${esc(m.cs)}${id === uid ? ' (you)' : ''}</span></div>`;
+  const img = memberImg(id, m), au = img && img.url;
+  return `<div class="mk${id === uid ? ' me' : ''}${stale ? ' stale' : ''}${talking ? ' talking' : ''}${au ? ' hasav' : ''}${img && img.photo ? ' pic' : ''}" style="--c:${esc(m.color)}">${arr}<span class="dot"${au ? ` style="background-image:url(${au})"` : ''}></span><span class="lbl">${esc(m.cs)}${id === uid ? ' (you)' : ''}</span></div>`;
 }
 function placeMarker(id, m, ll){
   const html = markerHtml(m, id);
@@ -1126,7 +1622,7 @@ function placeMarker(id, m, ll){
 }
 function updateMyMarker(){
   if (!myPos || !map) return;
-  const m = Object.assign({}, members[uid] || {}, { cs: me.cs, color: me.color, av: me.av, online: true, t: now() });
+  const m = Object.assign({}, members[uid] || {}, { cs: me.cs, color: me.color, av: me.av, mk: me.mk, online: true, t: now() });
   placeMarker(uid, m, myPos);
   if (!accCircle) accCircle = L.circle(myPos, { radius: myAcc, color: me.color, weight: 1, fillOpacity: .08, interactive: false }).addTo(map);
   else accCircle.setLatLng(myPos).setRadius(myAcc);
@@ -1150,9 +1646,10 @@ function renderMembers(){
     if (id === uid) bits.push('You');
     if (m.spd > 0.8) bits.push(Math.round(m.spd * 3.6) + ' km/h');
     if (m.bat != null && on) bits.push((m.bat <= 20 ? 'low battery ' : 'battery ') + m.bat + '%');
+    if (m.lowfuel && on) bits.unshift('⛽ low fuel');
     bits.push(on ? (id === uid && !sharing ? 'location paused' : m.lt ? 'seen ' + ago(m.lt) : 'location not shared') : 'offline');
-    const au = avatarURL(id === uid ? me.av : m.av);
-    return `<div class="item${on ? '' : ' off'}${talking ? ' talking' : ''}"><span class="sw${au ? ' av' : ''}" style="--c:${esc(m.color)}${au ? `;background-image:url(${au})` : ''}"></span>
+    const img = memberImg(id, id === uid ? Object.assign({}, m, { av: me.av, mk: me.mk }) : m), au = img && img.url;
+    return `<div class="item${on ? '' : ' off'}${talking ? ' talking' : ''}"><span class="sw${au ? ' av' : ''}${img && img.photo ? ' photo' : ''}" style="--c:${esc(m.color)}${au ? `;background-image:url(${au})` : ''}"></span>
       <div class="main"><div class="name">${esc(m.cs)}</div><div class="meta">${esc(bits.join(', '))}</div></div>
       ${id !== uid && m.lat != null && myPos ? (() => { const dd = hav(myPos, [m.lat, m.lng]), t0 = Math.min(...(prox.d.length ? prox.d : [150])); return `<span class="dist ${dd <= t0 ? 'hot' : dd <= Math.max(...(prox.d.length ? prox.d : [300])) ? 'warm' : ''}">${fmtDist(dd)}</span>`; })() : ''}
       ${m.lat != null ? `<button class="mini" data-goto="${esc(id)}">Find</button>` : ''}</div>`;
@@ -1171,7 +1668,8 @@ function setTab(t, keepCollapsed){
   else if (!keepCollapsed) sheet.classList.remove('collapsed');
   curTab = t;
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
-  $('#p-team').hidden = t !== 'team'; $('#p-routes').hidden = t !== 'routes'; $('#p-me').hidden = t !== 'me';
+  $('#p-team').hidden = t !== 'team'; $('#p-routes').hidden = t !== 'routes'; $('#p-me').hidden = t !== 'me'; $('#p-fuel').hidden = t !== 'fuel';
+  if (t === 'fuel') renderFuel();
   if (t === 'me') renderCache();
 }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => setTab(b.dataset.tab));
@@ -1576,7 +2074,9 @@ function avatarURL(a){
   return avCacheURL[a] = c.toDataURL();
 }
 function renderAvPreviews(){
-  const au = avatarURL(me.av);
+  const mi = memberImg(uid || '__me', { av: me.av, mk: me.mk }), useImg = uid ? mi : (me.mk !== 'dot' && me.mk !== 'av' && me.pic ? { url: me.pic, photo: true } : (avatarURL(me.av) ? { url: avatarURL(me.av), photo: false } : null));
+  const au = useImg && useImg.url;
+  ['#joinAv', '#meAv'].forEach(sel => { const el = $(sel); if (el) el.classList.toggle('photo', !!(useImg && useImg.photo)); });
   ['#joinAv', '#meAv'].forEach(sel => {
     const el = $(sel); if (!el) return;
     el.style.setProperty('--c', me.color);

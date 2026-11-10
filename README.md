@@ -52,6 +52,14 @@ The launcher icon is built from `icons/` (generated from the club logo). To chan
 - **Nearby alerts** (Me tab): pick any of 100 m, 150 m, 300 m, 500 m, 1 km. Choose Sonar, Chime, Beep-beep, Horn, Bell or Silent, plus an optional spoken alert in English or Filipino ("Malapit na si Busina King, 150 metro."). With the screen off you get a notification and the spoken alert.
 - **Happy sound**: when 3 or more members are within your closest distance, a jingle plays with confetti and "Convoy assembled!".
 
+## Chat, fuel tracker and van photo
+
+- **Group chat**: the round chat button above the tabs opens it; the – button minimizes it back to the bubble, which shows a red count of unread messages. Quick replies (Pa-ihi muna, Gas stop, Sunod lang...) send with one tap, and **Read aloud** speaks new messages for the driver. With the app in the background, new messages arrive as notifications.
+- **Fuel tab**: log fill-ups (liters, price per liter, total, fuel type, station, full tank), other expenses (oil change, tolls, parking, repairs...), and see km/L, L/100 km, cost per km and 30-day spending. The gauge estimates what is left from your last fill-up and the distance the app has tracked since; tap E, ¼, ½, ¾ or F when you start the engine to correct it.
+- **Low fuel reminder**: when the estimate drops below your reminder distance (60 km by default), you get a sound, a spoken alert and the nearest gas station. The ⛽ button on the map shows the 10 nearest stations from OpenStreetMap with Directions to Google Maps. Members who are low show ⛽ next to their callsign (you can turn that off).
+- **Van photo**: upload a photo of your minivan (first screen or Me tab), crop it into the circle, and it becomes your marker. "Show me as" switches between Photo, Pixel avatar and Dot.
+- Fuel data stays on your phone; only the "low fuel" flag is shared, and only if you allow it.
+
 ## Known limits
 
 - Push-to-talk needs the app open on screen. Hearing others while the app is in the background usually works but is not guaranteed on every phone.
