@@ -3,9 +3,13 @@
     "rooms": {
       "$room": {
         ".read": "auth != null",
-        "meta":   { ".write": "auth != null && !data.exists()" },
+        "meta": {
+          ".write": "auth != null && !data.exists()"
+        },
         "members": {
-          "$uid": { ".write": "auth != null && auth.uid === $uid" }
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
         },
         "pics": {
           "$uid": {
@@ -19,10 +23,21 @@
             ".validate": "newData.child('uid').val() === auth.uid && newData.child('text').isString() && newData.child('text').val().length <= 300"
           }
         },
-        "routes": { ".write": "auth != null" },
-        "pins":   { ".write": "auth != null" },
-        "floor":  { ".write": "auth != null" },
-        "ptt":    { ".write": "auth != null" }
+        "routes": {
+          ".write": "auth != null"
+        },
+        "pins": {
+          ".write": "auth != null"
+        },
+        "floor": {
+          ".write": "auth != null"
+        },
+        "ptt": {
+          ".write": "auth != null"
+        },
+        "dest": {
+          ".write": "auth != null"
+        }
       }
     }
   }

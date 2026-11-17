@@ -320,6 +320,70 @@ body.lowpower .mk.me::before{animation:none;opacity:0}
 .row3{display:flex;gap:8px}.row3 label{flex:1;min-width:0}
 input.num{width:84px;padding:8px;font-size:16px;text-align:right}
 .lbl2 .mini{margin-left:8px;vertical-align:middle}
+/* ---- phase 6: directions, HUD, sounds ---- */
+.navcard{position:fixed;left:10px;right:66px;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:560;background:#0D1B2AF0;color:#F3EEDF;border-radius:16px;padding:10px 10px 8px;box-shadow:0 6px 18px #0007;border:1px solid #2BC4C955;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body.hasnav .nearby{top:calc(env(safe-area-inset-top,0px) + 170px)}
+.nvrow{display:flex;align-items:center;gap:10px}
+.nvicon{width:44px;height:44px;border-radius:12px;background:#2BC4C922;color:#7FE6EA;display:grid;place-items:center;font-size:22px;flex:none}
+.nvicon.sm{width:34px;height:34px;font-size:17px}
+.nvmain{flex:1;min-width:0}
+.nvmain b{display:block;font-size:17px;line-height:1.2}
+.nvmain span{font-size:13px;color:#9FB6C6}
+.nvx{width:34px;height:34px;border-radius:10px;background:#ffffff14;font-size:15px}
+.nvbtns{display:flex;gap:6px;margin-top:8px}
+.nvbtns button{flex:1;padding:8px 4px;border-radius:10px;background:#ffffff18;font-weight:700;font-size:14px;color:#F3EEDF}
+.nvbtns button.go{background:var(--orange)}
+.destmk{font-size:30px;filter:drop-shadow(0 2px 3px #0008)}
+#destModal,#soundModal,#voiceModal{position:fixed;inset:0;z-index:1100;background:#000a;display:grid;place-items:center;padding:10px}
+.destbox{max-height:90vh;overflow:auto}
+.destsearch{display:flex;gap:8px;margin:4px 0 8px}
+.destsearch button{background:var(--orange);color:#fff;font-weight:700;border-radius:10px;padding:0 16px}
+#destResults .item,#destQuick .item{width:100%;text-align:left;background:none;border-radius:0}
+#destResults .main,#destQuick .main{display:block}
+#destResults .name,#destQuick .name{display:block}
+#destResults .meta,#destQuick .meta{display:block}
+.tiny{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.35}
+#hud{position:fixed;inset:0;z-index:2500;background:#000;color:var(--hud,#7CFFB2);overflow:hidden;touch-action:manipulation}
+#hudInner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:4vh;padding:4vh 5vw;transform-origin:center}
+.hudturn{display:flex;align-items:center;gap:5vw}
+.hudturn svg{width:min(34vw,34vh);height:auto;flex:none;filter:drop-shadow(0 0 12px var(--hud))}
+.hudturn b{display:block;font-size:min(16vw,15vh);line-height:.95;font-weight:700;text-shadow:0 0 18px var(--hud)}
+.hudturn span{display:block;font-size:min(6.5vw,6vh);line-height:1.15;opacity:.95}
+.hudrow{display:flex;align-items:flex-end;gap:6vw;flex-wrap:wrap}
+.hudspeed b{font-size:min(20vw,19vh);line-height:.9;font-weight:700;text-shadow:0 0 18px var(--hud)}
+.hudspeed span,.hudeta span{display:block;font-size:min(5vw,5vh);opacity:.8}
+.hudeta b{font-size:min(10vw,10vh);line-height:1;font-weight:700}
+.hudmini{display:flex;flex-direction:column;gap:6px;font-size:min(5.5vw,5.5vh);margin-left:auto;text-align:right}
+.hudmini .hot{color:#FFC24A}
+#hudCtl{position:absolute;left:8px;right:8px;top:calc(env(safe-area-inset-top,0px) + 8px);display:flex;gap:6px;flex-wrap:wrap;justify-content:center;transition:opacity .6s;z-index:2}
+#hudCtl.dim{opacity:.12}
+#hudCtl.dim ~ #hudTip{opacity:0;transition:opacity .6s}
+#hudCtl button{background:#ffffff1c;color:#fff;border-radius:10px;padding:9px 12px;font-weight:700;font-size:14px}
+#hudCtl button[aria-pressed=true]{background:#2BC4C966}
+#hudCtl .sw2{width:30px;height:30px;padding:0;border-radius:50%;background:var(--c)}
+#hudCtl .sw2[aria-pressed=true]{box-shadow:0 0 0 3px #fff}
+#hudTip{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);left:0;right:0;text-align:center;color:#ffffff66;font-size:13px}
+.set.snd{gap:10px}
+.set.snd>div{flex:1;min-width:0}
+.set.snd.on{background:#2BC4C914}
+.playb{width:38px;height:38px;border-radius:50%;background:var(--forest);color:#F3EEDF;font-size:14px;flex:none}
+.used{display:inline-block!important;font-size:11px!important;background:#2BC4C933;color:var(--ink)!important;border-radius:8px;padding:1px 6px;margin:2px 4px 0 0!important}
+.mini.picked{background:var(--teal);color:#fff}
+.sliderrow{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.sliderrow input[type=range]{flex:1;accent-color:var(--teal)}
+.sliderrow b{min-width:72px}
+.sliderrow span{min-width:54px;text-align:right;font-size:14px;color:var(--muted)}
+#vVoice{width:100%;font-size:15px;padding:10px}
+/* ---- phase 7: recorder ---- */
+#recModal{position:fixed;inset:0;z-index:1200;background:#000b;display:grid;place-items:center;padding:14px}
+.recbox{text-align:center}
+.recbox h2{margin:0 0 4px}
+#recBtn{width:150px;height:150px;border-radius:50%;margin:16px auto 10px;display:grid;place-items:center;font-weight:700;font-size:18px;color:#fff;background:radial-gradient(circle at 35% 30%,#FF6A5A,#C2362B 65%,#7E1D15);box-shadow:0 0 0 6px #C2362B33,0 8px 20px #0006}
+#recBtn.on{animation:tx 1s ease-in-out infinite}
+.reclvl{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin:6px 0}
+#recLvl{height:100%;width:0;background:linear-gradient(90deg,#2BC4C9,#7CFFB2,#FFC24A,#E8453C);transition:width .05s}
+#recTime{font-size:15px;color:var(--muted)}
+#packBox .set span{display:block}
 /* markers */
 .mk{position:relative;width:24px;height:24px}
 .mk .dot{position:absolute;inset:3px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 4px #0007}
@@ -388,11 +452,14 @@ input.num{width:84px;padding:8px;font-size:16px;text-align:right}
   </header>
 
   <div id="nearby" class="nearby" hidden aria-label="Members near you"></div>
+  <div id="navCard" class="navcard" hidden aria-live="polite"></div>
   <div class="mapbtns">
     <button id="btnMe" aria-label="Center on me"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
     <button id="btnGroup" aria-label="Show the whole group"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     <button id="btnLayer" aria-label="Switch map style">Topo</button>
     <button id="btnGas" aria-label="Find nearest gas stations" style="font-size:20px">⛽</button>
+    <button id="btnDest" aria-label="Set a destination and get directions" style="font-size:21px">🧭</button>
+    <button id="btnHud" aria-label="Windshield HUD mirror mode">HUD</button>
   </div>
 
   <div id="talk" class="talk" hidden><span class="wave"><i></i><i></i><i></i><i></i></span><span id="talkTxt"></span></div>
@@ -444,13 +511,18 @@ input.num{width:84px;padding:8px;font-size:16px;text-align:right}
           <button id="cacheClear" class="mini">Clear</button></div>
       </div>
       <p class="hint2" id="bgHint" hidden>If your dot freezes after a while with the screen off, set this app's battery use to <b>Unrestricted</b>: <button id="bgSettings">open app settings</button></p>
+      <p class="lbl2">Sounds and voice</p>
+      <div class="settings">
+        <div class="set"><div><b>Sound library</b><span>Pick sounds for alerts, chat, low fuel, talk start and more, or add your own</span></div><button id="btnLib" class="mini">Open</button></div>
+        <div class="set"><div><b>Voice and directions</b><span>Voice style, speed, pitch, and when turns are announced</span></div><button id="btnVoice" class="mini">Open</button></div>
+      </div>
       <p class="lbl2">Nearby alerts</p>
       <div class="settings">
         <div class="set"><div><b>Alert me when members are close</b><span>A sound and voice when someone enters your range, even with the screen off</span></div>
           <button id="proxTgl" class="switch" role="switch" aria-checked="true" aria-label="Nearby alerts"></button></div>
         <div id="proxBody">
           <div class="set col"><div><b>Distances</b><span>Pick one or more. Each one alerts once as someone gets closer.</span></div><div id="proxDist" class="chips" role="group" aria-label="Alert distances"></div></div>
-          <div class="set col"><div><b>Alert sound</b><span>Tap one to hear it</span></div><div id="proxSnd" class="chips" role="radiogroup" aria-label="Alert sound"></div></div>
+          <div class="set"><div><b>Alert sound</b><span id="proxSndName"></span></div><button id="proxSndBtn" class="mini">Change</button></div>
           <div class="set"><div><b>Voice alert</b><span>Says who is near you</span></div><button id="voiceTgl" class="switch" role="switch" aria-label="Voice alert"></button></div>
           <div class="set"><div><b>Voice language</b></div><div class="seg" role="radiogroup" aria-label="Voice language"><button role="radio" data-lang="en">English</button><button role="radio" data-lang="fil">Filipino</button></div></div>
           <div class="set"><div><b>Happy sound for 3 or more</b><span>Plays when 3 or more members are within your closest distance</span></div><button id="partyTgl" class="switch" role="switch" aria-label="Happy sound for 3 or more"></button></div>
@@ -540,6 +612,73 @@ input.num{width:84px;padding:8px;font-size:16px;text-align:right}
 
 <div id="fuelModal" hidden><div class="avdlg" role="dialog" aria-modal="true" id="fuelForm"></div></div>
 
+<div id="destModal" hidden>
+  <div class="avdlg destbox" role="dialog" aria-modal="true" aria-labelledby="destTitle">
+    <h2 id="destTitle">Where to?</h2>
+    <div class="destsearch"><input id="destQ" placeholder="Place, mall, landmark, barangay" autocomplete="off" enterkeyhint="search"><button id="destGo">Search</button></div>
+    <div id="destResults"></div>
+    <button id="destPickBtn" class="secondary" style="width:100%;margin:6px 0">📍 Pick a spot on the map</button>
+    <div id="destQuick"></div>
+    <p class="tiny">Routes and ETAs use OpenStreetMap and don't include live traffic. For traffic-aware navigation, tap Google Maps or Waze after choosing.</p>
+    <div class="btns"><button id="destClose">Close</button></div>
+  </div>
+</div>
+
+<div id="hud" hidden aria-label="Windshield head-up display">
+  <div id="hudInner"></div>
+  <div id="hudCtl">
+    <button id="hudFlipX" aria-pressed="true">Mirror ⇆</button>
+    <button id="hudFlipY" aria-pressed="false">Flip ⇅</button>
+    <button class="sw2" data-hudc="#7CFFB2" style="--c:#7CFFB2" aria-label="Green"></button>
+    <button class="sw2" data-hudc="#5FE8FF" style="--c:#5FE8FF" aria-label="Cyan"></button>
+    <button class="sw2" data-hudc="#FFD15C" style="--c:#FFD15C" aria-label="Amber"></button>
+    <button class="sw2" data-hudc="#FFFFFF" style="--c:#FFFFFF" aria-label="White"></button>
+    <button id="hudExit">Exit</button>
+  </div>
+  <div id="hudTip">Lay the phone flat on the dashboard, screen up, brightness at max. Tap Mirror or Flip until the reflection reads correctly.</div>
+</div>
+
+<div id="soundModal" hidden>
+  <div class="avdlg destbox" role="dialog" aria-modal="true" aria-labelledby="libTitle">
+    <h2 id="libTitle">Sound library</h2>
+    <p class="lbl2" style="margin-top:0">Choose a sound for</p>
+    <div id="libEvents" class="chips" role="radiogroup" aria-label="Event"></div>
+    <div class="sliderrow"><b>Volume</b><input type="range" id="fxVol" min="0.1" max="1.5" step="0.05" aria-label="Sound effects volume"></div>
+    <div id="libList"></div>
+    <div class="actions" style="margin-top:10px"><button id="libRec" class="secondary">🎙 Record a sound</button><button id="libAdd" class="secondary">＋ Add a sound file</button></div>
+    <p class="tiny">Record up to 6 seconds, or add an MP3, WAV or OGG under 400 KB. Up to 10 of your own sounds. Your own sounds play while the app is open; with the screen off, alerts use the phone's notification sound and the voice.</p>
+    <div class="btns"><button id="libClose" class="ok">Done</button></div>
+  </div>
+</div>
+<input type="file" id="sndFile" accept="audio/*" hidden>
+
+<div id="voiceModal" hidden>
+  <div class="avdlg destbox" role="dialog" aria-modal="true" aria-labelledby="voiceTitle">
+    <h2 id="voiceTitle">Voice and directions</h2>
+    <div class="settings">
+      <div class="set"><div><b>Spoken directions</b><span>Turn-by-turn voice while you follow a route</span></div><button id="navVoiceTgl" class="switch" role="switch" aria-label="Spoken directions"></button></div>
+      <div class="set col"><div><b>Voice style</b><span>Characters change the wording, pitch and speed. Directions are always said clearly first.</span></div><div id="vStyle" class="chips" role="radiogroup" aria-label="Voice style"></div><div id="packBox" hidden></div></div>
+      <div class="set col"><div><b>Phone voice</b><span>Voices installed on this phone. More can be added in Android Settings, Text-to-speech.</span></div><select id="vVoice" aria-label="Phone voice"></select></div>
+      <div class="sliderrow"><b>Speed</b><input type="range" id="vRate" min="0.6" max="1.6" step="0.1" aria-label="Speech speed"><span id="vRateL"></span></div>
+      <div class="sliderrow"><b>Pitch</b><input type="range" id="vPitch" min="0.6" max="1.5" step="0.1" aria-label="Voice pitch"><span id="vPitchL"></span></div>
+      <div class="set col"><div><b>Early warning</b><span>Announce the next turn ahead of time</span></div><div id="vEarly" class="chips" role="radiogroup" aria-label="Early warning distance"></div></div>
+      <div class="set"><div><b>Chime before each direction</b><span>Sound: <span id="vChimeName"></span> <button id="vChimeBtn" class="mini">Change</button></span></div><button id="vChime" class="switch" role="switch" aria-label="Chime before directions"></button></div>
+    </div>
+    <div class="btns"><button id="vTest">▶ Test voice</button><button id="voiceClose" class="ok">Done</button></div>
+  </div>
+</div>
+
+<div id="recModal" hidden>
+  <div class="avdlg recbox" role="dialog" aria-modal="true" aria-labelledby="recTitle">
+    <h2 id="recTitle">Record</h2>
+    <p class="hint2" id="recHint"></p>
+    <button id="recBtn">● Record</button>
+    <div class="reclvl" aria-hidden="true"><div id="recLvl"></div></div>
+    <div id="recTime"></div>
+    <div class="btns"><button id="recCancel">Cancel</button><button id="recPlay" hidden>▶ Play</button><button id="recSave" class="ok" hidden>Save</button></div>
+  </div>
+</div>
+
 <div id="modal" hidden>
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <h2 id="mTitle"></h2>
@@ -606,7 +745,7 @@ function tone(freq, dur, when = 0, vol = .12){
     const c = ac(), o = c.createOscillator(), g = c.createGain(), t = c.currentTime + when;
     o.type = 'sine'; o.frequency.value = freq;
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .01); g.gain.linearRampToValueAtTime(0, t + dur);
-    o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + .02);
+    o.connect(g).connect(master()); o.start(t); o.stop(t + dur + .02);
   } catch {}
 }
 const chirpStart = () => { tone(880, .06); tone(1320, .08, .07); };
@@ -726,6 +865,7 @@ async function enterRoom(code){
     if (on) meRef.update({ online: true, t: firebase.database.ServerValue.TIMESTAMP });
   });
   R.child('members').on('value', s => { members = s.val() || {}; renderMembers(); checkProximity(); });
+  R.child('dest').on('value', s => { groupDest = s.val(); renderNavCard(); });
   R.child('pics').on('value', s => { const v = s.val() || {}; pics = {}; Object.keys(v).forEach(k => { if (validPic(v[k])) pics[k] = v[k]; }); renderMembers(); if (chatOpen) renderChat(); });
   startChat();
   const rr = R.child('routes');
@@ -846,7 +986,7 @@ function initMap(){
   map = L.map('map', { zoomControl: false }).setView([12.5, 122], 6);
   baseStreets = new CachedTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
   baseTopo = new CachedTiles('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '© OpenStreetMap, SRTM | © OpenTopoMap' });
-  map.on('click', e => { if (draw) { draw.pts.push([+e.latlng.lat.toFixed(6), +e.latlng.lng.toFixed(6)]); updDraw(); } });
+  map.on('click', e => { if (destPick) { destPick = false; startNav({ name: 'Dropped pin', lat: +e.latlng.lat.toFixed(6), lng: +e.latlng.lng.toFixed(6) }); return; } if (draw) { draw.pts.push([+e.latlng.lat.toFixed(6), +e.latlng.lng.toFixed(6)]); updDraw(); } });
   map.on('contextmenu', e => { if (!draw) dropPin(e.latlng); });
   $('#btnMe').onclick = () => myPos ? map.setView(myPos, Math.max(map.getZoom(), 16)) : toast('Waiting for your GPS fix');
   $('#btnGroup').onclick = fitGroup;
@@ -894,7 +1034,7 @@ function drivingNudge(force){
   lastDriveNag = Date.now();
   toast('Moving at ' + Math.round(mySpeed * 3.6) + ' km/h. Driving? Let a passenger talk, or turn on hands-free voice mode in the Me tab.', 7000);
 }
-function onPos(p){ onPosCore(p); maybeRings(); checkProximity(); fuelTrack(p.coords); fuelCheck(); }
+function onPos(p){ onPosCore(p); maybeRings(); checkProximity(); fuelTrack(p.coords); fuelCheck(); updateNav(); }
 function onPosCore(p){
   const c = p.coords;
   myPos = [c.latitude, c.longitude]; myAcc = c.accuracy;
@@ -1072,14 +1212,14 @@ function env(g, t, a, peak, d){ g.gain.setValueAtTime(0, t); g.gain.linearRampTo
 function voice(type, f, t, dur, vol, dest, a = .01){
   const c = ac(), o = c.createOscillator(), g = c.createGain();
   o.type = type; o.frequency.setValueAtTime(f, t); env(g, t, a, vol, dur);
-  o.connect(g).connect(dest || c.destination); o.start(t); o.stop(t + dur + .05); return o;
+  o.connect(g).connect(dest || master()); o.start(t); o.stop(t + dur + .05); return o;
 }
 const SOUNDS = {
   sonar(){ const c = ac(), t = c.currentTime; voice('sine', 1180, t, 1.1, .35); voice('sine', 1180, t + .32, .8, .12); },
   chime(){ const c = ac(), t = c.currentTime; voice('sine', 988, t, .9, .28); voice('sine', 1319, t + .16, 1.1, .26); voice('sine', 1976, t + .16, .5, .06); },
-  beep(){ const c = ac(), t = c.currentTime, lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400; lp.connect(c.destination);
+  beep(){ const c = ac(), t = c.currentTime, lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400; lp.connect(master());
     voice('square', 460, t, .16, .16, lp, .005); voice('square', 460, t + .22, .2, .16, lp, .005); },
-  horn(){ const c = ac(), t = c.currentTime, lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1500; lp.connect(c.destination);
+  horn(){ const c = ac(), t = c.currentTime, lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1500; lp.connect(master());
     voice('sawtooth', 349, t, .55, .12, lp, .02); voice('sawtooth', 440, t, .55, .1, lp, .02); },
   bell(){ const c = ac(), t = c.currentTime; voice('triangle', 1047, t, 1.6, .3); voice('sine', 2093, t, .9, .08); voice('sine', 3136, t, .5, .04); },
   off(){}
@@ -1095,16 +1235,7 @@ function happySound(){
 }
 function speak(text){
   if (!prox.voice) return;
-  const lang = prox.lang === 'fil' ? 'fil-PH' : 'en-US';
-  speakQ = speakQ.then(async () => {
-    if (Speech) {
-      try { await Speech.speak({ text, lang, rate: 1.0, pitch: 1.0, volume: 1.0, category: 'playback' }); return; }
-      catch { try { await Speech.speak({ text, lang: 'en-US', rate: 1.0, pitch: 1.0, volume: 1.0, category: 'playback' }); return; } catch {} }
-    }
-    if (window.speechSynthesis) {
-      await new Promise(res => { const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.onend = u.onerror = res; speechSynthesis.speak(u); setTimeout(res, 6000); });
-    }
-  });
+  speakRaw(text, prox.lang === 'fil' ? 'fil-PH' : 'en-US');
 }
 function notifyNative(title, body){
   if (!LNotif) return;
@@ -1114,12 +1245,12 @@ function nearLine(cs, m){ return prox.lang === 'fil' ? 'Malapit na si ' + cs + '
 function partyLine(n){ return prox.lang === 'fil' ? 'Kumpleto na ang tropa! ' + n + ' kayong magkakasama.' : 'Convoy assembled! ' + n + ' of you are together.'; }
 function alertNear(m, th){
   if (document.hidden) notifyNative('📍 ' + m.cs + ' is near', 'Within ' + fmtM(th) + ' of you');
-  else { try { SOUNDS[prox.snd](); } catch {} buzz([60, 40, 60]); toast('📍 ' + m.cs + ' is within ' + fmtM(th), 4000); }
+  else { playEvent('near'); buzz([60, 40, 60]); toast('📍 ' + m.cs + ' is within ' + fmtM(th), 4000); }
   speak(nearLine(m.cs, th));
 }
 function alertParty(n){
   if (document.hidden) notifyNative('🎉 Convoy assembled!', n + ' of you are together');
-  else { happySound(); buzz([40, 30, 40, 30, 120]); toast('🎉 Convoy assembled! ' + n + ' of you are together', 4500); confetti(); }
+  else { playEvent('party'); buzz([40, 30, 40, 30, 120]); toast('🎉 Convoy assembled! ' + n + ' of you are together', 4500); confetti(); }
   speak(partyLine(n));
 }
 function checkProximity(){
@@ -1181,8 +1312,7 @@ function renderProx(){
     prox.d = prox.d.includes(d) ? prox.d.filter(x => x !== d) : prox.d.concat(d);
     saveProx(); renderProx(); Object.keys(bands).forEach(k => delete bands[k]); proxSeeded = false; drawRings(); checkProximity();
   });
-  $('#proxSnd').innerHTML = Object.entries(SOUND_NAMES).map(([k, n]) => `<button role="radio" aria-checked="${prox.snd === k}" data-k="${k}">${n}</button>`).join('');
-  $('#proxSnd').querySelectorAll('[data-k]').forEach(b => b.onclick = () => { prox.snd = b.dataset.k; saveProx(); renderProx(); try { SOUNDS[prox.snd](); } catch {} });
+  $('#proxSndName').textContent = (LIB[soundMap.near] || customSounds.find(x => x.id === soundMap.near) || { name: 'Sonar ping' }).name;
   $('#voiceTgl').setAttribute('aria-checked', prox.voice);
   $('#partyTgl').setAttribute('aria-checked', prox.party);
   $('#ringsTgl').setAttribute('aria-checked', prox.rings);
@@ -1193,8 +1323,9 @@ $('#voiceTgl').onclick = () => { prox.voice = !prox.voice; saveProx(); renderPro
 $('#partyTgl').onclick = () => { prox.party = !prox.party; saveProx(); renderProx(); };
 $('#ringsTgl').onclick = () => { prox.rings = !prox.rings; saveProx(); renderProx(); drawRings(); };
 document.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => { prox.lang = b.dataset.lang; saveProx(); renderProx(); });
-$('#proxTest').onclick = () => { ac(); try { SOUNDS[prox.snd](); } catch {} speak(nearLine('Tito Convoy', prox.d.slice().sort((a, b) => a - b)[0] || 150)); };
-$('#partyTest').onclick = () => { ac(); happySound(); confetti(); speak(partyLine(4)); };
+$('#proxSndBtn').onclick = () => openLib('near');
+$('#proxTest').onclick = () => { ac(); playEvent('near'); speak(nearLine('Tito Convoy', prox.d.slice().sort((a, b) => a - b)[0] || 150)); };
+$('#partyTest').onclick = () => { ac(); playEvent('party'); confetti(); speak(partyLine(4)); };
 
 /* a little celebration */
 function confetti(){
@@ -1315,10 +1446,10 @@ function onChatMsg(k, m, live){
   if (chatOpen) renderChat();
   if (!live || m.uid === uid) return;
   if (document.hidden) { notifyNative('💬 ' + m.cs, m.text); if (chatSpeak) speakAny(m.cs + ' says: ' + m.text); return; }
-  if (!chatOpen) { setUnread(unread + 1); popSound(); toast('💬 ' + m.cs + ': ' + m.text, 3500); }
+  if (!chatOpen) { setUnread(unread + 1); playEvent('chat'); toast('💬 ' + m.cs + ': ' + m.text, 3500); }
   if (chatSpeak) speakAny(m.cs + ' says: ' + m.text);
 }
-function speakAny(text){ const v = prox.voice; prox.voice = true; speak(text); prox.voice = v; }
+function speakAny(text){ speakRaw(text, prox.lang === 'fil' ? 'fil-PH' : 'en-US'); }
 function startChat(){
   chatStartKey = R.child('chat').push().key;
   R.child('chat').limitToLast(60).on('child_added', s => { const m = s.val(); if (m && m.text) onChatMsg(s.key, m, s.key > chatStartKey); });
@@ -1415,7 +1546,7 @@ async function alertFuel(f){
   const km = Math.round(f.range);
   const body = 'About ' + km + ' km left' + (near ? '. Nearest: ' + near.name + ', ' + fmtDist(near.d) + ' away' : '');
   if (document.hidden) notifyNative('⛽ Low fuel', body);
-  else { try { SOUNDS.bell(); } catch {} buzz([200, 100, 200]); toast('⛽ Low fuel. ' + body, 7000); }
+  else { playEvent('fuel'); buzz([200, 100, 200]); toast('⛽ Low fuel. ' + body, 7000); }
   speakAny(prox.lang === 'fil'
     ? 'Paubos na ang gas. Mga ' + km + ' kilometro na lang.' + (near ? ' Pinakamalapit na gasolinahan: ' + near.name + ', ' + fmtDist(near.d) + '.' : '')
     : 'Low fuel. About ' + km + ' kilometers left.' + (near ? ' Nearest gas station is ' + near.name + ', ' + fmtDist(near.d) + ' away.' : ''));
@@ -1599,6 +1730,576 @@ function openExp(){
   });
 }
 $('#btnGas').onclick = () => findGas(true);
+
+/* ---------- sound library + voice settings ---------- */
+let masterGain = null;
+const fxVol = { v: store.get('fxVol', .9) };
+function master(){ const c = ac(); if (!masterGain) { masterGain = c.createGain(); masterGain.connect(c.destination); } masterGain.gain.value = fxVol.v; return masterGain; }
+function noiseBurst(t, dur, vol, freq){
+  const c = ac(), n = Math.max(1, Math.floor(c.sampleRate * dur)), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+  const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+  s.buffer = b; f.type = 'bandpass'; f.frequency.value = freq || 1800; f.Q.value = 1.2; g.gain.value = vol;
+  s.connect(f).connect(g).connect(master()); s.start(t);
+}
+function glide(type, f0, f1, t, dur, vol){
+  const c = ac(), o = c.createOscillator(), g = c.createGain();
+  o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur * .8);
+  env(g, t, .02, vol, dur); o.connect(g).connect(master()); o.start(t); o.stop(t + dur + .05);
+}
+function filtered(type, f, t, dur, vol, cut){
+  const c = ac(), lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = cut; lp.connect(master());
+  voice(type, f, t, dur, vol, lp, .01);
+}
+const T = () => ac().currentTime;
+const LIB = {
+  sonar:   { name: 'Sonar ping', cat: 'Alerts', play(){ const t = T(); voice('sine', 1180, t, 1.1, .35); voice('sine', 1180, t + .32, .8, .12); } },
+  chime:   { name: 'Chime', cat: 'Alerts', play(){ const t = T(); voice('sine', 988, t, .9, .28); voice('sine', 1319, t + .16, 1.1, .26); voice('sine', 1976, t + .16, .5, .06); } },
+  ding:    { name: 'Ding', cat: 'Alerts', play(){ const t = T(); voice('sine', 1568, t, .7, .3); voice('sine', 3136, t, .3, .05); } },
+  bell:    { name: 'Bell', cat: 'Alerts', play(){ const t = T(); voice('triangle', 1047, t, 1.6, .3); voice('sine', 2093, t, .9, .08); voice('sine', 3136, t, .5, .04); } },
+  radar:   { name: 'Radar blips', cat: 'Alerts', play(){ const t = T(); [0, .14, .28].forEach(d => voice('sine', 2000, t + d, .09, .22)); } },
+  alarm:   { name: 'Two-tone alarm', cat: 'Alerts', play(){ const t = T(); [0, .25, .5, .75].forEach((d, i) => filtered('square', i % 2 ? 660 : 880, t + d, .22, .14, 2500)); } },
+  pop:     { name: 'Pop', cat: 'Alerts', play(){ const t = T(); voice('sine', 880, t, .12, .2); voice('sine', 1320, t + .06, .14, .15); } },
+  beep:    { name: 'Beep-beep', cat: 'Pinoy road', play(){ const t = T(); filtered('square', 460, t, .16, .16, 2400); filtered('square', 460, t + .22, .2, .16, 2400); } },
+  horn:    { name: 'Van horn', cat: 'Pinoy road', play(){ const t = T(); filtered('sawtooth', 349, t, .55, .12, 1500); filtered('sawtooth', 440, t, .55, .1, 1500); } },
+  jeepney: { name: 'Jeepney honk', cat: 'Pinoy road', play(){ const t = T(); [[0, .12], [.18, .12], [.36, .45]].forEach(([d, l]) => { filtered('sawtooth', 311, t + d, l, .13, 1300); filtered('sawtooth', 392, t + d, l, .11, 1300); }); } },
+  trike:   { name: 'Tricycle putt-putt', cat: 'Pinoy road', play(){ const t = T(); for (let i = 0; i < 10; i++) noiseBurst(t + i * .085, .06, .5, 220 + (i % 2) * 60); } },
+  kalesa:  { name: 'Kalesa clip-clop', cat: 'Pinoy road', play(){ const t = T(); [0, .18, .5, .68].forEach((d, i) => noiseBurst(t + d, .05, .7, i % 2 ? 900 : 1300)); } },
+  taho:    { name: 'Taho call', cat: 'Pinoy road', play(){ const t = T(); glide('sine', 520, 500, t, .35, .3); glide('sine', 700, 640, t + .38, .9, .3); } },
+  bike:    { name: 'Bike bell', cat: 'Pinoy road', play(){ const t = T(); [0, .16].forEach(d => { voice('triangle', 2637, t + d, .5, .18); voice('sine', 3951, t + d, .3, .06); }); } },
+  whistle: { name: 'Traffic whistle', cat: 'Pinoy road', play(){ const t = T(); glide('sine', 2800, 3000, t, .25, .2); glide('sine', 2800, 3100, t + .32, .45, .22); } },
+  coin:    { name: 'Coin', cat: 'Retro game', play(){ const t = T(); filtered('square', 988, t, .08, .12, 6000); filtered('square', 1319, t + .08, .3, .12, 6000); } },
+  levelup: { name: 'Level up', cat: 'Retro game', play(){ const t = T(); [523, 659, 784, 1047, 1319].forEach((f, i) => filtered('square', f, t + i * .07, .12, .1, 5000)); } },
+  powerup: { name: 'Power-up', cat: 'Retro game', play(){ const t = T(); glide('square', 300, 1400, t, .45, .09); } },
+  chirp:   { name: 'Radio chirp', cat: 'Retro game', play(){ const t = T(); voice('sine', 880, t, .06, .15); voice('sine', 1320, t + .07, .08, .15); } },
+  roger:   { name: 'Roger beep', cat: 'Retro game', play(){ const t = T(); voice('sine', 1250, t, .07, .15); voice('sine', 950, t + .08, .09, .15); } },
+  party:   { name: 'Convoy jingle', cat: 'Celebrations', play(){ const t = T(); [523, 659, 784, 1047].forEach((f, i) => voice('triangle', f, t + i * .11, .35, .22)); voice('sine', 1568, t + .44, .7, .14); [2637, 3136, 2637, 3520].forEach((f, i) => voice('sine', f, t + .62 + i * .07, .18, .05)); } },
+  fanfare: { name: 'Fanfare', cat: 'Celebrations', play(){ const t = T(); [[392, 0, .15], [392, .16, .15], [392, .32, .15], [523, .5, .7]].forEach(([f, d, l]) => { filtered('sawtooth', f, t + d, l, .1, 2200); filtered('sawtooth', f * 1.5, t + d, l, .05, 2200); }); } },
+  tada:    { name: 'Ta-da!', cat: 'Celebrations', play(){ const t = T(); filtered('sawtooth', 523, t, .12, .1, 2600); [523, 659, 784].forEach(f => filtered('sawtooth', f, t + .16, .9, .07, 2600)); } },
+  off:     { name: 'Silent', cat: 'Alerts', play(){} }
+};
+const EVENTS = { near: 'Nearby alert', party: 'Convoy assembled', chat: 'Chat message', nav: 'Before directions', fuel: 'Low fuel', talkStart: 'Talk start', roger: 'Roger beep' };
+const soundMap = Object.assign({ near: (store.get('prox', {}).snd) || 'sonar', party: 'party', chat: 'pop', nav: 'ding', fuel: 'bell', talkStart: 'chirp', roger: 'roger' }, store.get('soundMap', {}));
+let customSounds = store.get('customSounds', []);
+function playId(id){
+  try {
+    if (id && id.startsWith('c:')) { const s = customSounds.find(x => x.id === id); if (s) { const a = new Audio(s.data); a.volume = Math.min(1, fxVol.v); a.play().catch(() => {}); } return; }
+    (LIB[id] || LIB.sonar).play();
+  } catch {}
+}
+function playEvent(ev){ playId(soundMap[ev]); }
+/* sound library modal */
+let libEvent = 'near';
+function openLib(ev){ if (ev) libEvent = ev; renderLib(); $('#soundModal').hidden = false; }
+function renderLib(){
+  $('#libEvents').innerHTML = Object.entries(EVENTS).map(([k, n]) => `<button role="radio" aria-checked="${k === libEvent}" data-ev="${k}">${n}</button>`).join('');
+  $('#libEvents').querySelectorAll('[data-ev]').forEach(b => b.onclick = () => { libEvent = b.dataset.ev; renderLib(); });
+  const cats = {};
+  Object.entries(LIB).forEach(([k, s]) => (cats[s.cat] = cats[s.cat] || []).push([k, s.name]));
+  if (customSounds.length) cats['Your sounds'] = customSounds.map(s => [s.id, s.name]);
+  $('#libList').innerHTML = Object.entries(cats).map(([cat, list]) => `<p class="lbl2">${esc(cat)}</p><div class="settings">${list.map(([k, n]) =>
+    `<div class="set snd${soundMap[libEvent] === k ? ' on' : ''}"><button class="playb" data-play="${esc(k)}" aria-label="Play ${esc(n)}">▶</button><div><b>${esc(n)}</b>${Object.entries(soundMap).filter(([, v]) => v === k).map(([e]) => `<span class="used">${EVENTS[e]}</span>`).join('')}</div>
+      ${k.startsWith('c:') ? `<button class="mini danger" data-delsnd="${esc(k)}" aria-label="Delete ${esc(n)}">✕</button>` : ''}<button class="mini${soundMap[libEvent] === k ? ' picked' : ''}" data-use="${esc(k)}">${soundMap[libEvent] === k ? 'In use' : 'Use'}</button></div>`).join('')}</div>`).join('');
+  $('#libList').querySelectorAll('[data-play]').forEach(b => b.onclick = () => playId(b.dataset.play));
+  $('#libList').querySelectorAll('[data-use]').forEach(b => b.onclick = () => { soundMap[libEvent] = b.dataset.use; store.set('soundMap', soundMap); if (libEvent === 'near') { prox.snd = b.dataset.use; saveProx(); renderProx(); } playId(b.dataset.use); renderLib(); });
+  $('#libList').querySelectorAll('[data-delsnd]').forEach(b => b.onclick = () => {
+    customSounds = customSounds.filter(x => x.id !== b.dataset.delsnd); store.set('customSounds', customSounds);
+    Object.keys(soundMap).forEach(e => { if (soundMap[e] === b.dataset.delsnd) soundMap[e] = { near: 'sonar', party: 'party', chat: 'pop', nav: 'ding', fuel: 'bell', talkStart: 'chirp', roger: 'roger' }[e]; });
+    store.set('soundMap', soundMap); renderLib();
+  });
+  $('#fxVol').value = fxVol.v;
+}
+$('#libClose').onclick = () => { $('#soundModal').hidden = true; };
+$('#fxVol').oninput = e => { fxVol.v = +e.target.value; store.set('fxVol', fxVol.v); if (masterGain) masterGain.gain.value = fxVol.v; };
+$('#fxVol').onchange = () => playEvent(libEvent);
+$('#libRec').onclick = () => recordToLibrary();
+$('#libAdd').onclick = () => { $('#sndFile').value = ''; $('#sndFile').click(); };
+$('#sndFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size > 400 * 1024) { toast('Pick a short sound under 400 KB (a few seconds).', 4500); return; }
+  if (customSounds.length >= 10) { toast('You can keep up to 10 of your own sounds. Delete one first.', 4500); return; }
+  const r = new FileReader();
+  r.onload = () => {
+    const name = f.name.replace(/\.[^.]+$/, '').slice(0, 30) || 'My sound', id = 'c:' + Date.now();
+    customSounds.push({ id, name, data: r.result });
+    store.set('customSounds', customSounds);
+    let ok = false; try { ok = JSON.parse(localStorage.getItem('sabay_customSounds') || '[]').length === customSounds.length; } catch {}
+    if (!ok) { customSounds.pop(); toast('Not enough space on the phone for that sound'); return; }
+    soundMap[libEvent] = id; store.set('soundMap', soundMap); renderLib(); playId(id); toast('Added "' + name + '" and set it for ' + EVENTS[libEvent]);
+  };
+  r.readAsDataURL(f);
+};
+/* ---------- voice settings (all spoken alerts + directions) ---------- */
+const voiceCfg = Object.assign({ style: 'en', rate: 1, pitch: 1, voice: '', early: 500, chime: true }, store.get('voiceCfg', {}));
+if (![0, 300, 500, 1000].includes(voiceCfg.early)) voiceCfg.early = 500;
+let voiceList = [];
+async function loadVoices(){
+  try {
+    if (Speech) { const r = await Speech.getSupportedVoices(); voiceList = (r.voices || []).map((v, i) => ({ i, name: v.name, lang: v.lang })); }
+    else if (window.speechSynthesis) voiceList = speechSynthesis.getVoices().map((v, i) => ({ i, name: v.name, lang: v.lang }));
+  } catch { voiceList = []; }
+  voiceList.sort((a, b) => (/^(fil|tl)/i.test(b.lang) - /^(fil|tl)/i.test(a.lang)) || (/^en/i.test(b.lang) - /^en/i.test(a.lang)) || a.name.localeCompare(b.name));
+}
+if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => { loadVoices(); if (!$('#voiceModal').hidden) renderVoice(); };
+function speakRaw(text, lang, mul){
+  const rate = Math.max(.5, Math.min(2, voiceCfg.rate * ((mul && mul.rate) || 1))), pitch = Math.max(.5, Math.min(2, voiceCfg.pitch * ((mul && mul.pitch) || 1)));
+  speakQ = speakQ.then(async () => {
+    const v = voiceList.find(x => x.name === voiceCfg.voice);
+    if (Speech) {
+      const o = { text, lang: v ? v.lang : lang, rate, pitch, volume: 1.0, category: 'playback' };
+      if (v) o.voice = v.i;
+      try { await Speech.speak(o); return; } catch { try { await Speech.speak(Object.assign(o, { lang: 'en-US', voice: undefined })); return; } catch {} }
+    }
+    if (window.speechSynthesis) {
+      await new Promise(res => {
+        const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = rate; u.pitch = pitch;
+        const wv = v && speechSynthesis.getVoices().find(x => x.name === v.name); if (wv) u.voice = wv;
+        u.onend = u.onerror = res; speechSynthesis.speak(u); setTimeout(res, 2500 + text.length * 90);
+      });
+    }
+  });
+}
+const navLang = () => voiceCfg.style === 'en' ? 'en-US' : 'fil-PH';
+const VSTYLE = { en: 'Standard English', fil: 'Filipino', barkada: 'Barkada Taglish' };
+function renderVoice(){
+  $('#vStyle').innerHTML = Object.entries(STYLES).map(([k, { name: n }]) => `<button role="radio" aria-checked="${voiceCfg.style === k}" data-vs="${k}">${n}</button>`).join('');
+  $('#vStyle').querySelectorAll('[data-vs]').forEach(b => b.onclick = () => { voiceCfg.style = b.dataset.vs; saveVoice(); renderVoice(); previewVoice(); });
+  const sel = $('#vVoice');
+  sel.innerHTML = '<option value="">Phone default</option>' + voiceList.map(v => `<option value="${esc(v.name)}"${v.name === voiceCfg.voice ? ' selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('');
+  $('#vRate').value = voiceCfg.rate; $('#vPitch').value = voiceCfg.pitch;
+  $('#vRateL').textContent = voiceCfg.rate.toFixed(1) + '×'; $('#vPitchL').textContent = voiceCfg.pitch < .9 ? 'Low' : voiceCfg.pitch > 1.1 ? 'High' : 'Normal';
+  $('#vEarly').innerHTML = [[0, 'Off'], [300, '300 m'], [500, '500 m'], [1000, '1 km']].map(([d, n]) => `<button role="radio" aria-checked="${voiceCfg.early === d}" data-ve="${d}">${n}</button>`).join('');
+  $('#vEarly').querySelectorAll('[data-ve]').forEach(b => b.onclick = () => { voiceCfg.early = +b.dataset.ve; saveVoice(); renderVoice(); });
+  $('#vChime').setAttribute('aria-checked', voiceCfg.chime);
+  $('#navVoiceTgl').setAttribute('aria-checked', navVoice);
+  renderPack();
+  $('#vChimeName').textContent = (LIB[soundMap.nav] || customSounds.find(x => x.id === soundMap.nav) || { name: 'Ding' }).name;
+}
+function saveVoice(){ store.set('voiceCfg', voiceCfg); }
+function previewVoice(){
+  const nv = navVoice; navVoice = true;
+  sayNav({ k: 'left', road: 'EDSA', st: { maneuver: { type: 'turn', modifier: 'left' }, name: 'EDSA' } }, 300);
+  navVoice = nv;
+}
+$('#vVoice').onchange = e => { voiceCfg.voice = e.target.value; saveVoice(); previewVoice(); };
+$('#vRate').oninput = e => { voiceCfg.rate = +e.target.value; saveVoice(); $('#vRateL').textContent = voiceCfg.rate.toFixed(1) + '×'; };
+$('#vRate').onchange = previewVoice;
+$('#vPitch').oninput = e => { voiceCfg.pitch = +e.target.value; saveVoice(); renderVoice(); };
+$('#vPitch').onchange = previewVoice;
+$('#vChime').onclick = () => { voiceCfg.chime = !voiceCfg.chime; saveVoice(); renderVoice(); };
+$('#vChimeBtn').onclick = () => { $('#voiceModal').hidden = true; openLib('nav'); };
+$('#vTest').onclick = previewVoice;
+$('#voiceClose').onclick = () => { $('#voiceModal').hidden = true; };
+async function openVoice(){ await loadVoices(); renderVoice(); $('#voiceModal').hidden = false; }
+$('#btnVoice').onclick = openVoice;
+$('#btnLib').onclick = () => openLib();
+/* spoken direction phrasing in three styles */
+function stepVoice(st, dist){
+  const s = voiceCfg.style, m = st.maneuver, mod = m.modifier || '', road = st.name || '';
+  const side = mod.includes('left') ? 'left' : mod.includes('right') ? 'right' : 'straight';
+  const pre = dist ? (s === 'en' ? 'In ' + dist + ' meters, ' : s === 'fil' ? 'Sa loob ng ' + dist + ' metro, ' : dist + ' metro pa, tapos ') : '';
+  if (s === 'en') return pre + stepText(st).replace(/^./, c => dist ? c.toLowerCase() : c);
+  const fil = s === 'fil';
+  const L2 = { left: fil ? 'kaliwa' : 'kaliwa', right: fil ? 'kanan' : 'kanan', straight: 'diretso' }[side];
+  const onto = road ? (fil ? ' papunta sa ' + road : ' sa ' + road) : '';
+  let t;
+  switch (m.type) {
+    case 'arrive': t = fil ? 'Nakarating ka na sa ' + (nav ? nav.dest.name : 'iyong destinasyon') : 'Andito na tayo sa ' + (nav ? nav.dest.name : 'destinasyon') + '! Galing mo, idol!'; break;
+    case 'depart': t = fil ? 'Magsimula' + (road ? ' sa ' + road : '') : 'Tara na' + (road ? ', daan tayo sa ' + road : '') + '!'; break;
+    case 'roundabout': case 'rotary': case 'roundabout turn': t = fil ? 'Sa rotonda, kunin ang exit ' + (m.exit || 1) + onto : 'Ikot sa rotonda, exit ' + (m.exit || 1) + onto + ', ingat lang'; break;
+    case 'fork': case 'merge': case 'on ramp': case 'off ramp': t = fil ? 'Manatili sa ' + L2 + onto : 'Sa ' + L2 + ' ka lang' + onto + ', pre'; break;
+    case 'continue': case 'new name': t = side === 'straight' ? (fil ? 'Diretso lang' + onto : 'Diretso lang' + onto + ', chill lang') : (fil ? 'Manatili sa ' + L2 + onto : 'Sa ' + L2 + ' lang tayo' + onto); break;
+    default:
+      if (mod === 'uturn') t = fil ? 'Mag-U-turn' + onto : 'U-turn tayo' + onto + ', bes';
+      else if (side === 'straight') t = fil ? 'Diretso' + onto : 'Diretso lang' + onto + ', pre';
+      else t = fil ? (side === 'left' ? 'Kumaliwa' : 'Kumanan') + onto : (side === 'left' ? 'Liko ka sa kaliwa' + onto + ', pre' : 'Kanan tayo' + (onto || ' dito') + ', lodi');
+  }
+  return pre + (pre ? t.replace(/^./, c => c.toLowerCase()) : t);
+}
+
+/* ---------- phase 7: character voice styles, meme sound effects, your own recordings ---------- */
+function lfoTone(type, f, t, dur, vol, rate, depth, cut){
+  const c = ac(), o = c.createOscillator(), g = c.createGain(), l = c.createOscillator(), lg = c.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t); l.frequency.value = rate; lg.gain.value = depth; l.connect(lg).connect(o.frequency);
+  env(g, t, .02, vol, dur);
+  let out = g; if (cut) { const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = cut; g.connect(lp); out = lp; }
+  o.connect(g); out.connect(master()); o.start(t); l.start(t); o.stop(t + dur + .05); l.stop(t + dur + .05);
+}
+function sweepNoise(t, dur, f0, f1, vol){
+  const c = ac(), n = Math.floor(c.sampleRate * dur), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+  s.buffer = b; f.type = 'bandpass'; f.Q.value = 3; f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  env(g, t, .005, vol, dur); s.connect(f).connect(g).connect(master()); s.start(t); s.stop(t + dur + .02);
+}
+Object.assign(LIB, {
+  airhorn:  { name: 'Air horn', cat: 'Meme sounds', play(){ const t = T(); [[0, .14], [.2, .14], [.4, .7]].forEach(([d, l]) => { filtered('sawtooth', 466, t + d, l, .14, 3200); filtered('sawtooth', 932, t + d, l, .07, 3200); filtered('square', 470, t + d, l, .05, 2400); }); } },
+  sadtrom:  { name: 'Sad trombone', cat: 'Meme sounds', play(){ const t = T(); [392, 370, 349].forEach((f, i) => filtered('sawtooth', f, t + i * .38, .34, .13, 1100)); lfoTone('sawtooth', 330, t + 1.14, 1.1, .13, 6, 9, 1100); } },
+  dundun:   { name: 'Dun dun dunnn', cat: 'Meme sounds', play(){ const t = T(); [[196, 0, .28], [233, .32, .28], [185, .66, 1.4]].forEach(([f, d, l]) => { filtered('sawtooth', f, t + d, l, .14, 900); filtered('sawtooth', f / 2, t + d, l, .1, 600); }); noiseBurst(t + .66, .3, .5, 120); } },
+  boom:     { name: 'Bass boom', cat: 'Meme sounds', play(){ const t = T(); glide('sine', 130, 38, t, .9, .7); noiseBurst(t, .12, .6, 90); } },
+  scratch:  { name: 'Record scratch', cat: 'Meme sounds', play(){ const t = T(); sweepNoise(t, .14, 600, 2600, .7); sweepNoise(t + .15, .2, 2400, 400, .7); } },
+  rimshot:  { name: 'Ba dum tss', cat: 'Meme sounds', play(){ const t = T(); glide('sine', 220, 120, t, .16, .5); glide('sine', 160, 90, t + .18, .2, .5); sweepNoise(t + .4, .7, 7000, 9000, .35); } },
+  boing:    { name: 'Cartoon boing', cat: 'Meme sounds', play(){ const t = T(); lfoTone('sine', 300, t, .8, .3, 14, 140); } },
+  slide:    { name: 'Slide whistle', cat: 'Meme sounds', play(){ const t = T(); glide('sine', 600, 2000, t, .45, .22); glide('sine', 2000, 700, t + .45, .5, .22); } },
+  crickets: { name: 'Awkward crickets', cat: 'Meme sounds', play(){ const t = T(); for (let k = 0; k < 3; k++) for (let i = 0; i < 4; i++) voice('sine', 4600, t + k * .6 + i * .045, .035, .08); } },
+  sting:    { name: 'Suspense sting', cat: 'Meme sounds', play(){ const t = T(); [233, 277, 330].forEach(f => lfoTone('sawtooth', f, t, 1.4, .06, 11, 4, 1800)); noiseBurst(t, .2, .3, 200); } },
+  victory:  { name: 'Victory tune', cat: 'Meme sounds', play(){ const t = T(); [[392, 0, .14], [523, .16, .14], [659, .32, .14], [784, .48, .32], [659, .84, .14], [784, 1.0, .14], [1047, 1.16, .7]].forEach(([f, d, l]) => filtered('square', f, t + d, l, .08, 4200)); } }
+});
+/* character voice styles. Every line states the direction plainly first; the character only changes the wording. */
+const dest7 = () => nav ? nav.dest.name : 'the destination';
+const cap1 = s => s.replace(/^./, c => c.toUpperCase());
+const STYLES = {
+  en: { name: 'Standard English', lang: 'en-US' },
+  fil: { name: 'Filipino', lang: 'fil-PH' },
+  barkada: { name: 'Barkada Taglish', lang: 'fil-PH' },
+  tita: { name: 'Tita mode', lang: 'fil-PH', pitch: 1.12, rate: .95, say(i, d){
+    const r = i.road ? ' sa ' + i.road : '';
+    const m = { left: 'kumaliwa ka' + r + ' ha', right: 'kumanan ka' + r + ' ha', straight: 'diretso lang' + r + ', huwag kang lilihis', uturn: 'mag-U-turn ka' + r + ', dahan-dahan lang', round: 'sa rotonda, exit ' + (i.exit || 1) + r + ' ha',
+      arrive: 'Anak, nandito na tayo sa ' + dest7() + '. Kumain ka na ba?', depart: 'Anak, alis na tayo. Mag-seatbelt ka, ha.', reroute: 'Ay, naligaw tayo. Ayusin natin, anak.' }[i.k];
+    return ['arrive', 'depart', 'reroute'].includes(i.k) ? m : 'Anak, ' + (d ? 'mga ' + d + ' metro pa, ' : '') + m + '. Ingat!'; } },
+  barker: { name: 'Jeepney barker', lang: 'fil-PH', rate: 1.2, pitch: 1.05, say(i, d){
+    const r = i.road ? ' ' + i.road + ', ' + i.road + '!' : '';
+    const m = { left: 'Kaliwa, kaliwa!' + r, right: 'Kanan, kanan!' + r, straight: 'Diretso lang, diretso!' + r, uturn: 'U-turn! U-turn!' + r, round: 'Rotonda! Exit ' + (i.exit || 1) + '!' + r,
+      arrive: 'Para po! Andito na tayo sa ' + dest7() + '!', depart: 'Sakay na! Aalis na! Tara na!', reroute: 'Iba daan natin! Kapit lang!' }[i.k];
+    return (d ? d + ' metro pa! ' : '') + m; } },
+  meme: { name: 'Pinoy meme', lang: 'fil-PH', sfx: { arrive: 'airhorn', reroute: 'sadtrom' }, say(i, d){
+    const r = i.road ? ' sa ' + i.road : '';
+    const m = { left: 'kaliwa' + r + '. Ganern!', right: 'kanan' + r + '. Petmalu!', straight: 'diretso lang' + r + '. Sana all diretso.', uturn: 'U-turn' + r + '. Edi wow.', round: 'rotonda, exit ' + (i.exit || 1) + r + '. Awra!',
+      arrive: 'Nakarating na tayo sa ' + dest7() + '! Sana all!', depart: 'Tara na, mga lodi!', reroute: 'Bagong ruta. Edi wow.' }[i.k];
+    return cap1((d && !['arrive', 'depart', 'reroute'].includes(i.k) ? 'sa ' + d + ' metro, ' : '') + m); } },
+  hype: { name: 'Hype announcer', lang: 'en-US', rate: 1.15, pitch: 1.1, sfx: { arrive: 'airhorn' }, say(i, d){
+    const r = i.road ? ' ON ' + i.road.toUpperCase() : '';
+    const m = { left: 'LEFT TURN' + r + '! LET\u2019S GO!', right: 'RIGHT TURN' + r + '! LET\u2019S GO!', straight: 'STRAIGHT AHEAD' + r + '! STAY FOCUSED!', uturn: 'U-TURN TIME' + r + '!', round: 'ROUNDABOUT! TAKE EXIT ' + (i.exit || 1) + r + '!',
+      arrive: 'DESTINATION REACHED! ' + dest7().toUpperCase() + '! WHAT A DRIVE!', depart: 'THE CONVOY IS ROLLING!', reroute: 'NEW ROUTE LOADING!' }[i.k];
+    return (d ? d + ' METERS! ' : '') + m; } },
+  captain: { name: 'Airline captain', lang: 'en-US', rate: .95, pitch: .9, say(i, d){
+    const r = i.road ? ' onto ' + i.road : '';
+    const m = { left: 'please make a left turn' + r, right: 'please make a right turn' + r, straight: 'please continue straight' + r, uturn: 'please prepare for a U-turn' + r, round: 'at the roundabout, please take exit ' + (i.exit || 1) + r,
+      arrive: 'Ladies and gentlemen, we have arrived at ' + dest7() + '. Thank you for driving with us.', depart: 'This is your captain speaking. Please fasten your seatbelts.', reroute: 'This is your captain. We are adjusting our route.' }[i.k];
+    return ['arrive', 'depart', 'reroute'].includes(i.k) ? m : cap1((d ? 'in ' + d + ' meters, ' : '') + m) + '.'; } },
+  drama: { name: 'Teleserye drama', lang: 'fil-PH', rate: .85, pitch: .92, sfx: { reroute: 'dundun' }, say(i, d){
+    const r = i.road ? ' sa ' + i.road : '';
+    const m = { left: 'kaliwa' + r + '. Dahil may mga daang kailangang tahakin.', right: 'kanan' + r + '. Kahit masakit.', straight: 'diretso lang' + r + '. Huwag ka nang lumingon.', uturn: 'mag-U-turn' + r + '. Babalik ka rin pala.', round: 'sa rotonda, exit ' + (i.exit || 1) + r + '. Paikot-ikot, tulad ng pag-ibig.',
+      arrive: 'Nandito na tayo sa ' + dest7() + '. Ang tagal kong hinintay ang sandaling ito.', depart: 'Simulan na natin ang kuwentong ito.', reroute: 'Iniwan mo ang daan. Pero hahanapan kita ng bago.' }[i.k];
+    return cap1((d && !['arrive', 'depart', 'reroute'].includes(i.k) ? 'sa ' + d + ' metro... ' : '') + m); } },
+  trailer: { name: 'Movie trailer', lang: 'en-US', rate: .85, pitch: .55, sfx: { arrive: 'boom' }, say(i, d){
+    const r = i.road ? ' onto ' + i.road : '';
+    const m = { left: 'one convoy... turns left' + r, right: 'one convoy... turns right' + r, straight: 'one road... straight ahead' + r, uturn: 'there is no going back... except a U-turn' + r, round: 'at the roundabout... exit ' + (i.exit || 1) + r,
+      arrive: 'This summer... you have arrived at ' + dest7() + '.', depart: 'In a world of traffic... one convoy dares to drive.', reroute: 'Plans change... recalculating.' }[i.k];
+    return ['arrive', 'depart', 'reroute'].includes(i.k) ? m : cap1((d ? 'in ' + d + ' meters... ' : '') + m) + '.'; } },
+  robot: { name: 'Robot', lang: 'en-US', rate: .9, pitch: .5, say(i, d){
+    const r = i.road ? '. ' + i.road : '';
+    const m = { left: 'Turn left' + r, right: 'Turn right' + r, straight: 'Continue straight' + r, uturn: 'Execute U-turn' + r, round: 'Roundabout. Exit ' + (i.exit || 1) + r,
+      arrive: 'Destination reached. Mission complete', depart: 'Systems online. Route loaded', reroute: 'Recalculating' }[i.k];
+    return (d ? 'In ' + d + ' meters. ' : '') + m + '. Beep boop.'; } },
+  chipmunk: { name: 'Chipmunk', lang: 'en-US', rate: 1.25, pitch: 1.9 },
+  mine: { name: '🎙 My recorded voice', lang: 'en-US' }
+};
+const SLOTS = { left: ['Turn left', 'Kaliwa!'], right: ['Turn right', 'Kanan!'], straight: ['Go straight', 'Diretso lang!'], uturn: ['U-turn', 'U-turn tayo!'], round: ['Roundabout', 'Rotonda!'],
+  ahead: ['Heads up (early warning)', 'Malapit na ang liko!'], arrive: ['Arrived', 'Andito na tayo!'], depart: ['Start', 'Tara na!'], reroute: ['Rerouting', 'Naligaw tayo!'] };
+let voicePack = store.get('voicePack', {});
+if (!STYLES[voiceCfg.style]) voiceCfg.style = 'en';
+function intentOf(st){
+  const m = st.maneuver, mod = m.modifier || '';
+  const k = m.type === 'arrive' ? 'arrive' : m.type === 'depart' ? 'depart' : /round|rotary/.test(m.type) ? 'round' : mod === 'uturn' ? 'uturn' : mod.includes('left') ? 'left' : mod.includes('right') ? 'right' : 'straight';
+  return { k, road: st.name || '', exit: m.exit, st };
+}
+function styleText(i, d){
+  const s = voiceCfg.style, S = STYLES[s] || STYLES.en;
+  if (S.say) return S.say(i, d);
+  if (i.k === 'reroute') return { fil: 'Bagong ruta', barkada: 'Naligaw tayo, ayusin ko lang' }[s] || 'Rerouting';
+  const st = i.st || { maneuver: { type: i.k === 'arrive' ? 'arrive' : i.k === 'depart' ? 'depart' : 'turn', modifier: i.k === 'uturn' ? 'uturn' : i.k }, name: i.road };
+  const saved = voiceCfg.style; if (s === 'chipmunk' || s === 'mine') voiceCfg.style = 'en';
+  const txt = stepVoice(st, d); voiceCfg.style = saved; return txt;
+}
+function playClip(data){
+  return new Promise(res => { const a = new Audio(data); a.volume = Math.min(1, fxVol.v + .1); a.onended = a.onerror = res; a.play().catch(res); setTimeout(res, 7000); });
+}
+function sayNav(i, d){
+  if (!navVoice) return;
+  const S = STYLES[voiceCfg.style] || STYLES.en;
+  if (voiceCfg.chime && !['arrive', 'reroute'].includes(i.k)) playEvent('nav');
+  if (voiceCfg.style === 'mine') {
+    speakQ = speakQ.then(async () => {
+      if (d && voicePack.ahead) await playClip(voicePack.ahead);
+      if (voicePack[i.k]) await playClip(voicePack[i.k]);
+    });
+    if (!voicePack[i.k]) { const saved = voiceCfg.style; voiceCfg.style = 'en'; speakRaw(styleText(i, d), 'en-US'); voiceCfg.style = saved; }
+  } else speakRaw(styleText(i, d), S.lang, { rate: S.rate || 1, pitch: S.pitch || 1 });
+  const fx = (S.sfx && S.sfx[i.k]) || (i.k === 'arrive' ? soundMap.party : null);
+  if (fx) speakQ = speakQ.then(() => playId(fx));
+}
+/* recorder: used for the voice pack and for the sound library */
+let recState = null;
+function recordClip(title, hint, maxMs){
+  return new Promise(async resolve => {
+    let stream;
+    try { stream = await getMic(); } catch { toast('Microphone is blocked. Allow it for QC Minivan Owners in Android Settings.', 5000); return resolve(null); }
+    $('#recTitle').textContent = title; $('#recHint').textContent = hint || '';
+    $('#recModal').hidden = false; $('#recPlay').hidden = $('#recSave').hidden = true;
+    $('#recBtn').textContent = '● Record'; $('#recBtn').classList.remove('on'); $('#recTime').textContent = (maxMs / 1000) + ' s max';
+    let blobURL = null, dataURL = null, rec = null, timer = null, started = 0, raf = null, an = null, src = null;
+    const finish = v => { $('#recModal').hidden = true; clearInterval(timer); cancelAnimationFrame(raf); try { src && src.disconnect(); } catch {} releaseMicLater(); resolve(v); };
+    const meter = () => { if (!an) return; const b = new Uint8Array(an.fftSize); an.getByteTimeDomainData(b); let m = 0; for (const x of b) m = Math.max(m, Math.abs(x - 128)); $('#recLvl').style.width = Math.min(100, m / 1.2) + '%'; raf = requestAnimationFrame(meter); };
+    try { const c = ac(); src = c.createMediaStreamSource(stream); an = c.createAnalyser(); an.fftSize = 512; src.connect(an); meter(); } catch {}
+    const stop = () => { if (rec && rec.state === 'recording') rec.stop(); };
+    $('#recBtn').onclick = () => {
+      if (rec && rec.state === 'recording') return stop();
+      const chunks = [];
+      rec = new MediaRecorder(stream, MIME ? { mimeType: MIME, audioBitsPerSecond: 32000 } : {});
+      rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+      rec.onstop = () => {
+        clearInterval(timer); $('#recBtn').textContent = '● Record again'; $('#recBtn').classList.remove('on');
+        const blob = new Blob(chunks, { type: MIME || 'audio/webm' });
+        if (blobURL) URL.revokeObjectURL(blobURL); blobURL = URL.createObjectURL(blob);
+        const fr = new FileReader(); fr.onload = () => { dataURL = fr.result; $('#recPlay').hidden = $('#recSave').hidden = false; new Audio(blobURL).play().catch(() => {}); }; fr.readAsDataURL(blob);
+      };
+      rec.start(); started = Date.now(); $('#recBtn').textContent = '■ Stop'; $('#recBtn').classList.add('on'); buzz(20);
+      timer = setInterval(() => { const s = (Date.now() - started) / 1000; $('#recTime').textContent = s.toFixed(1) + ' s'; if (s * 1000 >= maxMs) stop(); }, 100);
+    };
+    $('#recPlay').onclick = () => blobURL && new Audio(blobURL).play().catch(() => {});
+    $('#recSave').onclick = () => finish(dataURL);
+    $('#recCancel').onclick = () => { stop(); finish(null); };
+  });
+}
+function renderPack(){
+  const box = $('#packBox'); box.hidden = voiceCfg.style !== 'mine';
+  if (box.hidden) return;
+  box.innerHTML = '<p class="tiny" style="margin:0 0 6px">Record each direction once. Anything you skip is read by the phone voice instead.</p>' + Object.entries(SLOTS).map(([k, [n, eg]]) =>
+    `<div class="set snd${voicePack[k] ? ' on' : ''}"><button class="playb" data-pp="${k}" ${voicePack[k] ? '' : 'disabled style="opacity:.3"'} aria-label="Play ${n}">▶</button><div><b>${n}</b><span>e.g. “${esc(eg)}”</span></div>
+      ${voicePack[k] ? `<button class="mini danger" data-pd="${k}" aria-label="Delete ${n}">✕</button>` : ''}<button class="mini" data-pr="${k}">${voicePack[k] ? 'Redo' : '● Rec'}</button></div>`).join('');
+  box.querySelectorAll('[data-pp]').forEach(b => b.onclick = () => playClip(voicePack[b.dataset.pp]));
+  box.querySelectorAll('[data-pd]').forEach(b => b.onclick = () => { delete voicePack[b.dataset.pd]; store.set('voicePack', voicePack); renderPack(); });
+  box.querySelectorAll('[data-pr]').forEach(b => b.onclick = async () => {
+    const k = b.dataset.pr, d = await recordClip('Record: ' + SLOTS[k][0], 'Try saying “' + SLOTS[k][1] + '” Keep it short.', 4000);
+    if (!d) return;
+    voicePack[k] = d; store.set('voicePack', voicePack);
+    if (JSON.stringify(store.get('voicePack', {})).length < 20) { delete voicePack[k]; toast('Not enough space on the phone'); }
+    renderPack();
+  });
+}
+async function recordToLibrary(){
+  if (customSounds.length >= 10) { toast('You can keep up to 10 of your own sounds. Delete one first.', 4500); return; }
+  const d = await recordClip('Record a sound', 'Anything you like: a horn impression, “Busina!”, your barkada laughing… up to 6 seconds.', 6000);
+  if (!d) return;
+  const name = (await ask({ title: 'Name this sound', value: 'My sound ' + (customSounds.length + 1) })) || 'My sound';
+  const id = 'c:' + Date.now(); customSounds.push({ id, name: name.slice(0, 30), data: d }); store.set('customSounds', customSounds);
+  soundMap[libEvent] = id; store.set('soundMap', soundMap); renderLib(); toast('Saved "' + name + '" for ' + EVENTS[libEvent]);
+}
+
+/* ---------- destination, driving route, Google Maps / Waze hand-off, HUD (windshield mirror mode) ---------- */
+let nav = null, groupDest = null, navLayer = null, destPick = false, offRouteHits = 0, lastReroute = 0, navVoice = store.get('navVoice', true);
+const hudCfg = Object.assign({ flipX: true, flipY: false, color: '#7CFFB2' }, store.get('hud', {}));
+const gmapsURL = d => `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lng}&travelmode=driving&dir_action=navigate`;
+const wazeURL = d => `https://waze.com/ul?ll=${d.lat},${d.lng}&navigate=yes`;
+function clockAt(sec){ const d = new Date(Date.now() + sec * 1000); return d.toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit' }); }
+function fmtDur(sec){ const m = Math.round(sec / 60); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; }
+function stepText(st){
+  const m = st.maneuver, mod = m.modifier || '', road = st.name ? ' onto ' + st.name : '';
+  const side = mod.includes('left') ? 'left' : mod.includes('right') ? 'right' : 'straight';
+  switch (m.type) {
+    case 'depart': return 'Head out' + (st.name ? ' on ' + st.name : '');
+    case 'arrive': return 'Arrive at ' + (nav ? nav.dest.name : 'your destination');
+    case 'roundabout': case 'rotary': case 'roundabout turn': return 'At the roundabout, take exit ' + (m.exit || 1) + road;
+    case 'merge': return 'Merge ' + side + road;
+    case 'on ramp': return 'Take the ramp on the ' + side + road;
+    case 'off ramp': return 'Take the exit on the ' + side + road;
+    case 'fork': return 'Keep ' + side + road;
+    case 'end of road': return 'At the end of the road, turn ' + side + road;
+    case 'continue': case 'new name': return (side === 'straight' ? 'Continue straight' : 'Keep ' + side) + road;
+    default: return (mod === 'uturn' ? 'Make a U-turn' : mod === 'straight' ? 'Go straight' : 'Turn ' + mod) + road;
+  }
+}
+function arrowSVG(st, size){
+  const m = st ? st.maneuver : { type: 'continue', modifier: 'straight' }, mod = m.modifier || 'straight';
+  if (m.type === 'arrive') return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true"><path d="M50 8c-17 0-30 13-30 30 0 22 30 54 30 54s30-32 30-54C80 21 67 8 50 8z" fill="currentColor"/><circle cx="50" cy="38" r="11" fill="#000"/></svg>`;
+  if (mod === 'uturn') return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true"><path d="M66 90V40a18 18 0 0 0-36 0v12" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/><path d="M14 46l16 22 16-22z" fill="currentColor"/></svg>`;
+  const ang = { straight: 0, 'slight right': 40, right: 90, 'sharp right': 135, 'slight left': -40, left: -90, 'sharp left': -135 }[mod] || 0;
+  const rad = ang * Math.PI / 180, ex = 50 + Math.sin(rad) * 30, ey = 50 - Math.cos(rad) * 30;
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true"><path d="M50 94V50 L${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(${ex.toFixed(1)} ${ey.toFixed(1)}) rotate(${ang})"><path d="M-17 4 0-18 17 4z" fill="currentColor"/></g></svg>`;
+}
+/* place search (OpenStreetMap Nominatim), on submit only */
+async function searchPlaces(q){
+  const c = myPos || (map ? [map.getCenter().lat, map.getCenter().lng] : [14.65, 121.05]);
+  const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=8&countrycodes=ph&accept-language=en&q=' + encodeURIComponent(q)
+    + '&viewbox=' + [c[1] - .6, c[0] + .6, c[1] + .6, c[0] - .6].map(v => v.toFixed(3)).join(',');
+  const r = await fetch(url); const j = await r.json();
+  return j.map(x => ({ name: (x.name || x.display_name.split(',')[0]).slice(0, 60), addr: x.display_name.split(',').slice(1, 4).join(',').trim(), lat: +x.lat, lng: +x.lon }))
+    .map(x => Object.assign(x, { d: myPos ? hav(myPos, [x.lat, x.lng]) : null })).sort((a, b) => (a.d ?? 0) - (b.d ?? 0));
+}
+/* driving route (OSRM, OpenStreetMap data, no live traffic) */
+async function fetchRoute(from, to){
+  const url = `https://router.project-osrm.org/route/v1/driving/${from[1]},${from[0]};${to.lng},${to.lat}?overview=full&geometries=geojson&steps=true`;
+  let j;
+  if (document.hidden && NHttp) { const r = await NHttp.request({ url, method: 'GET' }); j = typeof r.data === 'string' ? JSON.parse(r.data) : r.data; }
+  else { const r = await fetch(url); j = await r.json(); }
+  if (!j.routes || !j.routes[0]) throw new Error('No driving route found');
+  const rt = j.routes[0];
+  return { dist: rt.distance, dur: rt.duration, line: rt.geometry.coordinates.map(c => [c[1], c[0]]), steps: rt.legs[0].steps };
+}
+async function startNav(dest, quiet){
+  if (!myPos) { toast('Waiting for your GPS fix'); return; }
+  closeDest();
+  try {
+    const r = await fetchRoute(myPos, dest);
+    nav = Object.assign({ dest, idx: 1, said: {}, arrived: false }, r);
+    lastReroute = Date.now(); offRouteHits = 0;
+    drawNav(true); updateNav();
+    if (!quiet) { toast('🧭 ' + fmtDist(r.dist) + ', about ' + fmtDur(r.dur) + ' without traffic', 4000); if (nav.steps[1]) sayNav(intentOf(nav.steps[1]), nav.steps[0] && nav.steps[0].distance > 80 ? Math.round(nav.steps[0].distance / 50) * 50 : 0); }
+  } catch (e) { toast('Could not get a driving route. Check your data connection, or use Google Maps.', 5000); nav = { dest, steps: [], line: [], dist: hav(myPos, [dest.lat, dest.lng]), dur: 0, idx: 0, said: {}, failed: true }; drawNav(true); updateNav(); }
+}
+function drawNav(fit){
+  if (navLayer) { map.removeLayer(navLayer); navLayer = null; }
+  if (!nav) return;
+  navLayer = L.layerGroup();
+  if (nav.line.length) { L.polyline(nav.line, { color: '#0D1B2A', weight: 11, opacity: .55 }).addTo(navLayer); L.polyline(nav.line, { color: '#2BC4C9', weight: 6 }).addTo(navLayer); }
+  L.marker([nav.dest.lat, nav.dest.lng], { icon: L.divIcon({ className: '', iconSize: [36, 44], iconAnchor: [18, 42], html: '<div class="destmk">🏁</div>' }), zIndexOffset: 900 }).addTo(navLayer);
+  navLayer.addTo(map);
+  if (fit) map.fitBounds((nav.line.length ? nav.line : [[nav.dest.lat, nav.dest.lng]]).concat([myPos]), { padding: [80, 80] });
+}
+function clearNav(){ nav = null; drawNav(); renderNavCard(); renderHud(); }
+function distToLine(p, line){
+  let best = Infinity; const k = Math.cos(p[0] * Math.PI / 180);
+  for (let i = 1; i < line.length; i++) {
+    const a = line[i - 1], b = line[i];
+    const ax = (a[1] - p[1]) * k, ay = a[0] - p[0], bx = (b[1] - p[1]) * k, by = b[0] - p[0];
+    const dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
+    const t = L2 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / L2)) : 0;
+    const x = ax + t * dx, y = ay + t * dy, d = Math.sqrt(x * x + y * y) * 111320;
+    if (d < best) best = d;
+  }
+  return best;
+}
+function navSay(t, noChime){ if (!navVoice) return; if (voiceCfg.chime && !noChime) playEvent('nav'); speakRaw(t, navLang()); }
+function updateNav(){
+  if (!nav || !myPos) { renderNavCard(); renderHud(); return; }
+  const dDest = hav(myPos, [nav.dest.lat, nav.dest.lng]);
+  if (!nav.arrived && dDest < 40) { nav.arrived = true; sayNav({ k: 'arrive' }, 0); }
+  if (nav.steps.length) {
+    for (let j = nav.idx + 1; j < Math.min(nav.idx + 4, nav.steps.length); j++) {
+      const L2 = nav.steps[j].maneuver.location;
+      if (hav(myPos, [L2[1], L2[0]]) < hav(myPos, [nav.steps[nav.idx].maneuver.location[1], nav.steps[nav.idx].maneuver.location[0]]) - 30) nav.idx = j;
+    }
+    let st = nav.steps[nav.idx];
+    while (st && nav.idx < nav.steps.length - 1 && hav(myPos, [st.maneuver.location[1], st.maneuver.location[0]]) < 22) { nav.idx++; st = nav.steps[nav.idx]; }
+    const dMan = st ? hav(myPos, [st.maneuver.location[1], st.maneuver.location[0]]) : dDest;
+    nav.dMan = dMan;
+    nav.left = dMan + nav.steps.slice(nav.idx).reduce((a, s) => a + s.distance, 0);
+    nav.eta = nav.dist ? nav.left * (nav.dur / nav.dist) : 0;
+    const key = nav.idx;
+    if (st && !nav.arrived) {
+      if (voiceCfg.early && dMan < voiceCfg.early && dMan > 150 && !nav.said[key + 'a'] && (nav.steps[nav.idx - 1] || {}).distance > voiceCfg.early + 150) { nav.said[key + 'a'] = 1; sayNav(intentOf(st), Math.round(dMan / 50) * 50); }
+      if (dMan < 60 && !nav.said[key + 'b']) { nav.said[key + 'b'] = 1; sayNav(intentOf(st), 0); }
+    }
+    if (!nav.arrived && nav.line.length && Date.now() - lastReroute > 25000) {
+      if (distToLine(myPos, nav.line) > 70) { if (++offRouteHits >= 2) { offRouteHits = 0; lastReroute = Date.now(); sayNav({ k: 'reroute' }, 0); startNav(nav.dest, true); } }
+      else offRouteHits = 0;
+    }
+  } else { nav.left = dDest; nav.eta = 0; nav.dMan = dDest; }
+  renderNavCard(); renderHud();
+}
+/* nav card on the map */
+function renderNavCard(){
+  const el = $('#navCard');
+  document.body.classList.toggle('hasnav', !!(nav || (groupDest && !nav)));
+  if (!nav) {
+    if (groupDest) {
+      el.hidden = false;
+      el.innerHTML = `<div class="nvrow"><span class="nvicon">🏁</span><div class="nvmain"><b>Convoy destination: ${esc(groupDest.name)}</b><span>set by ${esc(groupDest.by)}${myPos ? ', ' + fmtDist(hav(myPos, [groupDest.lat, groupDest.lng])) + ' from you' : ''}</span></div></div>
+        <div class="nvbtns"><button class="go" data-nv="start">Start</button><button data-nv="gmaps">Google Maps</button><button data-nv="waze">Waze</button></div>`;
+    } else { el.hidden = true; el.innerHTML = ''; return; }
+  } else {
+    const st = nav.steps[nav.idx];
+    el.hidden = false;
+    el.innerHTML = `<div class="nvrow"><span class="nvicon arrow">${nav.arrived ? arrowSVG({ maneuver: { type: 'arrive' } }, 34) : arrowSVG(st, 34)}</span>
+      <div class="nvmain"><b>${nav.arrived ? 'You have arrived' : st ? esc(stepText(st)) : 'Head to ' + esc(nav.dest.name)}</b>
+      <span>${nav.arrived ? esc(nav.dest.name) : (st ? 'in ' + fmtDist(nav.dMan || 0) + ' · ' : '') + fmtDist(nav.left || nav.dist) + ' left' + (nav.eta ? ' · arrive ' + clockAt(nav.eta) : '')}</span></div>
+      <button class="nvx" data-nv="clear" aria-label="End directions">✕</button></div>
+      <div class="nvbtns"><button data-nv="gmaps">Google Maps</button><button data-nv="waze">Waze</button><button class="go" data-nv="hud">HUD</button>${groupDest && groupDest.lat === nav.dest.lat && groupDest.lng === nav.dest.lng ? '' : '<button data-nv="share">Share</button>'}</div>`;
+  }
+  el.querySelectorAll('[data-nv]').forEach(b => b.onclick = () => {
+    const d = nav ? nav.dest : groupDest, a = b.dataset.nv;
+    if (a === 'start') startNav(groupDest);
+    else if (a === 'gmaps') openExternal(gmapsURL(d));
+    else if (a === 'waze') openExternal(wazeURL(d));
+    else if (a === 'hud') openHud();
+    else if (a === 'clear') clearNav();
+    else if (a === 'share') { R.child('dest').set({ name: d.name, lat: d.lat, lng: d.lng, by: me.cs, t: firebase.database.ServerValue.TIMESTAMP }); sendChat('🏁 Convoy destination: ' + d.name); toast('Destination shared with the group'); }
+  });
+}
+/* destination picker */
+function openDest(){
+  const quick = [];
+  if (groupDest) quick.push(Object.assign({ tag: 'Convoy destination' }, groupDest));
+  Object.values(pins).forEach(p => quick.push({ name: p.label, lat: p.lat, lng: p.lng, tag: 'Pin by ' + p.by }));
+  Object.values(routes).forEach(r => { const e = r.pts && r.pts[r.pts.length - 1]; if (e) quick.push({ name: 'End of ' + r.name, lat: e[0], lng: e[1], tag: 'Route' }); });
+  Object.entries(members).forEach(([id, m]) => { if (id !== uid && m.lat != null && m.online) quick.push({ name: m.cs, lat: m.lat, lng: m.lng, tag: 'Member' }); });
+  if (gasCache && gasCache.list[0]) quick.push({ name: gasCache.list[0].name, lat: gasCache.list[0].lat, lng: gasCache.list[0].lng, tag: 'Nearest gas' });
+  $('#destQuick').innerHTML = quick.slice(0, 12).map((q, i) => `<button class="item" data-q="${i}"><span class="nvicon sm">${q.tag === 'Member' ? '🚐' : q.tag.startsWith('Pin') ? '📍' : q.tag === 'Nearest gas' ? '⛽' : '🏁'}</span><span class="main"><span class="name">${esc(q.name)}</span><span class="meta">${esc(q.tag)}${myPos ? ', ' + fmtDist(hav(myPos, [q.lat, q.lng])) : ''}</span></span></button>`).join('') || '';
+  $('#destQuick').querySelectorAll('[data-q]').forEach(b => b.onclick = () => startNav(quick[+b.dataset.q]));
+  $('#destResults').innerHTML = '';
+  $('#destModal').hidden = false; setTimeout(() => $('#destQ').focus(), 80);
+}
+function closeDest(){ $('#destModal').hidden = true; }
+async function doSearch(){
+  const q = $('#destQ').value.trim(); if (q.length < 2) return;
+  $('#destResults').innerHTML = '<div class="empty">Searching…</div>';
+  try {
+    const res = await searchPlaces(q);
+    $('#destResults').innerHTML = res.length ? res.map((x, i) => `<button class="item" data-r="${i}"><span class="nvicon sm">📍</span><span class="main"><span class="name">${esc(x.name)}</span><span class="meta">${esc(x.addr)}${x.d != null ? ' · ' + fmtDist(x.d) : ''}</span></span></button>`).join('') : '<div class="empty">Nothing found. Try a landmark or barangay name, or pick on the map.</div>';
+    $('#destResults').querySelectorAll('[data-r]').forEach(b => b.onclick = () => startNav(res[+b.dataset.r]));
+  } catch { $('#destResults').innerHTML = '<div class="empty">Search needs a data connection.</div>'; }
+}
+$('#btnDest').onclick = openDest;
+$('#destClose').onclick = closeDest;
+$('#destGo').onclick = doSearch;
+$('#destQ').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
+$('#destPickBtn').onclick = () => { closeDest(); destPick = true; toast('Tap the map where you want to go', 4000); };
+$('#navVoiceTgl').onclick = () => { navVoice = !navVoice; store.set('navVoice', navVoice); $('#navVoiceTgl').setAttribute('aria-checked', navVoice); };
+/* ---------- HUD / windshield mirror mode ---------- */
+let hudOn = false, hudTick = null, hudCtlT = null;
+function openHud(){
+  hudOn = true; $('#hud').hidden = false; applyHudCfg(); renderHud();
+  try { navigator.wakeLock && navigator.wakeLock.request('screen').then(w => { hudOn && (window._hudLock = w); }).catch(() => {}); } catch {}
+  clearInterval(hudTick); hudTick = setInterval(renderHud, 1000);
+  showHudCtl();
+  if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+}
+function closeHud(){
+  hudOn = false; $('#hud').hidden = true; clearInterval(hudTick);
+  try { window._hudLock && window._hudLock.release(); } catch {}
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+function showHudCtl(){ $('#hudCtl').classList.remove('dim'); clearTimeout(hudCtlT); hudCtlT = setTimeout(() => $('#hudCtl').classList.add('dim'), 5000); }
+function applyHudCfg(){
+  $('#hudInner').style.transform = `scale(${hudCfg.flipX ? -1 : 1}, ${hudCfg.flipY ? -1 : 1})`;
+  $('#hud').style.setProperty('--hud', hudCfg.color);
+  $('#hudFlipX').setAttribute('aria-pressed', hudCfg.flipX); $('#hudFlipY').setAttribute('aria-pressed', hudCfg.flipY);
+  document.querySelectorAll('[data-hudc]').forEach(b => b.setAttribute('aria-pressed', b.dataset.hudc === hudCfg.color));
+}
+function renderHud(){
+  if (!hudOn) return;
+  const kmh = Math.max(0, Math.round((mySpeed || 0) * 3.6));
+  const near = Object.entries(members).filter(([id, m]) => id !== uid && m.lat != null && m.online && myPos && hav(myPos, [m.lat, m.lng]) < 1000).length;
+  const talking = fresh(floor) && floor.uid !== uid ? floor.cs : '';
+  let main;
+  if (nav && !nav.arrived && nav.steps.length) {
+    const st = nav.steps[nav.idx];
+    main = `<div class="hudturn">${arrowSVG(st, 150)}<div><b>${fmtDist(nav.dMan || 0)}</b><span>${esc(stepText(st))}</span></div></div>`;
+  } else if (nav && nav.arrived) main = `<div class="hudturn">${arrowSVG({ maneuver: { type: 'arrive' } }, 150)}<div><b>Arrived</b><span>${esc(nav.dest.name)}</span></div></div>`;
+  else if (nav) main = `<div class="hudturn"><div><b>${fmtDist(nav.left || 0)}</b><span>to ${esc(nav.dest.name)}</span></div></div>`;
+  else main = `<div class="hudturn"><div><b>${new Date().toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit' })}</b><span>Set a destination for turn arrows</span></div></div>`;
+  $('#hudInner').innerHTML = `${main}
+    <div class="hudrow"><div class="hudspeed"><b>${kmh}</b><span>km/h</span></div>
+    ${nav && !nav.arrived ? `<div class="hudeta"><b>${nav.eta ? clockAt(nav.eta) : '–'}</b><span>${fmtDist(nav.left || 0)} left</span></div>` : ''}
+    <div class="hudmini"><span>👥 ${near} near</span>${talking ? `<span class="hot">🎙 ${esc(talking)}</span>` : ''}${fuelWarned ? '<span class="hot">⛽ low fuel</span>' : ''}</div></div>`;
+}
+$('#hudExit').onclick = closeHud;
+$('#hudFlipX').onclick = () => { hudCfg.flipX = !hudCfg.flipX; store.set('hud', hudCfg); applyHudCfg(); showHudCtl(); };
+$('#hudFlipY').onclick = () => { hudCfg.flipY = !hudCfg.flipY; store.set('hud', hudCfg); applyHudCfg(); showHudCtl(); };
+document.querySelectorAll('[data-hudc]').forEach(b => b.onclick = () => { hudCfg.color = b.dataset.hudc; store.set('hud', hudCfg); applyHudCfg(); showHudCtl(); });
+$('#hud').addEventListener('pointerdown', showHudCtl);
+$('#btnHud').onclick = openHud;
 
 /* ---------- members ---------- */
 let accCircle;
@@ -1912,7 +2613,7 @@ function beginTx(stream, txId){
   pttState = 'live';
   pttBtn.classList.remove('arming'); pttBtn.classList.add('live');
   pttBtn.querySelector('.ptt-txt').textContent = 'On air';
-  if (txMode === 'ptt') chirpStart();
+  if (txMode === 'ptt') playEvent('talkStart');
   maxT = setTimeout(() => { toast('Transmissions stop after 60 seconds so others can talk.'); pttUp(); }, MAX_TX);
 }
 function pttUp(e){
@@ -1995,7 +2696,7 @@ function renderRadio(){
 }
 $('#voxTgl').onclick = () => setVox(!vox);
 document.querySelectorAll('#voxSensRow [data-s]').forEach(b => b.onclick = () => { voxSens = b.dataset.s; store.set('voxSens', voxSens); renderRadio(); });
-function afterPlay(){ rogerBeep(); voxHoldUntil = performance.now() + 900; player.onended = null; }
+function afterPlay(){ playEvent('roger'); voxHoldUntil = performance.now() + 900; player.onended = null; }
 
 /* receive: stream Opus chunks into MediaSource with a small jitter buffer */
 const player = new Audio();
